@@ -4,8 +4,14 @@ import java.util.List;
 
 public interface ModuleDescriptor {
 
+	String getPublicName();
+
 	List<Class<? extends ModuleDescriptor>> getModuleDependencyList();
 
-	String getPublicName();
+	void registerShellInstantiatedDependencies(List<ModuleDescriptor> dependencies);
+
+	void initializeModule();
+
+	ModuleMainController getMainController();
 
 }
