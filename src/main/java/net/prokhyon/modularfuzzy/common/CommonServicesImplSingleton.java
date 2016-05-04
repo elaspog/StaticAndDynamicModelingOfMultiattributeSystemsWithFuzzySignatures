@@ -67,12 +67,14 @@ public class CommonServicesImplSingleton implements CommonServices {
 	@Override
 	public void registerView(String viewName, String viewRelativePath, Class<?> relativeResourceClass,
 			Class<? extends Pane> paneType) {
+
 		viewNameAndPaneTypePairs
 				.add(new FxModulesViewInformationGroup(viewName, viewRelativePath, relativeResourceClass, paneType));
 	}
 
 	@Override
 	public List<ModuleDescriptor> getModuleDependencyInstances(Class<? extends ModuleDescriptor> moduleTypes) {
+
 		return null;
 	}
 
@@ -88,6 +90,7 @@ public class CommonServicesImplSingleton implements CommonServices {
 
 	@Override
 	public CommonServices getCommonServices() {
+
 		return null;
 	}
 

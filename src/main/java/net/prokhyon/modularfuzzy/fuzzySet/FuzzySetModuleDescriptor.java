@@ -3,8 +3,7 @@ package net.prokhyon.modularfuzzy.fuzzySet;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.TilePane;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.api.ModuleMainController;
 import net.prokhyon.modularfuzzy.common.CommonServices;
@@ -29,8 +28,8 @@ public class FuzzySetModuleDescriptor implements ModuleDescriptor {
 	@Override
 	public void initializeModule() {
 		services = CommonServicesImplSingleton.getInstance();
-		services.registerView("Fuzzy Set 1", "view/Set1Layout.fxml", FuzzySetModuleDescriptor.class, StackPane.class);
-		services.registerView("Fuzzy Set 2", "view/Set2Layout.fxml", FuzzySetModuleDescriptor.class, AnchorPane.class);
+		services.registerView("Fuzzy Set 1", "view/FuzzySetEditorLayout.fxml", FuzzySetModuleDescriptor.class,
+				TilePane.class);
 	}
 
 	@Override

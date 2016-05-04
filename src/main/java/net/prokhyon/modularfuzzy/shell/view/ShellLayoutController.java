@@ -65,6 +65,8 @@ public class ShellLayoutController {
 						loader.setLocation(relativeResourceClass.getResource(viewRelativePath));
 						// Pane p = loader.load();
 						Pane p = paneType.cast(loader.load());
+						// ControllerBase controller = loader.getController();
+						// controller.initializeController();
 						contentArea.getChildren().setAll(p);
 					} catch (IOException e1) {
 						e1.printStackTrace();
