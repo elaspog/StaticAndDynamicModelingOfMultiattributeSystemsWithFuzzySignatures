@@ -29,7 +29,6 @@ public class ShellLayoutController {
 	public ShellLayoutController() {
 
 		services = CommonServicesImplSingleton.getInstance();
-		((CommonServicesImplSingleton) services).initShellLayoutController(this);
 	}
 
 	@FXML
@@ -42,10 +41,10 @@ public class ShellLayoutController {
 		moduleSelectorButtons.setSpacing(5);
 		moduleSelectorButtons.setPadding(new Insets(5, 0, 0, 0));
 
-		List<FxModulesViewInformationGroup> viewNameAndPaneTypePairs = ((CommonServicesImplSingleton) services)
-				.getViewNameAndPaneTypePairs();
+		List<FxModulesViewInformationGroup> registeredViews = ((CommonServicesImplSingleton) services)
+				.getRegisteredViews();
 
-		for (FxModulesViewInformationGroup e : viewNameAndPaneTypePairs) {
+		for (FxModulesViewInformationGroup e : registeredViews) {
 
 			String viewName = e.getViewName();
 			String viewRelativePath = e.getViewRelativePath();

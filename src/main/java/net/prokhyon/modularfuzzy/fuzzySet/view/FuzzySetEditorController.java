@@ -4,8 +4,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -275,52 +273,6 @@ public class FuzzySetEditorController {
 	private void deletePoint() {
 
 		fuzzySetToEdit.get().fuzzySetPointsProperty().removeAll(pointsTableView.getSelectionModel().getSelectedItems());
-	}
-
-	private ChangeListener<Number> fuzzySetSystemTypeChanged() {
-		return new ChangeListener<Number>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observableValue, Number fromIndex, Number toIndex) {
-
-				switch (fuzzySetSystemTypeComboBox.getItems().get((Integer) toIndex)) {
-
-					case CUSTOM:
-						break;
-
-					case RARE:
-						break;
-
-					case RUSPINNI_PARTITION:
-						break;
-				}
-
-			}
-
-		};
-	}
-
-	private ChangeListener<Number> fuzzySetTypeChanged() {
-		return new ChangeListener<Number>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observableValue, Number fromIndex, Number toIndex) {
-
-				switch (fuzzySetTypeComboBox.getItems().get((Integer) toIndex)) {
-
-					case POLYGONAL:
-						break;
-
-					case TRAPEZOID:
-						break;
-
-					case TRIANGULAR:
-						break;
-				}
-
-			}
-
-		};
 	}
 
 }

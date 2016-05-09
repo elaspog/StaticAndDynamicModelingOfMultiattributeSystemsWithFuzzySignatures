@@ -11,15 +11,11 @@ import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureModuleDescriptor;
 import net.prokhyon.modularfuzzy.pathValues.PathValuesModuleDescriptor;
-import net.prokhyon.modularfuzzy.shell.ShellApp;
-import net.prokhyon.modularfuzzy.shell.view.ShellLayoutController;
 
 public class CommonServicesImplSingleton implements CommonServices {
 
-	private ShellApp shellApp;
-	private ShellLayoutController shellLayoutController;
 	private Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = new HashMap<Class<? extends ModuleDescriptor>, ModuleDescriptor>();;
-	private List<FxModulesViewInformationGroup> viewNameAndPaneTypePairs = new ArrayList<FxModulesViewInformationGroup>();
+	private List<FxModulesViewInformationGroup> registeredViews = new ArrayList<FxModulesViewInformationGroup>();
 
 	private static class SingletonHolder {
 		private static final CommonServicesImplSingleton INSTANCE = new CommonServicesImplSingleton();
@@ -33,20 +29,12 @@ public class CommonServicesImplSingleton implements CommonServices {
 		registerModules();
 	}
 
-	public void initMainApp(ShellApp shellApp) {
-		this.shellApp = shellApp;
-	}
-
-	public void initShellLayoutController(ShellLayoutController shellLayoutController) {
-		this.shellLayoutController = shellLayoutController;
-	}
-
 	public Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> getPseudoModules() {
 		return pseudoModules;
 	}
 
-	public List<FxModulesViewInformationGroup> getViewNameAndPaneTypePairs() {
-		return viewNameAndPaneTypePairs;
+	public List<FxModulesViewInformationGroup> getRegisteredViews() {
+		return registeredViews;
 	}
 
 	private void registerModules() {
@@ -68,30 +56,8 @@ public class CommonServicesImplSingleton implements CommonServices {
 	public void registerView(String viewName, String viewRelativePath, Class<?> relativeResourceClass,
 			Class<? extends Pane> paneType) {
 
-		viewNameAndPaneTypePairs
+		registeredViews
 				.add(new FxModulesViewInformationGroup(viewName, viewRelativePath, relativeResourceClass, paneType));
-	}
-
-	@Override
-	public List<ModuleDescriptor> getModuleDependencyInstances(Class<? extends ModuleDescriptor> moduleTypes) {
-
-		return null;
-	}
-
-	@Override
-	public void loadViewToContentArea(String view) {
-
-	}
-
-	@Override
-	public void loadViewToModalWindow(String view) {
-
-	}
-
-	@Override
-	public CommonServices getCommonServices() {
-
-		return null;
 	}
 
 }

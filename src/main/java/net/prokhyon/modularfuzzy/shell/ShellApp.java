@@ -24,7 +24,6 @@ public class ShellApp extends Application {
 
 	public ShellApp() {
 		services = CommonServicesImplSingleton.getInstance();
-		((CommonServicesImplSingleton) services).initMainApp(this);
 		((CommonServicesImplSingleton) services).initializeModules();
 	}
 
