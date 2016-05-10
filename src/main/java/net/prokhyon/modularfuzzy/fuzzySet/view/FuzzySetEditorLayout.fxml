@@ -80,9 +80,9 @@
                      <children>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Button fx:id="createSystemButton" mnemonicParsing="false" onAction="#createFuzzySetSystem" prefWidth="75.0" text="Create" />
-                              <Button fx:id="clearSystemButton" mnemonicParsing="false" onAction="#clearFuzzySetSystem" prefWidth="75.0" text="Clear" />
-                              <Button fx:id="saveSystemButton" mnemonicParsing="false" onAction="#saveSystem" prefWidth="75.0" text="Save" />
+                              <Button fx:id="createSystemButton" mnemonicParsing="false" onAction="#createFuzzySetSystem" prefWidth="100.0" text="Create" />
+                              <Button fx:id="clearSystemButton" mnemonicParsing="false" onAction="#clearFuzzySetSystem" prefWidth="100.0" text="Clear" />
+                              <Button fx:id="saveSystemButton" mnemonicParsing="false" onAction="#saveSystem" prefWidth="100.0" text="Save" />
                            </children>
                         </HBox>
                      </children>
@@ -91,7 +91,7 @@
             </VBox>
          </children>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <HBox>
          <children>
             <VBox>
                <children>
@@ -101,13 +101,13 @@
             </VBox>
             <VBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Button fx:id="createSetButton" mnemonicParsing="false" onAction="#createSet" prefWidth="75.0" text="Create set" />
-                  <Button fx:id="editSetButton" mnemonicParsing="false" onAction="#editSet" prefWidth="75.0" text="Edit set">
+                  <Button fx:id="createSetButton" mnemonicParsing="false" onAction="#createSet" prefWidth="100.0" text="Create set" />
+                  <Button fx:id="editSetButton" mnemonicParsing="false" onAction="#editSet" prefWidth="100.0" text="Edit set">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="deleteSetButton" mnemonicParsing="false" onAction="#deleteSet" prefWidth="75.0" text="Delete set" />
+                  <Button fx:id="deleteSetButton" mnemonicParsing="false" onAction="#deleteSet" prefWidth="100.0" text="Delete set" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
@@ -115,7 +115,7 @@
             </VBox>
          </children>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <HBox>
          <children>
             <VBox spacing="10.0">
                <children>
@@ -188,7 +188,7 @@
       </HBox>
       <HBox>
          <children>
-            <VBox prefHeight="200.0" prefWidth="150.0">
+            <VBox>
                <children>
                   <Label text="Points" />
                   <TableView fx:id="pointsTableView" editable="true" prefHeight="200.0" prefWidth="200.0">

@@ -19,7 +19,6 @@ public class ContentLoaderHandler {
 	public static void loadContent(FxModulesViewInformationGroup viewToLoad, AnchorPane whereToLoad,
 			WorkspaceElement selectedItem) {
 
-		String viewName = viewToLoad.getViewName();
 		String viewRelativePath = viewToLoad.getViewRelativePath();
 		Class<?> relativeResourceClass = viewToLoad.getRelativeResourceClass();
 		Class<? extends Pane> paneType = viewToLoad.getPaneType();
@@ -29,8 +28,9 @@ public class ContentLoaderHandler {
 			loader.setLocation(relativeResourceClass.getResource(viewRelativePath));
 			// Pane p = loader.load();
 			Pane p = paneType.cast(loader.load());
-			loadDataToViewIfPossible(selectedItem, loader);
 			whereToLoad.getChildren().setAll(p);
+			loadDataToViewIfPossible(selectedItem, loader);
+
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

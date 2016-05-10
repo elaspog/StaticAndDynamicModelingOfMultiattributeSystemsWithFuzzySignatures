@@ -18,8 +18,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.CommonServicesImplSingleton;
@@ -30,6 +28,7 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.FuzzySetSystem;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzySet.util.ExtendedNumberStringConverter;
+import net.prokhyon.modularfuzzy.fuzzySet.view.drawing.DrawHelper;
 
 public class FuzzySetEditorController implements LoadableDataController {
 
@@ -157,6 +156,8 @@ public class FuzzySetEditorController implements LoadableDataController {
 		yCoordinateColumn.setCellValueFactory(cellData -> cellData.getValue().yPointProperty());
 		yCoordinateColumn.setCellFactory(
 				TextFieldTableCell.<FuzzySetPoint, Number> forTableColumn(new ExtendedNumberStringConverter()));
+
+		DrawHelper.initialize(fuzzySetSystemPane, fuzzySystem);
 	}
 
 	@FXML
@@ -179,8 +180,9 @@ public class FuzzySetEditorController implements LoadableDataController {
 		fuzzySetSystemTypeComboBox.valueProperty().bindBidirectional(fuzzySystem.get().fuzzySystemTypeProperty());
 		fuzzySetListView.itemsProperty().bindBidirectional(fuzzySystem.get().fuzzySetsProperty());
 
-		drawFuzzySystem();
+		DrawHelper.drawFuzzySystem();
 		createdSetCounter = 0;
+
 	}
 
 	@FXML
@@ -203,7 +205,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 		fuzzySetListView.getItems().clear();
 		fuzzySetListView.itemsProperty().setValue(null);
 
-		clearPane();
+		DrawHelper.clearPane();
 	}
 
 	@FXML
@@ -217,34 +219,13 @@ public class FuzzySetEditorController implements LoadableDataController {
 		}
 	}
 
-	void drawFuzzySystem() {
-
-		clearPane();
-
-		double padding = 0.05;
-		double height = fuzzySetSystemPane.getHeight();
-		double width = fuzzySetSystemPane.getWidth();
-
-		Rectangle baseSetFrame = new Rectangle(padding * width, padding * height, width - 2 * padding * width,
-				height - 2 * padding * height);
-		baseSetFrame.setStroke(Color.LIGHTGRAY);
-		baseSetFrame.setFill(null);
-		baseSetFrame.setStrokeWidth(1);
-
-		fuzzySetSystemPane.getChildren().addAll(baseSetFrame);
-	}
-
-	void clearPane() {
-
-		fuzzySetSystemPane.getChildren().clear();
-	}
-
 	@FXML
 	private void createSet() {
 
 		createdSetCounter++;
 		fuzzySystem.get().fuzzySetsProperty()
 				.add(new FuzzySet("set" + createdSetCounter, null, FuzzySetTypeEnum.TRIANGULAR, null));
+		DrawHelper.drawFuzzySystem();
 	}
 
 	@FXML
@@ -259,6 +240,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 		fuzzySetTypeComboBox.setItems(FXCollections.observableArrayList(FuzzySetTypeEnum.values()));
 		fuzzySetTypeComboBox.valueProperty().bindBidirectional(fuzzySetToEdit.get().fuzzySetTypeProperty());
 		setDescriptionTextArea.textProperty().bindBidirectional(fuzzySetToEdit.get().fuzzySetDescriptionProperty());
+		DrawHelper.drawFuzzySystem();
 	}
 
 	@FXML
@@ -266,6 +248,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 
 		ObservableList<FuzzySet> selectedItems = fuzzySetListView.getSelectionModel().getSelectedItems();
 		fuzzySystem.get().fuzzySetsProperty().removeAll(selectedItems);
+		DrawHelper.drawFuzzySystem();
 	}
 
 	@FXML
@@ -280,6 +263,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 		setNameTextField.textProperty().set(null);
 		fuzzySetTypeComboBox.getItems().clear();
 		setDescriptionTextArea.textProperty().set(null);
+		DrawHelper.drawFuzzySystem();
 	}
 
 	@FXML
@@ -287,12 +271,14 @@ public class FuzzySetEditorController implements LoadableDataController {
 
 		fuzzySetToEdit.get().fuzzySetPointsProperty().add(new FuzzySetPoint(xCoordinateSpinner.getValue().floatValue(),
 				yCoordinateSpinner.getValue().floatValue()));
+		DrawHelper.drawFuzzySystem();
 	}
 
 	@FXML
 	private void deletePoint() {
 
 		fuzzySetToEdit.get().fuzzySetPointsProperty().removeAll(pointsTableView.getSelectionModel().getSelectedItems());
+		DrawHelper.drawFuzzySystem();
 	}
 
 }
