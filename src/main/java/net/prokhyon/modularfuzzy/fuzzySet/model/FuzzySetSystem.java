@@ -10,9 +10,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import net.prokhyon.modularfuzzy.common.WorkspaceElement;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnum;
 
-public class FuzzySetSystem {
+public class FuzzySetSystem extends WorkspaceElement {
 
 	private final StringProperty fuzzySystemName;
 	private final StringProperty fuzzySystemDescription;

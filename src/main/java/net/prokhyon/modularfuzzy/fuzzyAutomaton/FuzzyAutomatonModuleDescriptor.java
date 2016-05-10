@@ -4,6 +4,7 @@ import javafx.scene.layout.StackPane;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.CommonServicesImplSingleton;
+import net.prokhyon.modularfuzzy.common.FxModulesViewInformationGroup;
 
 public class FuzzyAutomatonModuleDescriptor implements ModuleDescriptor {
 
@@ -12,8 +13,10 @@ public class FuzzyAutomatonModuleDescriptor implements ModuleDescriptor {
 	@Override
 	public void initializeModule() {
 		services = CommonServicesImplSingleton.getInstance();
-		services.registerView("Fuzzy Automaton Editor", "view/FuzzyAutomatonEditorLayout.fxml",
-				FuzzyAutomatonModuleDescriptor.class, StackPane.class);
+
+		FxModulesViewInformationGroup moduleInfo = new FxModulesViewInformationGroup("Fuzzy Automaton Editor",
+				"view/FuzzyAutomatonEditorLayout.fxml", FuzzyAutomatonModuleDescriptor.class, StackPane.class);
+		services.registerView(moduleInfo);
 	}
 
 }

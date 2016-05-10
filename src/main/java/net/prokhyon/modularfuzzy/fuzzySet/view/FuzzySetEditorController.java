@@ -20,6 +20,10 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import net.prokhyon.modularfuzzy.api.LoadableDataController;
+import net.prokhyon.modularfuzzy.common.CommonServices;
+import net.prokhyon.modularfuzzy.common.CommonServicesImplSingleton;
+import net.prokhyon.modularfuzzy.common.WorkspaceElement;
 import net.prokhyon.modularfuzzy.fuzzySet.model.FuzzySet;
 import net.prokhyon.modularfuzzy.fuzzySet.model.FuzzySetPoint;
 import net.prokhyon.modularfuzzy.fuzzySet.model.FuzzySetSystem;
@@ -27,7 +31,7 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnu
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzySet.util.ExtendedNumberStringConverter;
 
-public class FuzzySetEditorController {
+public class FuzzySetEditorController implements LoadableDataController {
 
 	private ObjectProperty<FuzzySetSystem> fuzzySystem;
 
@@ -50,6 +54,9 @@ public class FuzzySetEditorController {
 
 	@FXML
 	private Button clearSystemButton;
+
+	@FXML
+	private Button saveSystemButton;
 
 	@FXML
 	private ListView<FuzzySet> fuzzySetListView;
@@ -112,6 +119,7 @@ public class FuzzySetEditorController {
 
 		createSystemButton.disableProperty().bind(isSetSelectedForEditing);
 		clearSystemButton.disableProperty().bind(isNotLoadedSetSystem.or(isSetSelectedForEditing));
+		saveSystemButton.disableProperty().bind(isNotLoadedSetSystem.or(isSetSelectedForEditing));
 		systemNameTextField.disableProperty().bind(isNotLoadedSetSystem.or(isSetSelectedForEditing));
 		fuzzySetSystemTypeComboBox.disableProperty().bind(isNotLoadedSetSystem.or(isSetSelectedForEditing));
 		systemDescriptionTextArea.disableProperty().bind(isNotLoadedSetSystem.or(isSetSelectedForEditing));
@@ -154,15 +162,16 @@ public class FuzzySetEditorController {
 	@FXML
 	private void createFuzzySetSystem() {
 
-		loadFuzzySetSystem(null);
+		loadWithData(null);
 	}
 
-	private void loadFuzzySetSystem(FuzzySetSystem fuzzySetSystem) {
+	@Override
+	public <T extends WorkspaceElement> void loadWithData(T modelToLoad) {
 
-		if (fuzzySetSystem == null)
+		if (modelToLoad == null)
 			this.fuzzySystem.set(new FuzzySetSystem());
 		else
-			this.fuzzySystem.set(fuzzySetSystem);
+			this.fuzzySystem.set((FuzzySetSystem) modelToLoad);
 
 		systemNameTextField.textProperty().bindBidirectional(fuzzySystem.get().fuzzySystemNameProperty());
 		systemDescriptionTextArea.textProperty().bindBidirectional(fuzzySystem.get().fuzzySystemDescriptionProperty());
@@ -195,6 +204,17 @@ public class FuzzySetEditorController {
 		fuzzySetListView.itemsProperty().setValue(null);
 
 		clearPane();
+	}
+
+	@FXML
+	private void saveSystem() {
+
+		CommonServices services = CommonServicesImplSingleton.getInstance();
+
+		FuzzySetSystem fuzzySetSystem = fuzzySystem.get();
+		if (fuzzySetSystem != null) {
+			services.addModelStore(fuzzySetSystem);
+		}
 	}
 
 	void drawFuzzySystem() {

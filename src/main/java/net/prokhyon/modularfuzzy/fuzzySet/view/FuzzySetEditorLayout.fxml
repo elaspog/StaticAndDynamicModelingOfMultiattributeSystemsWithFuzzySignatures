@@ -82,6 +82,7 @@
                            <children>
                               <Button fx:id="createSystemButton" mnemonicParsing="false" onAction="#createFuzzySetSystem" prefWidth="75.0" text="Create" />
                               <Button fx:id="clearSystemButton" mnemonicParsing="false" onAction="#clearFuzzySetSystem" prefWidth="75.0" text="Clear" />
+                              <Button fx:id="saveSystemButton" mnemonicParsing="false" onAction="#saveSystem" prefWidth="75.0" text="Save" />
                            </children>
                         </HBox>
                      </children>
@@ -210,7 +211,7 @@
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Spinner fx:id="xCoordinateSpinner" editable="true" GridPane.columnIndex="1" />
+                        <Spinner editable="true" GridPane.columnIndex="1" fx:id="xCoordinateSpinner" />
                         <Label text="X:" />
                      </children>
                   </GridPane>

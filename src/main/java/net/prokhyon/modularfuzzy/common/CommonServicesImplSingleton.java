@@ -1,11 +1,13 @@
 package net.prokhyon.modularfuzzy.common;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javafx.scene.layout.Pane;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetModuleDescriptor;
@@ -16,6 +18,7 @@ public class CommonServicesImplSingleton implements CommonServices {
 
 	private Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = new HashMap<Class<? extends ModuleDescriptor>, ModuleDescriptor>();;
 	private List<FxModulesViewInformationGroup> registeredViews = new ArrayList<FxModulesViewInformationGroup>();
+	private Map<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>> registeredStores = new HashMap<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>>();
 
 	private static class SingletonHolder {
 		private static final CommonServicesImplSingleton INSTANCE = new CommonServicesImplSingleton();
@@ -30,11 +33,15 @@ public class CommonServicesImplSingleton implements CommonServices {
 	}
 
 	public Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> getPseudoModules() {
-		return pseudoModules;
+		return Collections.unmodifiableMap(pseudoModules);
 	}
 
 	public List<FxModulesViewInformationGroup> getRegisteredViews() {
-		return registeredViews;
+		return Collections.unmodifiableList(registeredViews);
+	}
+
+	public Map<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>> getRegisteredStores() {
+		return Collections.unmodifiableMap(registeredStores);
 	}
 
 	private void registerModules() {
@@ -53,11 +60,32 @@ public class CommonServicesImplSingleton implements CommonServices {
 	}
 
 	@Override
-	public void registerView(String viewName, String viewRelativePath, Class<?> relativeResourceClass,
-			Class<? extends Pane> paneType) {
+	public void registerView(FxModulesViewInformationGroup moduleInfo) {
 
-		registeredViews
-				.add(new FxModulesViewInformationGroup(viewName, viewRelativePath, relativeResourceClass, paneType));
+		registeredViews.add(moduleInfo);
+	}
+
+	@Override
+	public <T extends WorkspaceElement> void registerModelTypeInStore(WorkspaceInformationGroup storeInfo) {
+
+		registeredStores.put(storeInfo, FXCollections.<T> observableArrayList());
+	}
+
+	@Override
+	public <T extends WorkspaceElement> void addModelStore(T model) {
+
+		Class<? extends WorkspaceElement> modelClass = model.getClass();
+		for (Map.Entry<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>> entry : registeredStores
+				.entrySet()) {
+
+			WorkspaceInformationGroup key = entry.getKey();
+			if (key.getModelType().equals(modelClass)) {
+
+				ObservableList value = entry.getValue();
+				if (!value.contains(model))
+					value.add(model);
+			}
+		}
 	}
 
 }
