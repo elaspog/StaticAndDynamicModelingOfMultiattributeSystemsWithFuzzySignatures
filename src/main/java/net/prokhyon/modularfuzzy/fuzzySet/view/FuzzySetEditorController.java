@@ -20,7 +20,6 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.common.CommonServices;
-import net.prokhyon.modularfuzzy.common.CommonServicesImplSingleton;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
 import net.prokhyon.modularfuzzy.fuzzySet.model.FuzzySet;
 import net.prokhyon.modularfuzzy.fuzzySet.model.FuzzySetPoint;
@@ -29,6 +28,7 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnu
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzySet.util.ExtendedNumberStringConverter;
 import net.prokhyon.modularfuzzy.fuzzySet.view.drawing.DrawHelper;
+import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 
 public class FuzzySetEditorController implements LoadableDataController {
 
@@ -211,7 +211,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 	@FXML
 	private void saveSystem() {
 
-		CommonServices services = CommonServicesImplSingleton.getInstance();
+		CommonServices services = new ServiceFactory().getCommonServices();
 
 		FuzzySetSystem fuzzySetSystem = fuzzySystem.get();
 		if (fuzzySetSystem != null) {

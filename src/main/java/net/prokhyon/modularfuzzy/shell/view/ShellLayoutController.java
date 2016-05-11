@@ -14,16 +14,13 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import net.prokhyon.modularfuzzy.common.CommonServices;
-import net.prokhyon.modularfuzzy.common.CommonServicesImplSingleton;
 import net.prokhyon.modularfuzzy.common.FxModulesViewInformationGroup;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.WorkspaceInformationGroup;
+import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.util.ContentLoaderHandler;
 
 public class ShellLayoutController {
-
-	CommonServices services;
 
 	@FXML
 	private AnchorPane contentArea;
@@ -36,7 +33,6 @@ public class ShellLayoutController {
 
 	public ShellLayoutController() {
 
-		services = CommonServicesImplSingleton.getInstance();
 	}
 
 	@FXML
@@ -52,8 +48,8 @@ public class ShellLayoutController {
 
 	private void loadWorkspace() {
 
-		Map<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>> registeredStores = ((CommonServicesImplSingleton) services)
-				.getRegisteredStores();
+		Map<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>> registeredStores = new ServiceFactory()
+				.getShellServices().getRegisteredStores();
 
 		for (Map.Entry<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>> entry : registeredStores
 				.entrySet()) {
@@ -72,7 +68,7 @@ public class ShellLayoutController {
 		moduleSelectorButtons.setSpacing(5);
 		moduleSelectorButtons.setPadding(new Insets(5, 0, 0, 0));
 
-		List<FxModulesViewInformationGroup> registeredViews = ((CommonServicesImplSingleton) services)
+		List<FxModulesViewInformationGroup> registeredViews = new ServiceFactory().getShellServices()
 				.getRegisteredViews();
 
 		for (FxModulesViewInformationGroup viewToLoad : registeredViews) {

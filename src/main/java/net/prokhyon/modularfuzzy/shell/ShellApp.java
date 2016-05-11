@@ -7,8 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import net.prokhyon.modularfuzzy.common.CommonServices;
-import net.prokhyon.modularfuzzy.common.CommonServicesImplSingleton;
+import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
+import net.prokhyon.modularfuzzy.shell.services.ShellServices;
 import net.prokhyon.modularfuzzy.shell.view.ShellLayoutController;
 
 public class ShellApp extends Application {
@@ -16,15 +16,15 @@ public class ShellApp extends Application {
 	private Stage primaryStage;
 	private BorderPane shellLayout;
 	private ShellLayoutController shellLayoutController;
-	private CommonServices services;
+	private ShellServices services;
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 
 	public ShellApp() {
-		services = CommonServicesImplSingleton.getInstance();
-		((CommonServicesImplSingleton) services).initializeModules();
+		services = new ServiceFactory().getShellServices();
+		services.initializeModules();
 	}
 
 	@Override

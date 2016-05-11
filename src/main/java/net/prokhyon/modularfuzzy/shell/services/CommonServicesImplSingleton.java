@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.common;
+package net.prokhyon.modularfuzzy.shell.services;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,12 +9,16 @@ import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
+import net.prokhyon.modularfuzzy.common.CommonServices;
+import net.prokhyon.modularfuzzy.common.FxModulesViewInformationGroup;
+import net.prokhyon.modularfuzzy.common.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.WorkspaceInformationGroup;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureModuleDescriptor;
 import net.prokhyon.modularfuzzy.pathValues.PathValuesModuleDescriptor;
 
-public class CommonServicesImplSingleton implements CommonServices {
+class CommonServicesImplSingleton implements CommonServices, ShellServices {
 
 	private Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = new HashMap<Class<? extends ModuleDescriptor>, ModuleDescriptor>();;
 	private List<FxModulesViewInformationGroup> registeredViews = new ArrayList<FxModulesViewInformationGroup>();
@@ -30,10 +34,6 @@ public class CommonServicesImplSingleton implements CommonServices {
 
 	private CommonServicesImplSingleton() {
 		registerModules();
-	}
-
-	public Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> getPseudoModules() {
-		return Collections.unmodifiableMap(pseudoModules);
 	}
 
 	public List<FxModulesViewInformationGroup> getRegisteredViews() {
@@ -57,6 +57,12 @@ public class CommonServicesImplSingleton implements CommonServices {
 		for (Map.Entry<Class<? extends ModuleDescriptor>, ModuleDescriptor> md : pseudoModules.entrySet()) {
 			md.getValue().initializeModule();
 		}
+	}
+
+	@Override
+	public Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> getPseudoModules() {
+
+		return Collections.unmodifiableMap(pseudoModules);
 	}
 
 	@Override

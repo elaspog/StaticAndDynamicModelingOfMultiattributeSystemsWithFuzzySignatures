@@ -1,6 +1,12 @@
 package net.prokhyon.modularfuzzy.common;
 
+import java.util.Map;
+
+import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
+
 public interface CommonServices {
+
+	Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> getPseudoModules();
 
 	void registerView(FxModulesViewInformationGroup moduleInfo);
 
