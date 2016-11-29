@@ -3,6 +3,8 @@ package net.prokhyon.modularfuzzy.fuzzySet.sample;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandlerBase;
+import net.prokhyon.modularfuzzy.common.descriptor.IDescriptorHandler;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointAbove;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBelow;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointCustom;
@@ -14,7 +16,7 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTrapezoidal;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTriangular;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.IFuzzyPoint;
 
-public class FuzzySetSystemDescriptorHandler {
+public class FuzzySetSystemDescriptorHandler extends DescriptorHandlerBase implements IDescriptorHandler {
 
 	String xml;
 
@@ -54,6 +56,20 @@ public class FuzzySetSystemDescriptorHandler {
 		list1.add(new FuzzySetPolygonal("toredek2", "kivallo", "szuperjo ezt nem szabad elcseszni", list24));
 
 		return new FuzzySetSystem("5set", "haromhalmazos leiras", FuzzySetSystemTypeEnum.RUSPINNI_PARTITION, list1);
+	}
+
+	@Override
+	public void writeXMLFile(String outputFilePath) {
+
+		xml = xstream.toXML(createSample());
+		System.out.println(formatXml(xml));
+	}
+
+	@Override
+	public void readXMLFile(String inputFilePath) {
+
+		FuzzySetSystem fuzzySetSystem = (FuzzySetSystem) xstream.fromXML(xml);
+		System.out.println(fuzzySetSystem);
 	}
 
 }
