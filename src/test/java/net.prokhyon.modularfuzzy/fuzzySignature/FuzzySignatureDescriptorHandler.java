@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.fuzzySignature.sample;
+package net.prokhyon.modularfuzzy.fuzzySignature;
 
 import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandlerBase;
 import net.prokhyon.modularfuzzy.common.descriptor.IDescriptorHandler;

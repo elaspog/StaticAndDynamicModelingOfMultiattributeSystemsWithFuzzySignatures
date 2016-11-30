@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.fuzzyAutomaton.sample;
+package net.prokhyon.modularfuzzy.fuzzyAutomaton;
 
 import java.util.ArrayList;
 import java.util.List;

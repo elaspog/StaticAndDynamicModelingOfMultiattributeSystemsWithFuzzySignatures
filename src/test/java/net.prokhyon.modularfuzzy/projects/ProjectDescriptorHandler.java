@@ -1,11 +1,11 @@
-package net.prokhyon.modularfuzzy.projects.sample;
+package net.prokhyon.modularfuzzy.projects;
 
 import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandlerBase;
 import net.prokhyon.modularfuzzy.common.descriptor.IDescriptorHandler;
-import net.prokhyon.modularfuzzy.fuzzyAutomaton.sample.FuzzyAutomatonDescriptorHandler;
-import net.prokhyon.modularfuzzy.fuzzySet.sample.FuzzySetSystemDescriptorHandler;
-import net.prokhyon.modularfuzzy.fuzzySignature.sample.FuzzySignatureDescriptorHandler;
-import net.prokhyon.modularfuzzy.pathValues.sample.FuzzyModelValuesDescriptorHandler;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonDescriptorHandler;
+import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetSystemDescriptorHandler;
+import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureDescriptorHandler;
+import net.prokhyon.modularfuzzy.pathValues.FuzzyModelValuesDescriptorHandler;
 import net.prokhyon.modularfuzzy.projects.model.descriptor.Project;
 
 import java.util.ArrayList;

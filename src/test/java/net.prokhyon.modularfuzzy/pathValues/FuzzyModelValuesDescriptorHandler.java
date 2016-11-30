@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.pathValues.sample;
+package net.prokhyon.modularfuzzy.pathValues;
 
 import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandlerBase;
 import net.prokhyon.modularfuzzy.common.descriptor.IDescriptorHandler;
