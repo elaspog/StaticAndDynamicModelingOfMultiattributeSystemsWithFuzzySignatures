@@ -5,7 +5,7 @@ import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.FxModulesViewInformationGroup;
 import net.prokhyon.modularfuzzy.common.WorkspaceInformationGroup;
-import net.prokhyon.modularfuzzy.fuzzySet.model.FuzzySetSystem;
+import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 
 public class FuzzySetModuleDescriptor implements ModuleDescriptor {

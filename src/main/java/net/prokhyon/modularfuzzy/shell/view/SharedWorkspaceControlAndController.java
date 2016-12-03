@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.AnchorPane;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.WorkspaceInformationGroup;
@@ -47,6 +48,7 @@ public class SharedWorkspaceControlAndController<T extends WorkspaceElement> ext
 
 		this.sharedModels = value;
 		this.sharedWorkspace.itemsProperty().set(sharedModels);
+		this.sharedWorkspace.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		this.contentArea = contentArea;
 		this.workspaceInformationGroup = workspaceInformationGroup;
 
@@ -75,6 +77,19 @@ public class SharedWorkspaceControlAndController<T extends WorkspaceElement> ext
 
 		T selectedItem = sharedWorkspace.getSelectionModel().getSelectedItem();
 		sharedModels.remove(selectedItem);
+	}
+
+
+	public ObservableList<T> getAllSharedModels() {
+		return sharedModels;
+	}
+
+	public ObservableList<T> getSelectedSharedModels() {
+		return sharedWorkspace.getSelectionModel().getSelectedItems();
+	}
+
+	public WorkspaceInformationGroup getWorkspaceInformationGroup() {
+		return workspaceInformationGroup;
 	}
 
 }

@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.fuzzySet.model;
+package net.prokhyon.modularfuzzy.fuzzySet.model.fx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class FuzzySet {
 			}
 		};
 	}
-	
+
 	public FuzzySet(String fuzySetName, String fuzzySetDescription, FuzzySetTypeEnum fuzzySetType,
 			List<FuzzySetPoint> fuzzySetPoints) {
 		super();

@@ -25,6 +25,14 @@ public class FuzzyPointCustom implements IFuzzyPoint {
 		return 2;
 	}
 
+	public double getxCoordinate() {
+		return xCoordinate;
+	}
+
+	public double getyCoordinate() {
+		return yCoordinate;
+	}
+
 	@Override
 	public String toString() {
 		return "FuzzyPointMiddle [xCoordinate=" + xCoordinate + ", yCoordinate=" + yCoordinate + "]";

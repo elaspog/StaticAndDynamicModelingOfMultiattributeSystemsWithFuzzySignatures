@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.fuzzySet.model;
+package net.prokhyon.modularfuzzy.fuzzySet.model.fx;
 
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;

@@ -5,6 +5,10 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 public abstract class FuzzyDescriptorRootBase {
 
+	@XStreamAlias("uuid")
+	@XStreamAsAttribute
+	protected String uuid;
+
 	@XStreamAlias("typeid")
 	@XStreamAsAttribute
 	protected String typeId;
@@ -16,6 +20,14 @@ public abstract class FuzzyDescriptorRootBase {
 		super();
 		this.typeId = typeId;
 		this.description = description;
+	}
+
+	public String getUUID(){
+		return uuid;
+	}
+
+	public void setUUID(String uuid){
+		this.uuid = uuid;
 	}
 
 	public String getTypeid() {

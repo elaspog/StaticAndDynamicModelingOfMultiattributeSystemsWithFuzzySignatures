@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -18,6 +19,7 @@ import net.prokhyon.modularfuzzy.common.FxModulesViewInformationGroup;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.WorkspaceInformationGroup;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
+import net.prokhyon.modularfuzzy.shell.services.ShellServices;
 import net.prokhyon.modularfuzzy.shell.util.ContentLoaderHandler;
 
 public class ShellLayoutController {
@@ -31,8 +33,11 @@ public class ShellLayoutController {
 	@FXML
 	private TabPane workspaceTabPane;
 
+	private ShellServices services;
+
 	public ShellLayoutController() {
 
+		services = new ServiceFactory().getShellServices();
 	}
 
 	@FXML
@@ -87,6 +92,31 @@ public class ShellLayoutController {
 			});
 
 		}
+	}
+
+	@FXML
+	private void loadDefaultModels() {
+
+	}
+
+	@FXML
+	private void loadModels() {
+
+	}
+
+	@FXML
+	private void unloadModels() {
+
+	}
+
+	@FXML
+	private void saveModels() {
+
+		final Node content = workspaceTabPane.getSelectionModel().getSelectedItem().getContent();
+		final SharedWorkspaceControlAndController selectedController = (SharedWorkspaceControlAndController) content;
+		final ObservableList<WorkspaceElement> sharedModels = selectedController.getSelectedSharedModels();
+		final WorkspaceInformationGroup workspaceInformationGroup = selectedController.getWorkspaceInformationGroup();
+		services.saveModelByModule(sharedModels, workspaceInformationGroup);
 	}
 
 }

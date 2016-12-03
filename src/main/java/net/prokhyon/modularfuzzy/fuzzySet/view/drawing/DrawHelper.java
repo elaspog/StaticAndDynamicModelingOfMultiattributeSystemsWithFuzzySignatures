@@ -8,9 +8,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import net.prokhyon.modularfuzzy.fuzzySet.model.FuzzySet;
-import net.prokhyon.modularfuzzy.fuzzySet.model.FuzzySetPoint;
-import net.prokhyon.modularfuzzy.fuzzySet.model.FuzzySetSystem;
+import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet;
+import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetPoint;
+import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
 
 public class DrawHelper {
 

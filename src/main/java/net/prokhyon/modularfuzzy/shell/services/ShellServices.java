@@ -16,4 +16,6 @@ public interface ShellServices {
 
 	Map<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>> getRegisteredStores();
 
+	void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInformationGroup modelInformation);
+
 }

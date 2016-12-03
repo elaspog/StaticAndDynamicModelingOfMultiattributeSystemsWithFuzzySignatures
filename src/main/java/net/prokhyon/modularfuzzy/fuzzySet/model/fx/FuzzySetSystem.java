@@ -1,7 +1,8 @@
-package net.prokhyon.modularfuzzy.fuzzySet.model;
+package net.prokhyon.modularfuzzy.fuzzySet.model.fx;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -15,18 +16,44 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnu
 
 public class FuzzySetSystem extends WorkspaceElement {
 
+	private final StringProperty uuid;
 	private final StringProperty fuzzySystemName;
 	private final StringProperty fuzzySystemDescription;
 	private final ObjectProperty<FuzzySetSystemTypeEnum> fuzzySystemType;
 	private final ListProperty<FuzzySet> fuzzySets;
+
+	private StringProperty initializeUUIDPropertyFromString(String uuid){
+
+		StringProperty fuzzySetUUIDProp = null;
+		try{
+			String uuidStr = UUID.fromString(uuid).toString();
+			fuzzySetUUIDProp = new SimpleStringProperty(uuidStr);
+		} catch (Exception exception){
+			fuzzySetUUIDProp = new SimpleStringProperty(UUID.randomUUID().toString());
+		}
+		return fuzzySetUUIDProp;
+	}
 
 	public FuzzySetSystem() {
 		this("fuzzySystem", "That's a custom fuzzy system", FuzzySetSystemTypeEnum.CUSTOM, null);
 	}
 
 	public FuzzySetSystem(String fuzzySystemName, String fuzzySystemDescription, FuzzySetSystemTypeEnum fuzzySystemType,
+						  List<FuzzySet> fuzzySets, String uuid) {
+		super();
+		this.uuid = initializeUUIDPropertyFromString(uuid);
+		this.fuzzySystemName = new SimpleStringProperty(fuzzySystemName);
+		this.fuzzySystemDescription = new SimpleStringProperty(fuzzySystemDescription);
+		this.fuzzySystemType = new SimpleObjectProperty<FuzzySetSystemTypeEnum>(fuzzySystemType);
+		if (fuzzySets == null)
+			fuzzySets = new ArrayList<FuzzySet>();
+		this.fuzzySets = new SimpleListProperty<FuzzySet>(FXCollections.observableArrayList(FuzzySet.extractor()));
+	}
+
+	public FuzzySetSystem(String fuzzySystemName, String fuzzySystemDescription, FuzzySetSystemTypeEnum fuzzySystemType,
 			List<FuzzySet> fuzzySets) {
 		super();
+		this.uuid = initializeUUIDPropertyFromString(null);
 		this.fuzzySystemName = new SimpleStringProperty(fuzzySystemName);
 		this.fuzzySystemDescription = new SimpleStringProperty(fuzzySystemDescription);
 		this.fuzzySystemType = new SimpleObjectProperty<FuzzySetSystemTypeEnum>(fuzzySystemType);

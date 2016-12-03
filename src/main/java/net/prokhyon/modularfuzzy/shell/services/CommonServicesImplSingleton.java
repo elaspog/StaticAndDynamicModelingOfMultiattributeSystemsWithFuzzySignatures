@@ -17,6 +17,7 @@ import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureModuleDescriptor;
 import net.prokhyon.modularfuzzy.pathValues.PathValuesModuleDescriptor;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 class CommonServicesImplSingleton implements CommonServices, ShellServices {
 
@@ -57,6 +58,12 @@ class CommonServicesImplSingleton implements CommonServices, ShellServices {
 		for (Map.Entry<Class<? extends ModuleDescriptor>, ModuleDescriptor> md : pseudoModules.entrySet()) {
 			md.getValue().initializeModule();
 		}
+	}
+
+	@Override
+	public void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInformationGroup modelInformation) {
+
+		throw new NotImplementedException();
 	}
 
 	@Override

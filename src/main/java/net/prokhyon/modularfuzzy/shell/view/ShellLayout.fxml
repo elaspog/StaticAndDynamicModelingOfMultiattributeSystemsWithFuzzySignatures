@@ -14,12 +14,16 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.prokhyon.modularfuzzy.shell.view.ShellLayoutController">
+<BorderPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.prokhyon.modularfuzzy.shell.view.ShellLayoutController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
+                  <MenuItem mnemonicParsing="false" onAction="#unloadModels" text="Unload models" />
+                  <MenuItem mnemonicParsing="false" onAction="#loadDefaultModels" text="Load default models" />
+                  <MenuItem mnemonicParsing="false" onAction="#loadModels" text="Load model" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveModels" text="Save model" />
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>

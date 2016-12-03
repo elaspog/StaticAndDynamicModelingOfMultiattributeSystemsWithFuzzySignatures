@@ -4,7 +4,7 @@ import java.util.List;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import net.prokhyon.modularfuzzy.fuzzySet.model.FuzzySet;
+import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet;
 
 public class FuzzySetDrawWrapper {
 
