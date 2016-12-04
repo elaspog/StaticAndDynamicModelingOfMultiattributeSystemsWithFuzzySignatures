@@ -15,7 +15,7 @@ import org.xml.sax.InputSource;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
-public abstract class DescriptorHandlerBase {
+public class DescriptorHandlerBase {
 
 	protected XStream xstream;
 
@@ -45,4 +45,7 @@ public abstract class DescriptorHandlerBase {
 		}
 	}
 
+	public XStream getXstream() {
+		return xstream;
+	}
 }

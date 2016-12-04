@@ -1,5 +1,7 @@
 package net.prokhyon.modularfuzzy.fuzzySet.model;
 
+import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnum;
+
 import java.util.ArrayList;
 import java.util.List;
 

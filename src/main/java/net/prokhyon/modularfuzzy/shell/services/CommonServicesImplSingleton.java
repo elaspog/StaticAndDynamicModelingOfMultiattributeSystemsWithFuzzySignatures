@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.*;
@@ -17,12 +18,14 @@ import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureModuleDescriptor;
 import net.prokhyon.modularfuzzy.pathValues.PathValuesModuleDescriptor;
 
-class CommonServicesImplSingleton implements CommonServices, ShellServices {
+public class CommonServicesImplSingleton implements CommonServices, ShellServices {
 
 	private Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = new HashMap<Class<? extends ModuleDescriptor>, ModuleDescriptor>();;
 	private List<FxModulesViewInfo> registeredViews = new ArrayList<FxModulesViewInfo>();
 	private Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = new HashMap<WorkspaceInfo, ObservableList<? extends WorkspaceElement>>();
 	private List<PersistableModelInfo> registeredPersistenceMethods = new ArrayList<PersistableModelInfo>();
+	private Stage stage;
+
 
 	private static class SingletonHolder {
 		private static final CommonServicesImplSingleton INSTANCE = new CommonServicesImplSingleton();
@@ -73,6 +76,11 @@ class CommonServicesImplSingleton implements CommonServices, ShellServices {
 	}
 
 	@Override
+	public Stage getShellStage() {
+		return this.stage;
+	}
+
+	@Override
 	public Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> getPseudoModules() {
 
 		return Collections.unmodifiableMap(pseudoModules);
@@ -111,6 +119,10 @@ class CommonServicesImplSingleton implements CommonServices, ShellServices {
 	public void registerPersistenceMethod(PersistableModelInfo information) {
 
 		registeredPersistenceMethods.add(information);
+	}
+
+	public void setShellStage(Stage stage) {
+		this.stage = stage;
 	}
 
 }

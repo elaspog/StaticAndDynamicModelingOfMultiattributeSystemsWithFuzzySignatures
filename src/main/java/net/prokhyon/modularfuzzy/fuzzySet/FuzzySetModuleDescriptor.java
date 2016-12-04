@@ -6,6 +6,7 @@ import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.WorkspaceInfo;
+import net.prokhyon.modularfuzzy.fuzzySet.util.ModelDomainIOManager;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 
 public class FuzzySetModuleDescriptor implements ModuleDescriptor {
@@ -20,7 +21,7 @@ public class FuzzySetModuleDescriptor implements ModuleDescriptor {
 				"view/FuzzySetEditorLayout.fxml", FuzzySetModuleDescriptor.class, TilePane.class);
 		services.registerView(viewOfModuleInfo);
 
-		PersistableModelInfo pmt = new PersistableModelInfo(null,
+		PersistableModelInfo pmt = new PersistableModelInfo(new ModelDomainIOManager(),
 				net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem.class,
 				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem.class);
 

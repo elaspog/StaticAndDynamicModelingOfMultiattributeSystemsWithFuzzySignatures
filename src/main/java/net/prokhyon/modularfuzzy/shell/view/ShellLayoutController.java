@@ -14,7 +14,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import net.prokhyon.modularfuzzy.common.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.WorkspaceInfo;
@@ -36,8 +35,6 @@ public class ShellLayoutController {
 	private TabPane workspaceTabPane;
 
 	private ShellServices services;
-
-	private Stage stage;
 
 	public ShellLayoutController() {
 
@@ -127,7 +124,4 @@ public class ShellLayoutController {
 		}
 	}
 
-	public void setStage(Stage stage) {
-		this.stage = stage;
-	}
 }
