@@ -8,11 +8,10 @@ import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
-import net.prokhyon.modularfuzzy.common.CommonServices;
-import net.prokhyon.modularfuzzy.common.FxModulesViewInformationGroup;
-import net.prokhyon.modularfuzzy.common.WorkspaceElement;
-import net.prokhyon.modularfuzzy.common.WorkspaceInformationGroup;
+import net.prokhyon.modularfuzzy.common.*;
+import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureModuleDescriptor;
@@ -24,6 +23,7 @@ class CommonServicesImplSingleton implements CommonServices, ShellServices {
 	private Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = new HashMap<Class<? extends ModuleDescriptor>, ModuleDescriptor>();;
 	private List<FxModulesViewInformationGroup> registeredViews = new ArrayList<FxModulesViewInformationGroup>();
 	private Map<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>> registeredStores = new HashMap<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>>();
+	private List<PersistableModelTuple> registeredPersistenceMethods = new ArrayList<PersistableModelTuple>();
 
 	private static class SingletonHolder {
 		private static final CommonServicesImplSingleton INSTANCE = new CommonServicesImplSingleton();
@@ -63,7 +63,14 @@ class CommonServicesImplSingleton implements CommonServices, ShellServices {
 	@Override
 	public void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInformationGroup modelInformation) {
 
-		throw new NotImplementedException();
+		// TODO Export model according to the module what registered this type (should be extended later)
+		final PersistableModelTuple persistableModelTuple = modelInformation.getPersistableModelTuple();
+		try {
+			IPersistableModel persistableModel = persistableModelTuple.getPersistableModel();
+			persistableModel.exportModel(modelList);
+		} catch (RuntimeException e) {
+			throw new ModuleImplementationException("Not correctly implemented IPersistableModel interface in module.", e);
+		}
 	}
 
 	@Override
@@ -79,9 +86,9 @@ class CommonServicesImplSingleton implements CommonServices, ShellServices {
 	}
 
 	@Override
-	public <T extends WorkspaceElement> void registerModelTypeInStore(WorkspaceInformationGroup storeInfo) {
+	public void registerModelTypeInStore(WorkspaceInformationGroup storeInfo) {
 
-		registeredStores.put(storeInfo, FXCollections.<T> observableArrayList());
+		registeredStores.put(storeInfo, FXCollections.observableArrayList());
 	}
 
 	@Override
@@ -99,6 +106,12 @@ class CommonServicesImplSingleton implements CommonServices, ShellServices {
 					value.add(model);
 			}
 		}
+	}
+
+	@Override
+	public void registerPersistenceMethod(PersistableModelTuple information) {
+
+		registeredPersistenceMethods.add(information);
 	}
 
 }

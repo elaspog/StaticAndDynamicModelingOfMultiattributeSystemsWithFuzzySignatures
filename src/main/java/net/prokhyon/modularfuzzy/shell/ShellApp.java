@@ -41,6 +41,7 @@ public class ShellApp extends Application {
 			loader.setLocation(ShellApp.class.getResource("view/ShellLayout.fxml"));
 			shellLayout = (BorderPane) loader.load();
 			shellLayoutController = loader.getController();
+			shellLayoutController.setStage(primaryStage);
 			shellLayoutController.loadModules();
 			Scene scene = new Scene(shellLayout);
 			primaryStage.setScene(scene);

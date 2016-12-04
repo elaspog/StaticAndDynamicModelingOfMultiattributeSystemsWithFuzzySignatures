@@ -3,7 +3,6 @@ package net.prokhyon.modularfuzzy.shell.view;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,12 +14,15 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import net.prokhyon.modularfuzzy.common.FxModulesViewInformationGroup;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.WorkspaceInformationGroup;
+import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellServices;
 import net.prokhyon.modularfuzzy.shell.util.ContentLoaderHandler;
+import net.prokhyon.modularfuzzy.shell.util.FxDialogHelper;
 
 public class ShellLayoutController {
 
@@ -34,6 +36,8 @@ public class ShellLayoutController {
 	private TabPane workspaceTabPane;
 
 	private ShellServices services;
+
+	private Stage stage;
 
 	public ShellLayoutController() {
 
@@ -110,13 +114,20 @@ public class ShellLayoutController {
 	}
 
 	@FXML
-	private void saveModels() {
+	private void saveSelectedModelsFromWorkspace() {
 
 		final Node content = workspaceTabPane.getSelectionModel().getSelectedItem().getContent();
 		final SharedWorkspaceControlAndController selectedController = (SharedWorkspaceControlAndController) content;
 		final ObservableList<WorkspaceElement> sharedModels = selectedController.getSelectedSharedModels();
 		final WorkspaceInformationGroup workspaceInformationGroup = selectedController.getWorkspaceInformationGroup();
-		services.saveModelByModule(sharedModels, workspaceInformationGroup);
+		try {
+			services.saveModelByModule(sharedModels, workspaceInformationGroup);
+		} catch (ModuleImplementationException mie){
+			FxDialogHelper.ErrorDialogHelper(mie, "Model export error","Error occured while exporting", "A module has implemented incorrectly the IPersistableModel interface.");
+		}
 	}
 
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
 }

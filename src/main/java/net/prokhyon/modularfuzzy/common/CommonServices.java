@@ -10,8 +10,10 @@ public interface CommonServices {
 
 	void registerView(FxModulesViewInformationGroup moduleInfo);
 
-	<T extends WorkspaceElement> void registerModelTypeInStore(WorkspaceInformationGroup storeInfo);
+	void registerModelTypeInStore(WorkspaceInformationGroup storeInfo);
 
 	<T extends WorkspaceElement> void addModelStore(T model);
+
+	void registerPersistenceMethod(PersistableModelTuple information);
 
 }

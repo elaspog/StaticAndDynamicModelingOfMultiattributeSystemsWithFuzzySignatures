@@ -23,7 +23,7 @@
                   <MenuItem mnemonicParsing="false" onAction="#unloadModels" text="Unload models" />
                   <MenuItem mnemonicParsing="false" onAction="#loadDefaultModels" text="Load default models" />
                   <MenuItem mnemonicParsing="false" onAction="#loadModels" text="Load model" />
-                  <MenuItem mnemonicParsing="false" onAction="#saveModels" text="Save model" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveSelectedModelsFromWorkspace" text="Save selected models" />
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>

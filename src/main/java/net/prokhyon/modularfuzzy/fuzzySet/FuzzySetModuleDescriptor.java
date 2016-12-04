@@ -4,8 +4,8 @@ import javafx.scene.layout.TilePane;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.FxModulesViewInformationGroup;
+import net.prokhyon.modularfuzzy.common.PersistableModelTuple;
 import net.prokhyon.modularfuzzy.common.WorkspaceInformationGroup;
-import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 
 public class FuzzySetModuleDescriptor implements ModuleDescriptor {
@@ -20,9 +20,15 @@ public class FuzzySetModuleDescriptor implements ModuleDescriptor {
 				"view/FuzzySetEditorLayout.fxml", FuzzySetModuleDescriptor.class, TilePane.class);
 		services.registerView(viewOfModuleInfo);
 
-		WorkspaceInformationGroup storeInfo = new WorkspaceInformationGroup("Fuzzy Sets", FuzzySetSystem.class,
-				viewOfModuleInfo);
-		services.<FuzzySetSystem> registerModelTypeInStore(storeInfo);
+		PersistableModelTuple pmt = new PersistableModelTuple(null,
+				net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem.class,
+				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem.class);
+
+		WorkspaceInformationGroup storeInfo = new WorkspaceInformationGroup("Fuzzy Sets", net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem.class,
+				viewOfModuleInfo, pmt);
+
+		services.<net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem> registerModelTypeInStore(storeInfo);
+		services.registerPersistenceMethod(pmt);
 
 	}
 
