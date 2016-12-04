@@ -1,6 +1,6 @@
 package net.prokhyon.modularfuzzy.fuzzySignature;
 
-import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandlerBase;
+import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandler;
 import net.prokhyon.modularfuzzy.common.descriptor.IDescriptorHandler;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.*;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FuzzySignatureDescriptorHandler extends DescriptorHandlerBase implements IDescriptorHandler {
+public class FuzzySignatureDescriptorHandler extends DescriptorHandler implements IDescriptorHandler {
 
 	String xml;
 

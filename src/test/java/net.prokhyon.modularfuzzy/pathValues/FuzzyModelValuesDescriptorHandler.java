@@ -1,6 +1,6 @@
 package net.prokhyon.modularfuzzy.pathValues;
 
-import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandlerBase;
+import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandler;
 import net.prokhyon.modularfuzzy.common.descriptor.IDescriptorHandler;
 import net.prokhyon.modularfuzzy.pathValues.model.descriptor.FuzzyModelValues;
 import net.prokhyon.modularfuzzy.pathValues.model.descriptor.PathInfo;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FuzzyModelValuesDescriptorHandler extends DescriptorHandlerBase implements IDescriptorHandler {
+public class FuzzyModelValuesDescriptorHandler extends DescriptorHandler implements IDescriptorHandler {
 
 	String xml;
 

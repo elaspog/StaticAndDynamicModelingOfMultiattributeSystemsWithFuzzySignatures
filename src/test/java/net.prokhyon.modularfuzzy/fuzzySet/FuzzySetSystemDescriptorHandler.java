@@ -3,7 +3,7 @@ package net.prokhyon.modularfuzzy.fuzzySet;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandlerBase;
+import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandler;
 import net.prokhyon.modularfuzzy.common.descriptor.IDescriptorHandler;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointAbove;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBelow;
@@ -16,7 +16,7 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTrapezoidal;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTriangular;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.IFuzzyPoint;
 
-public class FuzzySetSystemDescriptorHandler extends DescriptorHandlerBase implements IDescriptorHandler {
+public class FuzzySetSystemDescriptorHandler extends DescriptorHandler implements IDescriptorHandler {
 
 	String xml;
 

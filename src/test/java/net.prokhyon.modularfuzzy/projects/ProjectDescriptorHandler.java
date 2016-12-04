@@ -1,6 +1,6 @@
 package net.prokhyon.modularfuzzy.projects;
 
-import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandlerBase;
+import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandler;
 import net.prokhyon.modularfuzzy.common.descriptor.IDescriptorHandler;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonDescriptorHandler;
 import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetSystemDescriptorHandler;
@@ -11,7 +11,7 @@ import net.prokhyon.modularfuzzy.projects.model.descriptor.Project;
 import java.util.ArrayList;
 
 
-public class ProjectDescriptorHandler extends DescriptorHandlerBase implements IDescriptorHandler {
+public class ProjectDescriptorHandler extends DescriptorHandler implements IDescriptorHandler {
 
 	String xml;
 	private FuzzySetSystemDescriptorHandler fuzzySetSystemDescriptorHandler;

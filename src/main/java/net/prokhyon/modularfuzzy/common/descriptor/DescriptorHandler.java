@@ -15,11 +15,11 @@ import org.xml.sax.InputSource;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
-public class DescriptorHandlerBase {
+public class DescriptorHandler {
 
 	protected XStream xstream;
 
-	public DescriptorHandlerBase() {
+	public DescriptorHandler() {
 		super();
 		xstream = new XStream(new StaxDriver());
 		xstream.autodetectAnnotations(true);

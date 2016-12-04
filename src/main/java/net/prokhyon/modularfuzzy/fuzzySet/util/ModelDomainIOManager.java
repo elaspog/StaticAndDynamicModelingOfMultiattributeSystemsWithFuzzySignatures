@@ -4,7 +4,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
-import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandlerBase;
+import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandler;
 import net.prokhyon.modularfuzzy.common.descriptor.FuzzyDescriptorRootBase;
 import net.prokhyon.modularfuzzy.fuzzySet.model.ModelConverter;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
@@ -37,7 +37,7 @@ public class ModelDomainIOManager implements IPersistableModel {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(shellServices.getShellStage());
 
-        DescriptorHandlerBase descriptorHandler = new DescriptorHandlerBase();
+        DescriptorHandler descriptorHandler = new DescriptorHandler();
         for (T m : models) {
             try {
                 final net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem model = (net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem) m;
