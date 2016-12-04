@@ -15,9 +15,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import net.prokhyon.modularfuzzy.common.FxModulesViewInformationGroup;
+import net.prokhyon.modularfuzzy.common.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
-import net.prokhyon.modularfuzzy.common.WorkspaceInformationGroup;
+import net.prokhyon.modularfuzzy.common.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellServices;
@@ -57,10 +57,10 @@ public class ShellLayoutController {
 
 	private void loadWorkspace() {
 
-		Map<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>> registeredStores = new ServiceFactory()
+		Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = new ServiceFactory()
 				.getShellServices().getRegisteredStores();
 
-		for (Map.Entry<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>> entry : registeredStores
+		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores
 				.entrySet()) {
 
 			SharedWorkspaceControlAndController swcac = new SharedWorkspaceControlAndController(contentArea,
@@ -77,10 +77,10 @@ public class ShellLayoutController {
 		moduleSelectorButtons.setSpacing(5);
 		moduleSelectorButtons.setPadding(new Insets(5, 0, 0, 0));
 
-		List<FxModulesViewInformationGroup> registeredViews = new ServiceFactory().getShellServices()
+		List<FxModulesViewInfo> registeredViews = new ServiceFactory().getShellServices()
 				.getRegisteredViews();
 
-		for (FxModulesViewInformationGroup viewToLoad : registeredViews) {
+		for (FxModulesViewInfo viewToLoad : registeredViews) {
 
 			Button buttonCurrent = new Button(viewToLoad.getViewName());
 			buttonCurrent.setMaxWidth(Double.MAX_VALUE);
@@ -119,9 +119,9 @@ public class ShellLayoutController {
 		final Node content = workspaceTabPane.getSelectionModel().getSelectedItem().getContent();
 		final SharedWorkspaceControlAndController selectedController = (SharedWorkspaceControlAndController) content;
 		final ObservableList<WorkspaceElement> sharedModels = selectedController.getSelectedSharedModels();
-		final WorkspaceInformationGroup workspaceInformationGroup = selectedController.getWorkspaceInformationGroup();
+		final WorkspaceInfo workspaceInfo = selectedController.getWorkspaceInfo();
 		try {
-			services.saveModelByModule(sharedModels, workspaceInformationGroup);
+			services.saveModelByModule(sharedModels, workspaceInfo);
 		} catch (ModuleImplementationException mie){
 			FxDialogHelper.ErrorDialogHelper(mie, "Model export error","Error occured while exporting", "A module has implemented incorrectly the IPersistableModel interface.");
 		}

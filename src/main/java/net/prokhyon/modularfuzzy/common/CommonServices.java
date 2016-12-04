@@ -8,12 +8,12 @@ public interface CommonServices {
 
 	Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> getPseudoModules();
 
-	void registerView(FxModulesViewInformationGroup moduleInfo);
+	void registerView(FxModulesViewInfo moduleInfo);
 
-	void registerModelTypeInStore(WorkspaceInformationGroup storeInfo);
+	void registerModelTypeInStore(WorkspaceInfo storeInfo);
 
 	<T extends WorkspaceElement> void addModelStore(T model);
 
-	void registerPersistenceMethod(PersistableModelTuple information);
+	void registerPersistenceMethod(PersistableModelInfo information);
 
 }

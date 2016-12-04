@@ -13,7 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.AnchorPane;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
-import net.prokhyon.modularfuzzy.common.WorkspaceInformationGroup;
+import net.prokhyon.modularfuzzy.common.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.shell.util.ContentLoaderHandler;
 
 public class SharedWorkspaceControlAndController<T extends WorkspaceElement> extends AnchorPane {
@@ -31,10 +31,10 @@ public class SharedWorkspaceControlAndController<T extends WorkspaceElement> ext
 
 	private ObservableList<T> sharedModels;
 
-	private WorkspaceInformationGroup workspaceInformationGroup;
+	private WorkspaceInfo workspaceInfo;
 
 	public SharedWorkspaceControlAndController(AnchorPane contentArea,
-			WorkspaceInformationGroup workspaceInformationGroup, ObservableList<T> value) {
+											   WorkspaceInfo workspaceInfo, ObservableList<T> value) {
 
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SharedWorkspaceControl.fxml"));
 		fxmlLoader.setRoot(this);
@@ -50,7 +50,7 @@ public class SharedWorkspaceControlAndController<T extends WorkspaceElement> ext
 		this.sharedWorkspace.itemsProperty().set(sharedModels);
 		this.sharedWorkspace.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		this.contentArea = contentArea;
-		this.workspaceInformationGroup = workspaceInformationGroup;
+		this.workspaceInfo = workspaceInfo;
 
 	}
 
@@ -68,7 +68,7 @@ public class SharedWorkspaceControlAndController<T extends WorkspaceElement> ext
 
 		T selectedItem = sharedWorkspace.getSelectionModel().getSelectedItem();
 		if (selectedItem != null)
-			ContentLoaderHandler.loadContent(workspaceInformationGroup.getLoaderInformation(), contentArea,
+			ContentLoaderHandler.loadContent(workspaceInfo.getLoaderInformation(), contentArea,
 					selectedItem);
 	}
 
@@ -88,8 +88,8 @@ public class SharedWorkspaceControlAndController<T extends WorkspaceElement> ext
 		return sharedWorkspace.getSelectionModel().getSelectedItems();
 	}
 
-	public WorkspaceInformationGroup getWorkspaceInformationGroup() {
-		return workspaceInformationGroup;
+	public WorkspaceInfo getWorkspaceInfo() {
+		return workspaceInfo;
 	}
 
 }

@@ -3,13 +3,13 @@ package net.prokhyon.modularfuzzy.common;
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.common.descriptor.FuzzyDescriptorRootBase;
 
-public class PersistableModelTuple {
+public class PersistableModelInfo {
 
     IPersistableModel persistableModel;
     Class<? extends WorkspaceElement> fxModel;
     Class<? extends FuzzyDescriptorRootBase> descriptorModel;
 
-    public PersistableModelTuple(IPersistableModel persistableModel, Class<? extends WorkspaceElement> fxModel, Class<? extends FuzzyDescriptorRootBase> descriptorModel) {
+    public PersistableModelInfo(IPersistableModel persistableModel, Class<? extends WorkspaceElement> fxModel, Class<? extends FuzzyDescriptorRootBase> descriptorModel) {
         this.persistableModel = persistableModel;
         this.fxModel = fxModel;
         this.descriptorModel = descriptorModel;

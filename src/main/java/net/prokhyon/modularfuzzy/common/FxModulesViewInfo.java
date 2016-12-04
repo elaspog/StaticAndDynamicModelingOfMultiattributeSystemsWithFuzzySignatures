@@ -2,15 +2,15 @@ package net.prokhyon.modularfuzzy.common;
 
 import javafx.scene.layout.Pane;
 
-public class FxModulesViewInformationGroup {
+public class FxModulesViewInfo {
 
 	String viewName;
 	String viewRelativePath;
 	Class<?> relativeResourceClass;
 	Class<? extends Pane> paneType;
 
-	public FxModulesViewInformationGroup(String viewName, String viewRelativePath, Class<?> relativeResourceClass,
-			Class<? extends Pane> paneType) {
+	public FxModulesViewInfo(String viewName, String viewRelativePath, Class<?> relativeResourceClass,
+                             Class<? extends Pane> paneType) {
 		super();
 		this.viewName = viewName;
 		this.viewRelativePath = viewRelativePath;

@@ -6,18 +6,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
-import net.prokhyon.modularfuzzy.common.FxModulesViewInformationGroup;
+import net.prokhyon.modularfuzzy.common.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
 
 public class ContentLoaderHandler {
 
-	public static void loadContent(FxModulesViewInformationGroup viewToLoad, AnchorPane whereToLoad) {
+	public static void loadContent(FxModulesViewInfo viewToLoad, AnchorPane whereToLoad) {
 
 		loadContent(viewToLoad, whereToLoad, null);
 	}
 
-	public static void loadContent(FxModulesViewInformationGroup viewToLoad, AnchorPane whereToLoad,
-			WorkspaceElement selectedItem) {
+	public static void loadContent(FxModulesViewInfo viewToLoad, AnchorPane whereToLoad,
+								   WorkspaceElement selectedItem) {
 
 		String viewRelativePath = viewToLoad.getViewRelativePath();
 		Class<?> relativeResourceClass = viewToLoad.getRelativeResourceClass();

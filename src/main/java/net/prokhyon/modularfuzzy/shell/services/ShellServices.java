@@ -4,18 +4,18 @@ import java.util.List;
 import java.util.Map;
 
 import javafx.collections.ObservableList;
-import net.prokhyon.modularfuzzy.common.FxModulesViewInformationGroup;
+import net.prokhyon.modularfuzzy.common.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
-import net.prokhyon.modularfuzzy.common.WorkspaceInformationGroup;
+import net.prokhyon.modularfuzzy.common.WorkspaceInfo;
 
 public interface ShellServices {
 
 	void initializeModules();
 
-	List<FxModulesViewInformationGroup> getRegisteredViews();
+	List<FxModulesViewInfo> getRegisteredViews();
 
-	Map<WorkspaceInformationGroup, ObservableList<? extends WorkspaceElement>> getRegisteredStores();
+	Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> getRegisteredStores();
 
-	void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInformationGroup modelInformation);
+	void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInfo modelInformation);
 
 }
