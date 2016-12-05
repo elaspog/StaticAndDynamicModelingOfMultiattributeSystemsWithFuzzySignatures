@@ -12,9 +12,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.descriptor.ConvertableFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnum;
 
-public class FuzzySetSystem extends WorkspaceElement {
+public class FuzzySetSystem extends WorkspaceElement
+		implements ConvertableFxModel2Descriptor<net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem>{
 
 	private final StringProperty uuid;
 	private final StringProperty fuzzySystemName;
@@ -108,6 +110,12 @@ public class FuzzySetSystem extends WorkspaceElement {
 
 	public ListProperty<FuzzySet> fuzzySetsProperty() {
 		return fuzzySets;
+	}
+
+	@Override
+	public net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem convert2DescriptorModel() {
+
+		return new net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem(this.getFuzzySystemName(), this.getFuzzySystemDescription(), this.getFuzzySystemType(), null);
 	}
 
 }

@@ -9,7 +9,7 @@ public class ModelConverter {
 
     public static net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem fxmodelToDescriptor(net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem model){
 
-        return null;
+        return model.convert2DescriptorModel();
     }
 
     public static net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem descriptorToFXmodel(net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem descriptor){
