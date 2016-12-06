@@ -5,9 +5,9 @@ import java.util.Map;
 
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
-import net.prokhyon.modularfuzzy.common.FxModulesViewInfo;
-import net.prokhyon.modularfuzzy.common.WorkspaceElement;
-import net.prokhyon.modularfuzzy.common.WorkspaceInfo;
+import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 
 public interface ShellServices {
 

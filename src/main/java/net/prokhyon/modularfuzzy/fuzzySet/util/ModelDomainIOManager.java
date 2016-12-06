@@ -3,9 +3,9 @@ package net.prokhyon.modularfuzzy.fuzzySet.util;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
-import net.prokhyon.modularfuzzy.common.WorkspaceElement;
-import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandler;
-import net.prokhyon.modularfuzzy.common.descriptor.FuzzyDescriptorRootBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorHandler;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellServices;
 

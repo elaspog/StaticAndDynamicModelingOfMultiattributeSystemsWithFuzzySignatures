@@ -5,7 +5,7 @@ import java.util.List;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
-import net.prokhyon.modularfuzzy.common.descriptor.FuzzyDescriptorModelBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorModelBase;
 
 public abstract class FuzzySetBase extends FuzzyDescriptorModelBase {
 

@@ -14,7 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
-import net.prokhyon.modularfuzzy.common.fxModel.FuzzyFxBase;
+import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.*;
 
 public class FuzzySet extends FuzzyFxBase

@@ -3,8 +3,8 @@ package net.prokhyon.modularfuzzy.fuzzyAutomaton;
 import javafx.scene.layout.GridPane;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
-import net.prokhyon.modularfuzzy.common.FxModulesViewInfo;
-import net.prokhyon.modularfuzzy.common.WorkspaceInfo;
+import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
+import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 

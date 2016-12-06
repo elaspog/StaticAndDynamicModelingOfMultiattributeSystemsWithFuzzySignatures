@@ -11,7 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import net.prokhyon.modularfuzzy.common.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.*;
 

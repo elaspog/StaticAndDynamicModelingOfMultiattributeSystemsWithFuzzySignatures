@@ -1,7 +1,7 @@
 package net.prokhyon.modularfuzzy.api;
 
-import net.prokhyon.modularfuzzy.common.WorkspaceElement;
-import net.prokhyon.modularfuzzy.common.descriptor.FuzzyDescriptorRootBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
 
 import java.util.List;
 

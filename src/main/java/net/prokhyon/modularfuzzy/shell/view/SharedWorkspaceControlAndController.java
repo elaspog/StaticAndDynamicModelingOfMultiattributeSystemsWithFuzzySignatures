@@ -12,8 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.AnchorPane;
-import net.prokhyon.modularfuzzy.common.WorkspaceElement;
-import net.prokhyon.modularfuzzy.common.WorkspaceInfo;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.shell.util.ContentLoaderHandler;
 
 public class SharedWorkspaceControlAndController<T extends WorkspaceElement> extends AnchorPane {

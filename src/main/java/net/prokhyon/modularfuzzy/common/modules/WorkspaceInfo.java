@@ -1,4 +1,6 @@
-package net.prokhyon.modularfuzzy.common;
+package net.prokhyon.modularfuzzy.common.modules;
+
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 
 public class WorkspaceInfo {
 

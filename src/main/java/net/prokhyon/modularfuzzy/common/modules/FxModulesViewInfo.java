@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.common;
+package net.prokhyon.modularfuzzy.common.modules;
 
 import javafx.scene.layout.Pane;
 

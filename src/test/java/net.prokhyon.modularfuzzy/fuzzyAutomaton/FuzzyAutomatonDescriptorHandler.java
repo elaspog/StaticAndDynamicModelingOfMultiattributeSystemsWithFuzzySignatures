@@ -3,8 +3,8 @@ package net.prokhyon.modularfuzzy.fuzzyAutomaton;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandler;
-import net.prokhyon.modularfuzzy.common.descriptor.IDescriptorHandler;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorHandler;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.IDescriptorHandler;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;

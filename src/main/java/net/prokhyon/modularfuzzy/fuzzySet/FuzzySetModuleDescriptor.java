@@ -3,9 +3,9 @@ package net.prokhyon.modularfuzzy.fuzzySet;
 import javafx.scene.layout.TilePane;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
-import net.prokhyon.modularfuzzy.common.FxModulesViewInfo;
-import net.prokhyon.modularfuzzy.common.PersistableModelInfo;
-import net.prokhyon.modularfuzzy.common.WorkspaceInfo;
+import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
+import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
+import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzySet.util.ModelDomainIOManager;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 

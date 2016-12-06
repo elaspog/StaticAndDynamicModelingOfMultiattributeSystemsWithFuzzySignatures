@@ -20,7 +20,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.common.CommonServices;
-import net.prokhyon.modularfuzzy.common.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetPoint;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;

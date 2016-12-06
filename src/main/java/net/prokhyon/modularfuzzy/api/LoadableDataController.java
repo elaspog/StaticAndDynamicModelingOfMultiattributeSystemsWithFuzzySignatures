@@ -1,6 +1,6 @@
 package net.prokhyon.modularfuzzy.api;
 
-import net.prokhyon.modularfuzzy.common.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 
 public interface LoadableDataController {
 

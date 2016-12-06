@@ -3,8 +3,8 @@ package net.prokhyon.modularfuzzy.fuzzySet;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandler;
-import net.prokhyon.modularfuzzy.common.descriptor.IDescriptorHandler;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorHandler;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.IDescriptorHandler;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointAbove;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBelow;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointCustom;

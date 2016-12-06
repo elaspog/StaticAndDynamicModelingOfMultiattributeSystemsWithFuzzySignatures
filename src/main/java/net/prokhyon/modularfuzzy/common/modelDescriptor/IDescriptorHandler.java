@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.common.descriptor;
+package net.prokhyon.modularfuzzy.common.modelDescriptor;
 
 public interface IDescriptorHandler {
 

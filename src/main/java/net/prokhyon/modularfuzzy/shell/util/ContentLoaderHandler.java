@@ -6,8 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
-import net.prokhyon.modularfuzzy.common.FxModulesViewInfo;
-import net.prokhyon.modularfuzzy.common.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 
 public class ContentLoaderHandler {
 

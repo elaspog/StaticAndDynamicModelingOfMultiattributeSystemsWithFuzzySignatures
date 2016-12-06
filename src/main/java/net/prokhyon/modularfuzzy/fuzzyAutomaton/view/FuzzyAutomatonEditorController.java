@@ -2,7 +2,7 @@ package net.prokhyon.modularfuzzy.fuzzyAutomaton.view;
 
 import javafx.fxml.FXML;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
-import net.prokhyon.modularfuzzy.common.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 
 public class FuzzyAutomatonEditorController implements LoadableDataController {
 

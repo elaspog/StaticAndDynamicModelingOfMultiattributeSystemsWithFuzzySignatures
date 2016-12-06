@@ -3,6 +3,10 @@ package net.prokhyon.modularfuzzy.common;
 import java.util.Map;
 
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
+import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
+import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 
 public interface CommonServices {
 

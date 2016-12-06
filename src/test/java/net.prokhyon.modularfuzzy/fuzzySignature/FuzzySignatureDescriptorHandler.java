@@ -1,7 +1,7 @@
 package net.prokhyon.modularfuzzy.fuzzySignature;
 
-import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandler;
-import net.prokhyon.modularfuzzy.common.descriptor.IDescriptorHandler;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorHandler;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.IDescriptorHandler;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.*;
 
 import java.util.ArrayList;

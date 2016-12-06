@@ -2,7 +2,7 @@ package net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import net.prokhyon.modularfuzzy.common.descriptor.FuzzyDescriptorModelBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorModelBase;
 
 @XStreamAlias("state")
 public class FuzzyState extends FuzzyDescriptorModelBase {

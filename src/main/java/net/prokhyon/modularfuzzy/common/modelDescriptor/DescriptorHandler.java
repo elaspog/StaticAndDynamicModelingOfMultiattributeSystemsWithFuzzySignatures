@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.common.descriptor;
+package net.prokhyon.modularfuzzy.common.modelDescriptor;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
