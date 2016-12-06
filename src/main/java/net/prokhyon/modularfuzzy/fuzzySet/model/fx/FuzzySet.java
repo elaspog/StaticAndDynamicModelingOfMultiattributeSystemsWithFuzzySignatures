@@ -12,9 +12,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.util.Callback;
-import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTypeEnum;
+import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
+import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
+import net.prokhyon.modularfuzzy.common.fxModel.FuzzyFxBase;
+import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.*;
 
-public class FuzzySet {
+public class FuzzySet extends FuzzyFxBase
+		implements ConvertibleFxModel2Descriptor<FuzzySetBase, FuzzySet> {
 
 	private final StringProperty fuzySetName;
 	private final StringProperty fuzzySetDescription;
@@ -95,4 +99,22 @@ public class FuzzySet {
 		return fuzySetName.get() + " : " + fuzzySetType.get();
 	}
 
+	@Override
+	public FuzzySetBase convert2DescriptorModel() {
+
+		final List<FuzzySetPoint> fxFuzzySetPoints = getFuzzySetPoints();
+		List<FuzzyPointBase> descriptorFuzzySetPoints = new ArrayList<>();
+		for (FuzzySetPoint fxFuzzySetPoint : fxFuzzySetPoints){
+			FuzzyPointBase fuzzyPointBase = fxFuzzySetPoint.convert2DescriptorModel();
+			descriptorFuzzySetPoints.add(fuzzyPointBase);
+		}
+		if (this.getFuzzySetType().equals(FuzzySetTypeEnum.TRIANGULAR)){
+			return new FuzzySetTriangular(null, getFuzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
+		} else if (this.getFuzzySetType().equals(FuzzySetTypeEnum.POLYGONAL)) {
+			return new FuzzySetPolygonal(null, getFuzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
+		} else if (this.getFuzzySetType().equals(FuzzySetTypeEnum.TRAPEZOID)) {
+			return new FuzzySetTrapezoidal(null, getFuzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
+		}
+		throw new ModuleImplementationException("Unknown FuzzySetTypeEnum while converting to FuzzySetBase descriptor model.");
+	}
 }

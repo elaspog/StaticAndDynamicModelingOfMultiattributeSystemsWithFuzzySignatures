@@ -6,7 +6,6 @@ import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.common.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.descriptor.DescriptorHandler;
 import net.prokhyon.modularfuzzy.common.descriptor.FuzzyDescriptorRootBase;
-import net.prokhyon.modularfuzzy.fuzzySet.model.ModelConverter;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellServices;
 
@@ -40,11 +39,13 @@ public class ModelDomainIOManager implements IPersistableModel {
         DescriptorHandler descriptorHandler = new DescriptorHandler();
         for (T m : models) {
             try {
-                final net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem model = (net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem) m;
-                final net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem fuzzySetSystem = ModelConverter.fxmodelToDescriptor(model);
+                final net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem fxFuzzySetSystem = (net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem) m;
+                final net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem descriptorFuzzySetSystem = fxFuzzySetSystem.convert2DescriptorModel();
 
-                String xml = descriptorHandler.getXstream().toXML(fuzzySetSystem);
-                System.out.println(descriptorHandler.formatXml(xml));
+                System.out.println(descriptorFuzzySetSystem.toString());
+                System.out.println();
+                System.out.println(descriptorHandler.getXml(descriptorFuzzySetSystem));
+                System.out.println(descriptorHandler.getJson(descriptorFuzzySetSystem));
 
             } catch (Exception e){}
         }

@@ -1,16 +1,12 @@
 package net.prokhyon.modularfuzzy.fuzzySet.model;
 
-import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnum;
+import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModelConverter {
 
-    public static net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem fxmodelToDescriptor(net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem model){
-
-        return model.convert2DescriptorModel();
-    }
 
     public static net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem descriptorToFXmodel(net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem descriptor){
 
@@ -27,10 +23,10 @@ public class ModelConverter {
             //TODO element.getLabel();
             final String fuzzySetDescription = element.getDescription();
             final net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTypeEnum fuzzySetType = element.getType();
-            final List<net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.IFuzzyPoint> fuzzySetPoints = element.getPoints();
+            final List<FuzzyPointBase> fuzzySetPoints = element.getPoints();
 
             List<net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetPoint> fuzzypoints = new ArrayList<>();
-            for (net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.IFuzzyPoint point : fuzzySetPoints) {
+            for (FuzzyPointBase point : fuzzySetPoints) {
 
                 net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetPoint fsp = null;
 

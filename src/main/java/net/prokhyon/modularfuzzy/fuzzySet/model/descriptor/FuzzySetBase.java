@@ -13,9 +13,9 @@ public abstract class FuzzySetBase extends FuzzyDescriptorModelBase {
 	private FuzzySetTypeEnum type;
 
 	@XStreamImplicit
-	private List<IFuzzyPoint> points;
+	private List<FuzzyPointBase> points;
 
-	public FuzzySetBase(String id, String label, String description, FuzzySetTypeEnum type, List<IFuzzyPoint> points) {
+	public FuzzySetBase(String id, String label, String description, FuzzySetTypeEnum type, List<FuzzyPointBase> points) {
 		super(id, label, description);
 		this.type = type;
 		this.points = points;
@@ -29,11 +29,11 @@ public abstract class FuzzySetBase extends FuzzyDescriptorModelBase {
 		this.type = type;
 	}
 
-	public List<IFuzzyPoint> getPoints() {
+	public List<FuzzyPointBase> getPoints() {
 		return points;
 	}
 
-	public void setPoints(List<IFuzzyPoint> points) {
+	public void setPoints(List<FuzzyPointBase> points) {
 		this.points = points;
 	}
 

@@ -14,7 +14,7 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTrapezoidal;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTriangular;
-import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.IFuzzyPoint;
+import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase;
 
 public class FuzzySetSystemDescriptorHandler extends DescriptorHandler implements IDescriptorHandler {
 
@@ -27,10 +27,10 @@ public class FuzzySetSystemDescriptorHandler extends DescriptorHandler implement
 	public FuzzySetSystem createSample() {
 		List<FuzzySetBase> list1 = new ArrayList<FuzzySetBase>();
 
-		List<IFuzzyPoint> list21 = new ArrayList<IFuzzyPoint>();
-		List<IFuzzyPoint> list22 = new ArrayList<IFuzzyPoint>();
-		List<IFuzzyPoint> list23 = new ArrayList<IFuzzyPoint>();
-		List<IFuzzyPoint> list24 = new ArrayList<IFuzzyPoint>();
+		List<FuzzyPointBase> list21 = new ArrayList<FuzzyPointBase>();
+		List<FuzzyPointBase> list22 = new ArrayList<FuzzyPointBase>();
+		List<FuzzyPointBase> list23 = new ArrayList<FuzzyPointBase>();
+		List<FuzzyPointBase> list24 = new ArrayList<FuzzyPointBase>();
 
 		list21.add(new FuzzyPointBelow(0.1));
 		list21.add(new FuzzyPointAbove(0.2));

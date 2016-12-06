@@ -4,7 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 @XStreamAlias("above")
-public class FuzzyPointAbove implements IFuzzyPoint {
+public class FuzzyPointAbove extends FuzzyPointBase {
 
 	@XStreamAlias("x")
 	@XStreamAsAttribute

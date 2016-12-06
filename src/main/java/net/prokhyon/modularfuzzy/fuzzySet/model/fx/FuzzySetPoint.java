@@ -2,8 +2,15 @@ package net.prokhyon.modularfuzzy.fuzzySet.model.fx;
 
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
+import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
+import net.prokhyon.modularfuzzy.common.fxModel.FuzzyFxBase;
+import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointAbove;
+import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBelow;
+import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointCustom;
+import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase;
 
-public class FuzzySetPoint {
+public class FuzzySetPoint extends FuzzyFxBase
+		implements ConvertibleFxModel2Descriptor<net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase, FuzzySetPoint> {
 
 	private final FloatProperty xPoint;
 	private final FloatProperty yPoint;
@@ -43,4 +50,18 @@ public class FuzzySetPoint {
 		return "FuzzySetPoint [xPoint=" + xPoint + ", yPoint=" + yPoint + "]";
 	}
 
+	@Override
+	public FuzzyPointBase convert2DescriptorModel() {
+
+		final float xPoint = getXPoint();
+		final float yPoint = getYPoint();
+
+		if (yPoint == 1.0){
+			return new FuzzyPointAbove(xPoint);
+		} else if (yPoint == 0.0) {
+			return new FuzzyPointBelow(xPoint);
+		} else {
+			return new FuzzyPointCustom(xPoint, yPoint);
+		}
+	}
 }

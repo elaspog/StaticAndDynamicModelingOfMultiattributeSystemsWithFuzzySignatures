@@ -7,7 +7,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("fuzzyset")
 public class FuzzySetTrapezoidal extends FuzzySetBase {
 
-	public FuzzySetTrapezoidal(String id, String label, String description, List<IFuzzyPoint> points) {
+	public FuzzySetTrapezoidal(String id, String label, String description, List<FuzzyPointBase> points) {
 		super(id, label, description, FuzzySetTypeEnum.TRAPEZOID, points);
 	}
 

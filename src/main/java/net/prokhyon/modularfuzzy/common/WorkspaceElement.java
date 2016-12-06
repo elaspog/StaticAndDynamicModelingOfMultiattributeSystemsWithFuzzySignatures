@@ -1,5 +1,7 @@
 package net.prokhyon.modularfuzzy.common;
 
-public abstract class WorkspaceElement {
+import net.prokhyon.modularfuzzy.common.fxModel.FuzzyFxBase;
+
+public abstract class WorkspaceElement extends FuzzyFxBase {
 
 }

@@ -2,6 +2,7 @@ package net.prokhyon.modularfuzzy.common.descriptor;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.Writer;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
@@ -10,6 +11,9 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.json.JsonWriter;
 import org.xml.sax.InputSource;
 
 import com.thoughtworks.xstream.XStream;
@@ -21,11 +25,9 @@ public class DescriptorHandler {
 
 	public DescriptorHandler() {
 		super();
-		xstream = new XStream(new StaxDriver());
-		xstream.autodetectAnnotations(true);
 	}
 
-	public static String formatXml(String xml) {
+	protected static String formatXml(String xml) {
 
 		try {
 			Transformer serializer = SAXTransformerFactory.newInstance().newTransformer();
@@ -45,7 +47,21 @@ public class DescriptorHandler {
 		}
 	}
 
-	public XStream getXstream() {
-		return xstream;
+	public <T extends FuzzyDescriptorRootBase> String getXml(T model) {
+		xstream = new XStream(new StaxDriver());
+		xstream.autodetectAnnotations(true);
+		String xml = xstream.toXML(model);
+		return formatXml(xml);
+	}
+
+	public <T extends FuzzyDescriptorRootBase> String getJson(T model) {
+		xstream = new XStream(new JsonHierarchicalStreamDriver() {
+
+			public HierarchicalStreamWriter createWriter(Writer writer) {
+				return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);
+			}
+		});
+		xstream.autodetectAnnotations(true);
+		return xstream.toXML(model);
 	}
 }

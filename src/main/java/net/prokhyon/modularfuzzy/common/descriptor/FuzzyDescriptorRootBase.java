@@ -3,7 +3,7 @@ package net.prokhyon.modularfuzzy.common.descriptor;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
-public abstract class FuzzyDescriptorRootBase {
+public abstract class FuzzyDescriptorRootBase extends FuzzyDescriptorBase {
 
 	@XStreamAlias("uuid")
 	@XStreamAsAttribute
