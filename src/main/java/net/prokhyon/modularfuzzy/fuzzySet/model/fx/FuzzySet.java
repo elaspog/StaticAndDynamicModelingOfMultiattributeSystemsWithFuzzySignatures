@@ -18,7 +18,7 @@ import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.*;
 
 public class FuzzySet extends FuzzyFxBase
-		implements ConvertibleFxModel2Descriptor<FuzzySetBase, FuzzySet> {
+		implements ConvertibleFxModel2Descriptor.Internal<FuzzySetBase, FuzzySet> {
 
 	private final StringProperty fuzySetName;
 	private final StringProperty fuzzySetDescription;

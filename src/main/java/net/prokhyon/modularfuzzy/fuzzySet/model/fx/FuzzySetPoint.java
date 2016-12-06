@@ -10,7 +10,7 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointCustom;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase;
 
 public class FuzzySetPoint extends FuzzyFxBase
-		implements ConvertibleFxModel2Descriptor<net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase, FuzzySetPoint> {
+		implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase, FuzzySetPoint> {
 
 	private final FloatProperty xPoint;
 	private final FloatProperty yPoint;
