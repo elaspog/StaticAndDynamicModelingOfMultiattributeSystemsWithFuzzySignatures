@@ -8,13 +8,13 @@ public interface ConvertibleDescriptor2FxModel<DESCRIPTOR_MODEL extends FuzzyDes
 
 
     interface Internal <DESCRIPTOR_MODEL extends FuzzyDescriptorBase, FX_MODEL extends FuzzyFxBase>
-            extends IConversionBase<DESCRIPTOR_MODEL, FX_MODEL> {
+            extends ConvertibleDescriptor2FxModel<DESCRIPTOR_MODEL, FX_MODEL> {
 
         FX_MODEL convert2FxModel();
     }
 
     interface External <DESCRIPTOR_MODEL extends FuzzyDescriptorBase, FX_MODEL extends FuzzyFxBase>
-            extends IConversionBase<DESCRIPTOR_MODEL, FX_MODEL> {
+            extends ConvertibleDescriptor2FxModel<DESCRIPTOR_MODEL, FX_MODEL> {
 
         FX_MODEL convert2FxModel(DESCRIPTOR_MODEL model);
     }
