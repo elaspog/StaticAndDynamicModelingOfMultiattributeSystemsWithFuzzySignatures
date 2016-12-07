@@ -1,14 +1,16 @@
 package net.prokhyon.modularfuzzy.fuzzySet.model;
 
+import net.prokhyon.modularfuzzy.common.conversion.ConvertibleDescriptor2FxModel;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelConverter {
+public class ModelConverter
+        implements ConvertibleDescriptor2FxModel.External<net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem, net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem> {
 
-
-    public static net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem descriptorToFXmodel(net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem descriptor){
+    @Override
+    public net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem convert2FxModel(net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem descriptor){
 
         final String fuzzySystemUUID = descriptor.getUUID();
         final String fuzzySystemName = descriptor.getTypeid();

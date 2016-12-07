@@ -19,6 +19,4 @@ public interface ShellServices {
 
 	void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInfo modelInformation);
 
-	Stage getShellStage();
-
 }

@@ -14,14 +14,15 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
+import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 import net.prokhyon.modularfuzzy.shell.services.ShellServices;
 import net.prokhyon.modularfuzzy.shell.util.ContentLoaderHandler;
-import net.prokhyon.modularfuzzy.shell.util.FxDialogHelper;
 
 public class ShellLayoutController {
 
@@ -34,11 +35,13 @@ public class ShellLayoutController {
 	@FXML
 	private TabPane workspaceTabPane;
 
-	private ShellServices services;
+	private ShellServices shellServices;
+	private ShellDialogServices shellDialogServices;
 
 	public ShellLayoutController() {
 
-		services = new ServiceFactory().getShellServices();
+		shellServices = new ServiceFactory().getShellServices();
+		shellDialogServices = new ServiceFactory().getShellDialogServices();
 	}
 
 	@FXML
@@ -118,9 +121,12 @@ public class ShellLayoutController {
 		final ObservableList<WorkspaceElement> sharedModels = selectedController.getSelectedSharedModels();
 		final WorkspaceInfo workspaceInfo = selectedController.getWorkspaceInfo();
 		try {
-			services.saveModelByModule(sharedModels, workspaceInfo);
+			shellServices.saveModelByModule(sharedModels, workspaceInfo);
 		} catch (ModuleImplementationException mie){
-			FxDialogHelper.ErrorDialogHelper(mie, "Model export error","Error occured while exporting", "A module has implemented incorrectly the IPersistableModel interface.");
+			shellDialogServices.informErrorWithStacktraceDialog(mie,
+					"Model export error",
+					"Error occured while exporting",
+					"A module has implemented incorrectly the IPersistableModel interface.");
 		}
 	}
 

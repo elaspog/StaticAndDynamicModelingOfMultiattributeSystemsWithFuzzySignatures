@@ -14,4 +14,9 @@ public class ServiceFactory {
 		return CommonServicesImplSingleton.getInstance();
 	}
 
+	public ShellDialogServices getShellDialogServices(){
+
+		return CommonServicesImplSingleton.getInstance();
+	}
+
 }
