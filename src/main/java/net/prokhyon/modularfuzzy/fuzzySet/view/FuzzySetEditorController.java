@@ -102,6 +102,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 	@FXML
 	private Button deletePointButton;
 
+	private int createdSetSystemCounter;
 	private int createdSetCounter;
 
 	@FXML
@@ -157,22 +158,26 @@ public class FuzzySetEditorController implements LoadableDataController {
 		yCoordinateColumn.setCellFactory(
 				TextFieldTableCell.<FuzzySetPoint, Number> forTableColumn(new ExtendedNumberStringConverter()));
 
+		createdSetSystemCounter = 0;
+		createdSetCounter = 0;
 		DrawHelper.initialize(fuzzySetSystemPane, fuzzySystem);
 	}
 
 	@FXML
 	private void createFuzzySetSystem() {
 
-		loadWithData(null);
+		createdSetSystemCounter++;
+		loadWithData(new FuzzySetSystem("fuzzySystem" + Integer.toString(createdSetSystemCounter),
+				"That's a custom fuzzy system", FuzzySetSystemTypeEnum.CUSTOM, null));
 	}
 
 	@Override
 	public <T extends WorkspaceElement> void loadWithData(T modelToLoad) {
 
 		if (modelToLoad == null)
-			this.fuzzySystem.set(new FuzzySetSystem());
-		else
-			this.fuzzySystem.set((FuzzySetSystem) modelToLoad);
+			return;
+
+		this.fuzzySystem.set((FuzzySetSystem) modelToLoad);
 
 		systemNameTextField.textProperty().bindBidirectional(fuzzySystem.get().fuzzySystemNameProperty());
 		systemDescriptionTextArea.textProperty().bindBidirectional(fuzzySystem.get().fuzzySystemDescriptionProperty());
@@ -181,8 +186,6 @@ public class FuzzySetEditorController implements LoadableDataController {
 		fuzzySetListView.itemsProperty().bindBidirectional(fuzzySystem.get().fuzzySetsProperty());
 
 		DrawHelper.drawFuzzySystem();
-		createdSetCounter = 0;
-
 	}
 
 	@FXML

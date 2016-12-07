@@ -36,10 +36,6 @@ public class FuzzySetSystem extends WorkspaceElement
 		return fuzzySetUUIDProp;
 	}
 
-	public FuzzySetSystem() {
-		this("fuzzySystem", "That's a custom fuzzy system", FuzzySetSystemTypeEnum.CUSTOM, null);
-	}
-
 	public FuzzySetSystem(String fuzzySystemName, String fuzzySystemDescription, FuzzySetSystemTypeEnum fuzzySystemType,
 						  List<FuzzySet> fuzzySets, String uuid) {
 		super();
