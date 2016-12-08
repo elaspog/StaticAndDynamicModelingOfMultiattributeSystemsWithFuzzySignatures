@@ -45,13 +45,9 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 		registerModules();
 	}
 
-	public List<FxModulesViewInfo> getRegisteredViews() {
-		return Collections.unmodifiableList(registeredViews);
-	}
-
-	public Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> getRegisteredStores() {
-		return Collections.unmodifiableMap(registeredStores);
-	}
+	/*
+		Methods
+	 */
 
 	private void registerModules() {
 
@@ -61,11 +57,23 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 		pseudoModules.put(PathValuesModuleDescriptor.class, new PathValuesModuleDescriptor());
 	}
 
+	/*
+		Implementing interface: ShellServices
+	 */
+
 	public void initializeModules() {
 
 		for (Map.Entry<Class<? extends ModuleDescriptor>, ModuleDescriptor> md : pseudoModules.entrySet()) {
 			md.getValue().initializeModule();
 		}
+	}
+
+	public List<FxModulesViewInfo> getRegisteredViews() {
+		return Collections.unmodifiableList(registeredViews);
+	}
+
+	public Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> getRegisteredStores() {
+		return Collections.unmodifiableMap(registeredStores);
 	}
 
 	@Override
@@ -80,6 +88,10 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 			throw new ModuleImplementationException("Not correctly implemented IPersistableModel interface in module.", e);
 		}
 	}
+
+	/*
+		Implementing interface: CommonServices
+	 */
 
 	@Override
 	public Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> getPseudoModules() {
@@ -122,6 +134,10 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 		registeredPersistenceMethods.add(information);
 	}
 
+	/*
+		Implementing interface: ShellDialogServices
+	 */
+
 	@Override
 	public void informWarningDialog(String title, String header, String content) {
 
@@ -145,6 +161,10 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 
 		return FxDialogHelper.saveFileDialog(stage, initialFileName, extensions);
 	}
+
+	/*
+		Getters and Setters
+	 */
 
 	public void setShellStage(Stage stage) {
 

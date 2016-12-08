@@ -1,6 +1,5 @@
 package net.prokhyon.modularfuzzy.common;
 
-import java.io.File;
 import java.util.Map;
 
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
