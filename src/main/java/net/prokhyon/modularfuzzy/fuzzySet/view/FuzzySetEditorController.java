@@ -18,6 +18,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
+
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
@@ -35,6 +36,8 @@ public class FuzzySetEditorController implements LoadableDataController {
 	private ObjectProperty<FuzzySetSystem> fuzzySystem;
 
 	private ObjectProperty<FuzzySet> fuzzySetToEdit;
+
+	private FuzzySetSystem originalFuzzySystem;
 
 	@FXML
 	private Pane fuzzySetSystemPane;
@@ -111,6 +114,15 @@ public class FuzzySetEditorController implements LoadableDataController {
 		this.fuzzySystem = new SimpleObjectProperty<FuzzySetSystem>();
 		this.fuzzySetToEdit = new SimpleObjectProperty<FuzzySet>();
 
+		bindViewElementsToControllerProperties();
+
+		createdSetSystemCounter = 0;
+		createdSetCounter = 0;
+		DrawHelper.initialize(fuzzySetSystemPane, fuzzySystem);
+	}
+
+	void bindViewElementsToControllerProperties(){
+
 		BooleanBinding isNotLoadedSetSystem = Bindings.isNull(fuzzySystem);
 		BooleanBinding isSetSelectedForEditing = fuzzySetToEdit.isNotNull();
 		BooleanBinding isNotSetSelectedForEditing = Bindings.isNull(fuzzySetToEdit);
@@ -152,15 +164,35 @@ public class FuzzySetEditorController implements LoadableDataController {
 		});
 
 		xCoordinateColumn.setCellValueFactory(cellData -> cellData.getValue().xPointProperty());
-		xCoordinateColumn.setCellFactory(
-				TextFieldTableCell.<FuzzySetPoint, Number> forTableColumn(new ExtendedNumberStringConverter()));
+		xCoordinateColumn.setCellFactory(TextFieldTableCell.<FuzzySetPoint, Number> forTableColumn(new ExtendedNumberStringConverter()));
 		yCoordinateColumn.setCellValueFactory(cellData -> cellData.getValue().yPointProperty());
-		yCoordinateColumn.setCellFactory(
-				TextFieldTableCell.<FuzzySetPoint, Number> forTableColumn(new ExtendedNumberStringConverter()));
+		yCoordinateColumn.setCellFactory(TextFieldTableCell.<FuzzySetPoint, Number> forTableColumn(new ExtendedNumberStringConverter()));
 
-		createdSetSystemCounter = 0;
-		createdSetCounter = 0;
-		DrawHelper.initialize(fuzzySetSystemPane, fuzzySystem);
+	}
+
+	void unbindViewElementsFromControllerProperties(){
+
+		unbindSetSystemViewElementsFromControllerProperties();
+		unbindSetViewElementsFromControllerProperties();
+	}
+
+	void unbindSetSystemViewElementsFromControllerProperties(){
+
+		if (fuzzySystem.getValue() != null) {
+			systemNameTextField.textProperty().unbindBidirectional(fuzzySystem.getValue().fuzzySystemNameProperty());
+			fuzzySetSystemTypeComboBox.valueProperty().unbindBidirectional(fuzzySystem.get().fuzzySystemTypeProperty());
+			systemDescriptionTextArea.textProperty().unbindBidirectional(fuzzySystem.get().fuzzySystemDescriptionProperty());
+			fuzzySetListView.itemsProperty().unbindBidirectional(fuzzySystem.get().fuzzySetsProperty());
+		}
+	}
+
+	void unbindSetViewElementsFromControllerProperties(){
+
+		if (fuzzySetToEdit.getValue() != null) {
+			setNameTextField.textProperty().unbindBidirectional(fuzzySetToEdit.get().fuzySetNameProperty());
+			fuzzySetTypeComboBox.valueProperty().unbindBidirectional(fuzzySetToEdit.get().fuzzySetTypeProperty());
+			setDescriptionTextArea.textProperty().unbindBidirectional(fuzzySetToEdit.get().fuzzySetDescriptionProperty());
+		}
 	}
 
 	@FXML
@@ -174,10 +206,13 @@ public class FuzzySetEditorController implements LoadableDataController {
 	@Override
 	public <T extends WorkspaceElement> void loadWithData(T modelToLoad) {
 
+		clearFuzzySetSystem();
 		if (modelToLoad == null)
 			return;
 
-		this.fuzzySystem.set((FuzzySetSystem) modelToLoad);
+		this.originalFuzzySystem = (FuzzySetSystem) modelToLoad;
+		FuzzySetSystem fss = ((FuzzySetSystem)modelToLoad).deepCopy();
+		this.fuzzySystem.set(fss);
 
 		systemNameTextField.textProperty().bindBidirectional(fuzzySystem.get().fuzzySystemNameProperty());
 		systemDescriptionTextArea.textProperty().bindBidirectional(fuzzySystem.get().fuzzySystemDescriptionProperty());
@@ -191,23 +226,12 @@ public class FuzzySetEditorController implements LoadableDataController {
 	@FXML
 	private void clearFuzzySetSystem() {
 
-		if (fuzzySystem.getValue() != null) {
-			systemNameTextField.textProperty().unbindBidirectional(fuzzySystem.getValue().fuzzySystemNameProperty());
-			fuzzySetSystemTypeComboBox.valueProperty().unbindBidirectional(fuzzySystem.get().fuzzySystemTypeProperty());
-			systemDescriptionTextArea.textProperty()
-					.unbindBidirectional(fuzzySystem.get().fuzzySystemDescriptionProperty());
-			fuzzySetListView.itemsProperty().unbindBidirectional(fuzzySystem.get().fuzzySetsProperty());
-		}
+		unbindViewElementsFromControllerProperties();
 		fuzzySystem.setValue(null);
-
 		systemNameTextField.textProperty().set(null);
 		fuzzySetSystemTypeComboBox.getItems().clear();
 		systemDescriptionTextArea.textProperty().set(null);
-
-		fuzzySetListView.getSelectionModel().clearSelection();
-		fuzzySetListView.getItems().clear();
 		fuzzySetListView.itemsProperty().setValue(null);
-
 		DrawHelper.clearPane();
 	}
 
@@ -225,6 +249,8 @@ public class FuzzySetEditorController implements LoadableDataController {
 	@FXML
 	private void createSet() {
 
+		unbindViewElementsFromControllerProperties();
+		bindViewElementsToControllerProperties();
 		createdSetCounter++;
 		fuzzySystem.get().fuzzySetsProperty()
 				.add(new FuzzySet("set" + createdSetCounter, null, FuzzySetTypeEnum.TRIANGULAR, null));
@@ -257,10 +283,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 	@FXML
 	private void saveSet() {
 
-		setNameTextField.textProperty().unbindBidirectional(fuzzySetToEdit.get().fuzySetNameProperty());
-		fuzzySetTypeComboBox.valueProperty().unbindBidirectional(fuzzySetToEdit.get().fuzzySetTypeProperty());
-		setDescriptionTextArea.textProperty().unbindBidirectional(fuzzySetToEdit.get().fuzzySetDescriptionProperty());
-
+		unbindSetViewElementsFromControllerProperties();
 		fuzzySetToEdit.setValue(null);
 
 		setNameTextField.textProperty().set(null);

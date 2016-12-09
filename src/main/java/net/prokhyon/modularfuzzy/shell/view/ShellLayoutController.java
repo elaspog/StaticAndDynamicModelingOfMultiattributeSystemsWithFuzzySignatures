@@ -1,6 +1,7 @@
 package net.prokhyon.modularfuzzy.shell.view;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.collections.ObservableList;
@@ -23,6 +24,7 @@ import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 import net.prokhyon.modularfuzzy.shell.services.ShellServices;
 import net.prokhyon.modularfuzzy.shell.util.ContentLoaderHandler;
+import net.prokhyon.modularfuzzy.shell.util.PaneAndControllerPair;
 
 public class ShellLayoutController {
 
@@ -38,6 +40,12 @@ public class ShellLayoutController {
 	private ShellServices shellServices;
 	private ShellDialogServices shellDialogServices;
 
+	public Map<FxModulesViewInfo, PaneAndControllerPair> getContents() {
+		return contents;
+	}
+
+	private Map<FxModulesViewInfo, PaneAndControllerPair> contents;
+
 	public ShellLayoutController() {
 
 		shellServices = new ServiceFactory().getShellServices();
@@ -51,11 +59,22 @@ public class ShellLayoutController {
 
 	public void loadModules() throws IOException {
 
-		loadWorkspace();
-		loadSideButtons();
+		initializeContentsForContentArea();
+		initializeTabTablesWorkspaceArea();
+		initializeSideButtonSelectorArea();
 	}
 
-	private void loadWorkspace() {
+	private void initializeContentsForContentArea() {
+
+		contents = new HashMap<>();
+		List<FxModulesViewInfo> registeredViews = new ServiceFactory().getShellServices().getRegisteredViews();
+		for (FxModulesViewInfo viewToLoad : registeredViews) {
+			PaneAndControllerPair p = ContentLoaderHandler.initializeContentPane(viewToLoad);
+			contents.put(viewToLoad, p);
+		}
+	}
+
+	private void initializeTabTablesWorkspaceArea() {
 
 		Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = new ServiceFactory()
 				.getShellServices().getRegisteredStores();
@@ -64,7 +83,7 @@ public class ShellLayoutController {
 				.entrySet()) {
 
 			SharedWorkspaceControlAndController swcac = new SharedWorkspaceControlAndController(contentArea,
-					entry.getKey(), entry.getValue());
+					entry.getKey(), entry.getValue(), this);
 			Tab t = new Tab();
 			t.setContent(swcac);
 			t.setText(entry.getKey().getViewName());
@@ -72,7 +91,7 @@ public class ShellLayoutController {
 		}
 	}
 
-	private void loadSideButtons() {
+	private void initializeSideButtonSelectorArea() {
 
 		moduleSelectorButtons.setSpacing(5);
 		moduleSelectorButtons.setPadding(new Insets(5, 0, 0, 0));
@@ -91,7 +110,8 @@ public class ShellLayoutController {
 				@Override
 				public void handle(ActionEvent ae) {
 
-					ContentLoaderHandler.loadContent(viewToLoad, contentArea);
+					PaneAndControllerPair p = contents.get(viewToLoad);
+					ContentLoaderHandler.loadContentPane(contentArea, null, p);
 				}
 			});
 

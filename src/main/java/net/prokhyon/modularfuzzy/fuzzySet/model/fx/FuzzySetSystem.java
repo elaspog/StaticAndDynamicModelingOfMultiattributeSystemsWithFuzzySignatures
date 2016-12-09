@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.*;
@@ -42,10 +43,8 @@ public class FuzzySetSystem extends WorkspaceElement
 		this.uuid = initializeUUIDPropertyFromString(uuid);
 		this.fuzzySystemName = new SimpleStringProperty(fuzzySystemName);
 		this.fuzzySystemDescription = new SimpleStringProperty(fuzzySystemDescription);
-		this.fuzzySystemType = new SimpleObjectProperty<FuzzySetSystemTypeEnum>(fuzzySystemType);
-		if (fuzzySets == null)
-			fuzzySets = new ArrayList<FuzzySet>();
-		this.fuzzySets = new SimpleListProperty<FuzzySet>(FXCollections.observableArrayList(FuzzySet.extractor()));
+		this.fuzzySystemType = new SimpleObjectProperty<>(fuzzySystemType);
+		this.fuzzySets = new SimpleListProperty<>(FXCollections.observableArrayList(FuzzySet.extractor()));
 	}
 
 	public FuzzySetSystem(String fuzzySystemName, String fuzzySystemDescription, FuzzySetSystemTypeEnum fuzzySystemType,
@@ -54,10 +53,23 @@ public class FuzzySetSystem extends WorkspaceElement
 		this.uuid = initializeUUIDPropertyFromString(null);
 		this.fuzzySystemName = new SimpleStringProperty(fuzzySystemName);
 		this.fuzzySystemDescription = new SimpleStringProperty(fuzzySystemDescription);
-		this.fuzzySystemType = new SimpleObjectProperty<FuzzySetSystemTypeEnum>(fuzzySystemType);
-		if (fuzzySets == null)
-			fuzzySets = new ArrayList<FuzzySet>();
-		this.fuzzySets = new SimpleListProperty<FuzzySet>(FXCollections.observableArrayList(FuzzySet.extractor()));
+		this.fuzzySystemType = new SimpleObjectProperty<>(fuzzySystemType);
+		this.fuzzySets = new SimpleListProperty<>(FXCollections.observableArrayList(FuzzySet.extractor()));
+	}
+
+	public FuzzySetSystem(FuzzySetSystem otherFuzzySetSystem){
+		super();
+		this.uuid = initializeUUIDPropertyFromString(otherFuzzySetSystem.uuid.get());
+		this.fuzzySystemName = new SimpleStringProperty(otherFuzzySetSystem.fuzzySystemName.get());
+		this.fuzzySystemDescription = new SimpleStringProperty(otherFuzzySetSystem.fuzzySystemDescription.get());
+		this.fuzzySystemType = new SimpleObjectProperty<>(otherFuzzySetSystem.fuzzySystemType.get());
+
+		final ObservableList<FuzzySet> fuzzySets = otherFuzzySetSystem.fuzzySets.get();
+		List<FuzzySet> copiedFuzzySets = new ArrayList<>();
+		for (FuzzySet fs : fuzzySets){
+			copiedFuzzySets.add(fs.deepCopy());
+		}
+		this.fuzzySets = new SimpleListProperty<>(FXCollections.observableArrayList(copiedFuzzySets));
 	}
 
 	public String getFuzzySystemName() {
@@ -120,4 +132,7 @@ public class FuzzySetSystem extends WorkspaceElement
 		return new net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem(this.getFuzzySystemName(), this.getFuzzySystemDescription(), this.getFuzzySystemType(), descriptorFuzzySets);
 	}
 
+	public FuzzySetSystem deepCopy() {
+		return new FuzzySetSystem(this);
+	}
 }

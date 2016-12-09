@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
@@ -40,10 +41,24 @@ public class FuzzySet extends FuzzyFxBase
 		super();
 		this.fuzySetName = new SimpleStringProperty(fuzySetName);
 		this.fuzzySetDescription = new SimpleStringProperty(fuzzySetDescription);
-		this.fuzzySetType = new SimpleObjectProperty<FuzzySetTypeEnum>(fuzzySetType);
+		this.fuzzySetType = new SimpleObjectProperty<>(fuzzySetType);
 		if (fuzzySetPoints == null)
-			fuzzySetPoints = new ArrayList<FuzzySetPoint>();
-		this.fuzzySetPoints = new SimpleListProperty<FuzzySetPoint>(FXCollections.observableArrayList(fuzzySetPoints));
+			fuzzySetPoints = new ArrayList<>();
+		this.fuzzySetPoints = new SimpleListProperty<>(FXCollections.observableArrayList(fuzzySetPoints));
+	}
+
+	public FuzzySet(FuzzySet otherFuzzySet) {
+		super();
+		this.fuzySetName = new SimpleStringProperty(otherFuzzySet.fuzySetName.get());
+		this.fuzzySetDescription = new SimpleStringProperty(otherFuzzySet.fuzzySetDescription.get());
+		this.fuzzySetType = new SimpleObjectProperty<>(otherFuzzySet.fuzzySetType.get());
+
+		final ObservableList<FuzzySetPoint> fuzzySetPoints = otherFuzzySet.fuzzySetPoints.get();
+		List<FuzzySetPoint> copiedFuzzySetPoints = new ArrayList<>();
+		for (FuzzySetPoint fs : fuzzySetPoints){
+			copiedFuzzySetPoints.add(fs.deepCopy());
+		}
+		this.fuzzySetPoints = new SimpleListProperty<>(FXCollections.observableArrayList(copiedFuzzySetPoints));
 	}
 
 	public String getFuzySetName() {
@@ -116,5 +131,9 @@ public class FuzzySet extends FuzzyFxBase
 			return new FuzzySetTrapezoidal(null, getFuzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
 		}
 		throw new ModuleImplementationException("Unknown FuzzySetTypeEnum while converting to FuzzySetBase descriptor model.");
+	}
+
+	public FuzzySet deepCopy() {
+		return new FuzzySet(this);
 	}
 }

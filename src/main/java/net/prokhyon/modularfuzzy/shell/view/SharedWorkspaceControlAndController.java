@@ -1,6 +1,7 @@
 package net.prokhyon.modularfuzzy.shell.view;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -13,8 +14,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.AnchorPane;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.shell.util.ContentLoaderHandler;
+import net.prokhyon.modularfuzzy.shell.util.PaneAndControllerPair;
 
 public class SharedWorkspaceControlAndController<T extends WorkspaceElement> extends AnchorPane {
 
@@ -33,8 +36,10 @@ public class SharedWorkspaceControlAndController<T extends WorkspaceElement> ext
 
 	private WorkspaceInfo workspaceInfo;
 
-	public SharedWorkspaceControlAndController(AnchorPane contentArea,
-											   WorkspaceInfo workspaceInfo, ObservableList<T> value) {
+	ShellLayoutController shellLayoutController;
+
+	public SharedWorkspaceControlAndController(AnchorPane contentArea, WorkspaceInfo workspaceInfo,
+											   ObservableList<T> value, ShellLayoutController shellLayoutController) {
 
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SharedWorkspaceControl.fxml"));
 		fxmlLoader.setRoot(this);
@@ -51,7 +56,7 @@ public class SharedWorkspaceControlAndController<T extends WorkspaceElement> ext
 		this.sharedWorkspace.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		this.contentArea = contentArea;
 		this.workspaceInfo = workspaceInfo;
-
+		this.shellLayoutController = shellLayoutController;
 	}
 
 	@FXML
@@ -67,9 +72,14 @@ public class SharedWorkspaceControlAndController<T extends WorkspaceElement> ext
 	protected void loadSelected() {
 
 		T selectedItem = sharedWorkspace.getSelectionModel().getSelectedItem();
-		if (selectedItem != null)
-			ContentLoaderHandler.loadContent(workspaceInfo.getLoaderInformation(), contentArea,
-					selectedItem);
+		if (selectedItem != null) {
+
+			final Map<FxModulesViewInfo, PaneAndControllerPair> contents = shellLayoutController.getContents();
+			final FxModulesViewInfo loaderInformation = workspaceInfo.getLoaderInformation();
+			final PaneAndControllerPair paneAndControllerPair = contents.get(loaderInformation);
+
+			ContentLoaderHandler.loadContentPane(contentArea, selectedItem, paneAndControllerPair);
+		}
 	}
 
 	@FXML

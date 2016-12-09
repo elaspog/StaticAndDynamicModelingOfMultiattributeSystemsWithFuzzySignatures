@@ -11,13 +11,8 @@ import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 
 public class ContentLoaderHandler {
 
-	public static void loadContent(FxModulesViewInfo viewToLoad, AnchorPane whereToLoad) {
 
-		loadContent(viewToLoad, whereToLoad, null);
-	}
-
-	public static void loadContent(FxModulesViewInfo viewToLoad, AnchorPane whereToLoad,
-								   WorkspaceElement selectedItem) {
+	public static PaneAndControllerPair initializeContentPane(FxModulesViewInfo viewToLoad) {
 
 		String viewRelativePath = viewToLoad.getViewRelativePath();
 		Class<?> relativeResourceClass = viewToLoad.getRelativeResourceClass();
@@ -28,22 +23,24 @@ public class ContentLoaderHandler {
 			loader.setLocation(relativeResourceClass.getResource(viewRelativePath));
 			// Pane p = loader.load();
 			Pane p = paneType.cast(loader.load());
-			whereToLoad.getChildren().setAll(p);
-			loadDataToViewIfPossible(selectedItem, loader);
+			LoadableDataController c = (LoadableDataController) loader.getController();
+			return new PaneAndControllerPair(p, c);
 
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
+		return null;
 	}
 
-	private static void loadDataToViewIfPossible(WorkspaceElement selectedItem, FXMLLoader loader) {
+	public static void loadContentPane(AnchorPane whereToLoad, WorkspaceElement selectedItem, PaneAndControllerPair p) {
 
+		whereToLoad.getChildren().setAll(p.pane);
 		if (selectedItem != null) {
 			try {
-				LoadableDataController controller = (LoadableDataController) loader.getController();
-				controller.loadWithData(selectedItem);
+				p.controller.loadWithData(selectedItem);
 			} catch (Exception e) {
 			}
 		}
 	}
+
 }
