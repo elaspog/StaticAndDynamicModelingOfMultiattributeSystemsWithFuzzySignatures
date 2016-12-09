@@ -112,7 +112,7 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	}
 
 	@Override
-	public <T extends WorkspaceElement> void addModelStore(T model) {
+	public <T extends WorkspaceElement> void addModelToRegisteredStore(T model) {
 
 		Class<? extends WorkspaceElement> modelClass = model.getClass();
 		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores
@@ -121,9 +121,28 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 			WorkspaceInfo key = entry.getKey();
 			if (key.getModelType().equals(modelClass)) {
 
-				ObservableList value = entry.getValue();
-				if (!value.contains(model))
-					value.add(model);
+				ObservableList list = entry.getValue();
+				if (!list.contains(model))
+					list.add(model);
+			}
+		}
+	}
+
+	@Override
+	public <T extends WorkspaceElement> void updateModelInRegisteredStore(T original, T model) {
+
+		Class<? extends WorkspaceElement> modelClass = model.getClass();
+		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores
+				.entrySet()) {
+
+			WorkspaceInfo key = entry.getKey();
+			if (key.getModelType().equals(modelClass)) {
+
+				ObservableList list = entry.getValue();
+				if (list.contains(original)) {
+					int index = list.indexOf(original);
+					list.set(index, model);
+				}
 			}
 		}
 	}
@@ -160,6 +179,12 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	public File saveFileDialog(String initialFileName, String ... extensions) {
 
 		return FxDialogHelper.saveFileDialog(stage, initialFileName, extensions);
+	}
+
+	@Override
+	public int selectFromOptions(String title, String headed, String content, String... choices) {
+
+		return FxDialogHelper.selectFromActions(title, headed, content, choices);
 	}
 
 	/*

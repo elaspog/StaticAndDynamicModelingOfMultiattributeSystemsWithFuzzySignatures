@@ -30,6 +30,7 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzySet.util.ExtendedNumberStringConverter;
 import net.prokhyon.modularfuzzy.fuzzySet.view.drawing.DrawHelper;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
+import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
 public class FuzzySetEditorController implements LoadableDataController {
 
@@ -37,7 +38,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 
 	private ObjectProperty<FuzzySet> fuzzySetToEdit;
 
-	private FuzzySetSystem originalFuzzySystem;
+	private FuzzySetSystem originallyLoadedFuzzySystem;
 
 	@FXML
 	private Pane fuzzySetSystemPane;
@@ -201,6 +202,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 		createdSetSystemCounter++;
 		loadWithData(new FuzzySetSystem("fuzzySystem" + Integer.toString(createdSetSystemCounter),
 				"That's a custom fuzzy system", FuzzySetSystemTypeEnum.CUSTOM, null));
+		this.originallyLoadedFuzzySystem = null;
 	}
 
 	@Override
@@ -210,7 +212,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 		if (modelToLoad == null)
 			return;
 
-		this.originalFuzzySystem = (FuzzySetSystem) modelToLoad;
+		this.originallyLoadedFuzzySystem = (FuzzySetSystem) modelToLoad;
 		FuzzySetSystem fss = ((FuzzySetSystem)modelToLoad).deepCopy();
 		this.fuzzySystem.set(fss);
 
@@ -233,16 +235,32 @@ public class FuzzySetEditorController implements LoadableDataController {
 		systemDescriptionTextArea.textProperty().set(null);
 		fuzzySetListView.itemsProperty().setValue(null);
 		DrawHelper.clearPane();
+		this.originallyLoadedFuzzySystem = null;
 	}
 
 	@FXML
 	private void saveSystem() {
 
-		CommonServices services = new ServiceFactory().getCommonServices();
-
+		CommonServices commonServices = new ServiceFactory().getCommonServices();
+		ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();
 		FuzzySetSystem fuzzySetSystem = fuzzySystem.get();
 		if (fuzzySetSystem != null) {
-			services.addModelStore(fuzzySetSystem);
+			final FuzzySetSystem fss = fuzzySetSystem.deepCopy();
+			if (this.originallyLoadedFuzzySystem != null ) {
+				int choice = shellDialogServices.selectFromOptions(
+						"Model conflict",
+						"This model has an original in model store.",
+						"Would you like to overwrite it, or create a new one instead?",
+						"Overwrite", "Create new");
+				if (choice == 1){
+					commonServices.updateModelInRegisteredStore(this.originallyLoadedFuzzySystem, fss);
+				} else if (choice == 2){
+					commonServices.addModelToRegisteredStore(fss);
+				}
+			} else {
+				commonServices.addModelToRegisteredStore(fss);
+				this.originallyLoadedFuzzySystem = fss;
+			}
 		}
 	}
 
@@ -285,7 +303,6 @@ public class FuzzySetEditorController implements LoadableDataController {
 
 		unbindSetViewElementsFromControllerProperties();
 		fuzzySetToEdit.setValue(null);
-
 		setNameTextField.textProperty().set(null);
 		fuzzySetTypeComboBox.getItems().clear();
 		setDescriptionTextArea.textProperty().set(null);

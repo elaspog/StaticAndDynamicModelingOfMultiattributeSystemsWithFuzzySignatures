@@ -1,8 +1,6 @@
 package net.prokhyon.modularfuzzy.shell.util;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
@@ -11,6 +9,9 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class FxDialogHelper {
 
@@ -78,6 +79,25 @@ public class FxDialogHelper {
         //fileChooser.setSelectedExtensionFilter();
         File file = fileChooser.showSaveDialog(stage);
         return file;
+    }
+
+    public static int selectFromActions(String title, String header, String content, String ... actions){
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+
+        List<ButtonType> buttonTypes = new ArrayList<>();
+        buttonTypes.add(new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE));   // +1 offset added
+        for (String action: actions){
+            buttonTypes.add(new ButtonType(action));
+        }
+        alert.getButtonTypes().setAll(buttonTypes);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        int ret = buttonTypes.indexOf(result.get());
+        return ret;
     }
 
 }

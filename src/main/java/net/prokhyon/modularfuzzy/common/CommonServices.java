@@ -16,7 +16,9 @@ public interface CommonServices {
 
 	void registerModelTypeInStore(WorkspaceInfo storeInfo);
 
-	<T extends WorkspaceElement> void addModelStore(T model);
+	<T extends WorkspaceElement> void addModelToRegisteredStore(T model);
+
+	<T extends WorkspaceElement> void updateModelInRegisteredStore(T original, T model);
 
 	void registerPersistenceMethod(PersistableModelInfo information);
 

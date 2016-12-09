@@ -12,4 +12,6 @@ public interface ShellDialogServices {
 
     File saveFileDialog(String initialFileName, String ... extensions);
 
+    int selectFromOptions(String title, String headed, String content, String ... choices);
+
 }
