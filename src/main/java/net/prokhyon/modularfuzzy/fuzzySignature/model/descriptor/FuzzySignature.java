@@ -21,9 +21,9 @@ public class FuzzySignature extends FuzzyDescriptorRootBase {
 	@XStreamImplicit
 	private List<FuzzyNode> nodeList;
 
-	public FuzzySignature(String typeId, String typeDescription, FuzzyTreeTypeEnum treeType, String rootNodeId,
+	public FuzzySignature(String uuid, String typeId, String typeDescription, FuzzyTreeTypeEnum treeType, String rootNodeId,
 			List<FuzzyNode> nodeList) {
-		super(typeId, typeDescription);
+		super(uuid, typeId, typeDescription);
 		this.treeType = treeType;
 		this.rootNodeId = rootNodeId;
 		this.nodeList = nodeList;

@@ -120,6 +120,19 @@ public class FuzzySetSystem extends WorkspaceElement
 		return fuzzySets;
 	}
 
+	public String getUuid() {
+		return uuid.get();
+	}
+
+	public StringProperty uuidProperty() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid.set(uuid);
+	}
+
+
 	@Override
 	public net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem convert2DescriptorModel() {
 
@@ -129,7 +142,9 @@ public class FuzzySetSystem extends WorkspaceElement
 			final FuzzySetBase fuzzySetBase = fxFuzzySet.convert2DescriptorModel();
 			descriptorFuzzySets.add(fuzzySetBase);
 		}
-		return new net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem(this.getFuzzySystemName(), this.getFuzzySystemDescription(), this.getFuzzySystemType(), descriptorFuzzySets);
+		return new net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem(this.getUuid(),
+				this.getFuzzySystemName(), this.getFuzzySystemDescription(), this.getFuzzySystemType(),
+				descriptorFuzzySets);
 	}
 
 	public FuzzySetSystem deepCopy() {

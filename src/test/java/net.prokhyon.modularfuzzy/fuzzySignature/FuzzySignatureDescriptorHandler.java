@@ -45,7 +45,7 @@ public class FuzzySignatureDescriptorHandler extends DescriptorHandler implement
 		nodes.add(new FuzzyNode("n111", "level1", null, null, null, "SMA1", "5set"));
 		nodes.add(new FuzzyNode("n112", "level1", null, null, null, "SMA3", null));
 
-		return new FuzzySignature("3set", "szignatura leiras", FuzzyTreeTypeEnum.PARTIAL_TYPE, "rootNodeId", nodes);
+		return new FuzzySignature("uuid", "3set", "szignatura leiras", FuzzyTreeTypeEnum.PARTIAL_TYPE, "rootNodeId", nodes);
 	}
 
 	@Override

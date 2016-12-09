@@ -16,8 +16,9 @@ public abstract class FuzzyDescriptorRootBase extends FuzzyDescriptorBase {
 	@XStreamAlias("description")
 	protected String description;
 
-	public FuzzyDescriptorRootBase(String typeId, String description) {
+	public FuzzyDescriptorRootBase(String uuid, String typeId, String description) {
 		super();
+		this.uuid = uuid;
 		this.typeId = typeId;
 		this.description = description;
 	}

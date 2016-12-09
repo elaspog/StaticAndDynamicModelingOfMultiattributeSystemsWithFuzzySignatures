@@ -31,7 +31,7 @@ public class FuzzyAutomatonDescriptorHandler extends DescriptorHandler implement
 		transitions.add(new FuzzyTransition("tr2", "lab2", null, "id2", "id3"));
 		transitions.add(new FuzzyTransition("tr3", "lab3", null, "id1", "id3"));
 
-		return new FuzzyAutomaton("automaton_id", "automata leiras", "3set", states, transitions);
+		return new FuzzyAutomaton("uuid", "automaton_id", "automata leiras", "3set", states, transitions);
 	}
 
 	@Override

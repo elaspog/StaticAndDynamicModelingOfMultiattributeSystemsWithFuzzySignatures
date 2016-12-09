@@ -55,7 +55,7 @@ public class FuzzySetSystemDescriptorHandler extends DescriptorHandler implement
 		list1.add(new FuzzySetPolygonal("toredek1", "kozepes", null, list23));
 		list1.add(new FuzzySetPolygonal("toredek2", "kivallo", "szuperjo ezt nem szabad elcseszni", list24));
 
-		return new FuzzySetSystem("5set", "haromhalmazos leiras", FuzzySetSystemTypeEnum.RUSPINNI_PARTITION, list1);
+		return new FuzzySetSystem("uuid", "5set", "haromhalmazos leiras", FuzzySetSystemTypeEnum.RUSPINNI_PARTITION, list1);
 	}
 
 	@Override
