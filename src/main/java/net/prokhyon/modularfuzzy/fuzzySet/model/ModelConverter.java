@@ -13,7 +13,7 @@ public class ModelConverter
     public net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem convert2FxModel(net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem descriptor){
 
         final String fuzzySystemUUID = descriptor.getUUID();
-        final String fuzzySystemName = descriptor.getTypeid();
+        final String fuzzySystemName = descriptor.getTypename();
         final String fuzzySystemDescription =  descriptor.getDescription();
         final net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnum fuzzySystemType =  descriptor.getType();
         final List<net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetBase> sets = descriptor.getSets();

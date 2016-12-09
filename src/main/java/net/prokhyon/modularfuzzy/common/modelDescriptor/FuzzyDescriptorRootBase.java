@@ -9,17 +9,17 @@ public abstract class FuzzyDescriptorRootBase extends FuzzyDescriptorBase {
 	@XStreamAsAttribute
 	protected String uuid;
 
-	@XStreamAlias("typeid")
+	@XStreamAlias("typename")
 	@XStreamAsAttribute
-	protected String typeId;
+	protected String typeName;
 
 	@XStreamAlias("description")
 	protected String description;
 
-	public FuzzyDescriptorRootBase(String uuid, String typeId, String description) {
+	public FuzzyDescriptorRootBase(String uuid, String typeName, String description) {
 		super();
 		this.uuid = uuid;
-		this.typeId = typeId;
+		this.typeName = typeName;
 		this.description = description;
 	}
 
@@ -31,20 +31,20 @@ public abstract class FuzzyDescriptorRootBase extends FuzzyDescriptorBase {
 		this.uuid = uuid;
 	}
 
-	public String getTypeid() {
-		return typeId;
+	public String getTypename() {
+		return typeName;
 	}
 
-	public void setTypeid(String typeid) {
-		this.typeId = typeid;
+	public void setTypename(String typename) {
+		this.typeName = typename;
 	}
 
-	public String getTypeId() {
-		return typeId;
+	public String getTypeName() {
+		return typeName;
 	}
 
-	public void setTypeId(String typeId) {
-		this.typeId = typeId;
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 
 	public String getDescription() {

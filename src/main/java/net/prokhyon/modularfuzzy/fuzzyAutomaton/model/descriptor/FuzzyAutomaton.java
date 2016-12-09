@@ -20,9 +20,9 @@ public class FuzzyAutomaton extends FuzzyDescriptorRootBase {
 	@XStreamImplicit
 	private List<FuzzyTransition> transitions;
 
-	public FuzzyAutomaton(String uuid, String typeId, String typeDescription, String fuzzyTypeId, List<FuzzyState> states,
+	public FuzzyAutomaton(String uuid, String typeName, String typeDescription, String fuzzyTypeId, List<FuzzyState> states,
 			List<FuzzyTransition> transitions) {
-		super(uuid, typeId, typeDescription);
+		super(uuid, typeName, typeDescription);
 		this.fuzzyTypeId = fuzzyTypeId;
 		this.states = states;
 		this.transitions = transitions;

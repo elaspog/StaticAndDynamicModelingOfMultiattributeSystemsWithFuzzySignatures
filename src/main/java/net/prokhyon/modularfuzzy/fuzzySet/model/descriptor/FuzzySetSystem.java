@@ -19,8 +19,8 @@ public class FuzzySetSystem extends FuzzyDescriptorRootBase {
 	@XStreamAlias("fuzzysets")
 	private List<FuzzySetBase> sets;
 
-	public FuzzySetSystem(String uuid, String typeId, String typeDescription, FuzzySetSystemTypeEnum type, List<FuzzySetBase> sets) {
-		super(uuid, typeId, typeDescription);
+	public FuzzySetSystem(String uuid, String typeName, String typeDescription, FuzzySetSystemTypeEnum type, List<FuzzySetBase> sets) {
+		super(uuid, typeName, typeDescription);
 		this.type = type;
 		this.sets = sets;
 	}
@@ -43,7 +43,7 @@ public class FuzzySetSystem extends FuzzyDescriptorRootBase {
 
 	@Override
 	public String toString() {
-		return "FuzzySetSystem [type=" + type + ", sets=" + sets + ", typeId=" + typeId + "]";
+		return "FuzzySetSystem [type=" + type + ", sets=" + sets + ", typeName=" + typeName + "]";
 	}
 
 }
