@@ -1,5 +1,6 @@
 package net.prokhyon.modularfuzzy.shell.view;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -16,13 +17,13 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
-import net.prokhyon.modularfuzzy.shell.services.ShellServices;
 import net.prokhyon.modularfuzzy.shell.util.ContentLoaderHandler;
 import net.prokhyon.modularfuzzy.shell.util.PaneAndControllerPair;
 
@@ -37,7 +38,7 @@ public class ShellLayoutController {
 	@FXML
 	private TabPane workspaceTabPane;
 
-	private ShellServices shellServices;
+	private CommonServices commonServices;
 	private ShellDialogServices shellDialogServices;
 
 	public Map<FxModulesViewInfo, PaneAndControllerPair> getContents() {
@@ -48,7 +49,7 @@ public class ShellLayoutController {
 
 	public ShellLayoutController() {
 
-		shellServices = new ServiceFactory().getShellServices();
+		commonServices = new ServiceFactory().getCommonServices();
 		shellDialogServices = new ServiceFactory().getShellDialogServices();
 	}
 
@@ -76,8 +77,8 @@ public class ShellLayoutController {
 
 	private void initializeTabTablesWorkspaceArea() {
 
-		Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = new ServiceFactory()
-				.getShellServices().getRegisteredStores();
+		Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores
+				= commonServices.getRegisteredStores();
 
 		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores
 				.entrySet()) {
@@ -126,6 +127,7 @@ public class ShellLayoutController {
 	@FXML
 	private void loadModels() {
 
+		List <File> filesToOpen = shellDialogServices.openFilesDialog();
 	}
 
 	@FXML
@@ -141,7 +143,7 @@ public class ShellLayoutController {
 		final ObservableList<WorkspaceElement> sharedModels = selectedController.getSelectedSharedModels();
 		final WorkspaceInfo workspaceInfo = selectedController.getWorkspaceInfo();
 		try {
-			shellServices.saveModelByModule(sharedModels, workspaceInfo);
+			commonServices.saveModelByModule(sharedModels, workspaceInfo);
 		} catch (ModuleImplementationException mie){
 			shellDialogServices.informErrorWithStacktraceDialog(mie,
 					"Model export error",

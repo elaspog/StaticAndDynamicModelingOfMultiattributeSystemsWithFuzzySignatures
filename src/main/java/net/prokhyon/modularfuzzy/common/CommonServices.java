@@ -2,6 +2,7 @@ package net.prokhyon.modularfuzzy.common;
 
 import java.util.Map;
 
+import javafx.collections.ObservableList;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
@@ -15,6 +16,10 @@ public interface CommonServices {
 	void registerView(FxModulesViewInfo moduleInfo);
 
 	void registerModelTypeInStore(WorkspaceInfo storeInfo);
+
+	Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> getRegisteredStores();
+
+	void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInfo modelInformation);
 
 	<T extends WorkspaceElement> void addModelToRegisteredStore(T model);
 

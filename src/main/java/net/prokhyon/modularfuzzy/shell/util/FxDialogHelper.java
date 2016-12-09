@@ -100,4 +100,13 @@ public class FxDialogHelper {
         return ret;
     }
 
+    public static List<File> selectFilesDialog(Stage stage){
+
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open models");
+        //fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        List<File> list = fileChooser.showOpenMultipleDialog(stage);
+        return list;
+    }
+
 }

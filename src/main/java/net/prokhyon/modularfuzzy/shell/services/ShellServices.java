@@ -15,8 +15,4 @@ public interface ShellServices {
 
 	List<FxModulesViewInfo> getRegisteredViews();
 
-	Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> getRegisteredStores();
-
-	void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInfo modelInformation);
-
 }

@@ -1,6 +1,7 @@
 package net.prokhyon.modularfuzzy.shell.services;
 
 import java.io.File;
+import java.util.List;
 
 public interface ShellDialogServices {
 
@@ -13,5 +14,7 @@ public interface ShellDialogServices {
     File saveFileDialog(String initialFileName, String ... extensions);
 
     int selectFromOptions(String title, String headed, String content, String ... choices);
+
+    List<File> openFilesDialog();
 
 }

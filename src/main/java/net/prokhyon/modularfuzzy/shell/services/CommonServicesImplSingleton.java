@@ -72,23 +72,6 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 		return Collections.unmodifiableList(registeredViews);
 	}
 
-	public Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> getRegisteredStores() {
-		return Collections.unmodifiableMap(registeredStores);
-	}
-
-	@Override
-	public void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInfo modelInformation) {
-
-		// TODO Export model according to the module what registered this type (should be extended later)
-		final PersistableModelInfo persistableModelInfo = modelInformation.getPersistableModelInfo();
-		try {
-			IPersistableModel persistableModel = persistableModelInfo.getPersistableModel();
-			persistableModel.exportModel(modelList);
-		} catch (RuntimeException e) {
-			throw new ModuleImplementationException("Not correctly implemented IPersistableModel interface in module.", e);
-		}
-	}
-
 	/*
 		Implementing interface: CommonServices
 	 */
@@ -109,6 +92,23 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	public void registerModelTypeInStore(WorkspaceInfo storeInfo) {
 
 		registeredStores.put(storeInfo, FXCollections.observableArrayList());
+	}
+
+	public Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> getRegisteredStores() {
+		return Collections.unmodifiableMap(registeredStores);
+	}
+
+	@Override
+	public void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInfo modelInformation) {
+
+		// TODO Export model according to the module what registered this type (should be extended later)
+		final PersistableModelInfo persistableModelInfo = modelInformation.getPersistableModelInfo();
+		try {
+			IPersistableModel persistableModel = persistableModelInfo.getPersistableModel();
+			persistableModel.exportModel(modelList);
+		} catch (RuntimeException e) {
+			throw new ModuleImplementationException("Not correctly implemented IPersistableModel interface in module.", e);
+		}
 	}
 
 	@Override
@@ -185,6 +185,12 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	public int selectFromOptions(String title, String headed, String content, String... choices) {
 
 		return FxDialogHelper.selectFromActions(title, headed, content, choices);
+	}
+
+	@Override
+	public List<File> openFilesDialog() {
+
+		return FxDialogHelper.selectFilesDialog(stage);
 	}
 
 	/*
