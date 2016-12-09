@@ -25,8 +25,7 @@ public class FuzzySetModuleDescriptor implements ModuleDescriptor {
 				net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem.class,
 				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem.class);
 
-		WorkspaceInfo storeInfo = new WorkspaceInfo("Fuzzy Sets", net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem.class,
-				viewOfModuleInfo, pmt);
+		WorkspaceInfo storeInfo = new WorkspaceInfo("Fuzzy Sets", viewOfModuleInfo, pmt);
 
 		services.<net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem> registerModelTypeInStore(storeInfo);
 		services.registerPersistenceMethod(pmt);

@@ -26,10 +26,10 @@ import net.prokhyon.modularfuzzy.shell.util.FxDialogHelper;
 
 public class CommonServicesImplSingleton implements CommonServices, ShellServices, ShellDialogServices {
 
-	private Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = new HashMap<Class<? extends ModuleDescriptor>, ModuleDescriptor>();;
-	private List<FxModulesViewInfo> registeredViews = new ArrayList<FxModulesViewInfo>();
-	private Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = new HashMap<WorkspaceInfo, ObservableList<? extends WorkspaceElement>>();
-	private List<PersistableModelInfo> registeredPersistenceMethods = new ArrayList<PersistableModelInfo>();
+	private Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = new HashMap<>();
+	private List<FxModulesViewInfo> registeredViews = new ArrayList<>();
+	private Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = new HashMap<>();
+	private List<PersistableModelInfo> registeredPersistenceMethods = new ArrayList<>();
 	private Stage stage;
 
 
@@ -119,7 +119,7 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 				.entrySet()) {
 
 			WorkspaceInfo key = entry.getKey();
-			if (key.getModelType().equals(modelClass)) {
+			if (key.getPersistableModelInfo().getFxModel().equals(modelClass)) {
 
 				ObservableList list = entry.getValue();
 				if (!list.contains(model))
@@ -136,7 +136,7 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 				.entrySet()) {
 
 			WorkspaceInfo key = entry.getKey();
-			if (key.getModelType().equals(modelClass)) {
+			if (key.getPersistableModelInfo().getFxModel().equals(modelClass)) {
 
 				ObservableList list = entry.getValue();
 				if (list.contains(original)) {

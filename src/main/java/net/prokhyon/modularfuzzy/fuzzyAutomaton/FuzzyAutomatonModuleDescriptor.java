@@ -4,6 +4,7 @@ import javafx.scene.layout.GridPane;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
+import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
@@ -20,9 +21,14 @@ public class FuzzyAutomatonModuleDescriptor implements ModuleDescriptor {
 				"view/FuzzyAutomatonEditorLayout.fxml", FuzzyAutomatonModuleDescriptor.class, GridPane.class);
 		services.registerView(viewOfModuleInfo);
 
-		WorkspaceInfo storeInfo = new WorkspaceInfo("Automatons", FuzzyAutomaton.class,
-				viewOfModuleInfo);
+		PersistableModelInfo pmt = new PersistableModelInfo(null,
+				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.FuzzyAutomaton.class,
+				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton.class);
+
+		WorkspaceInfo storeInfo = new WorkspaceInfo("Automatons", viewOfModuleInfo, pmt);
+
 		services.<FuzzyAutomaton> registerModelTypeInStore(storeInfo);
+		services.registerPersistenceMethod(pmt);
 
 	}
 
