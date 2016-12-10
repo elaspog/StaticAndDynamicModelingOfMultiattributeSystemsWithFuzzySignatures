@@ -1,6 +1,8 @@
 package net.prokhyon.modularfuzzy.fuzzySet.util;
 
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
+import net.prokhyon.modularfuzzy.common.errors.NotConvertibleException;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorHandler;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
@@ -17,10 +19,22 @@ public class ModelDomainIOManager implements IPersistableModel {
 
     private ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();
 
-    @Override
-    public <T extends FuzzyDescriptorRootBase> List<T> importModel() {
 
-        return null;
+    @Override
+    public <T extends FuzzyDescriptorRootBase>
+    T importModel(File file,
+                  Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
+                  List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
+            throws NotConvertibleException {
+
+        DescriptorHandler descriptorHandler = new DescriptorHandler();
+        try {
+            return descriptorHandler.readFromXmlFile(file, descriptorRootModel, descriptorModels);
+        } catch (NotConvertibleException nce){}
+        try {
+            return descriptorHandler.readFromJsonFile(file, descriptorRootModel, descriptorModels);
+        } catch (NotConvertibleException nce){}
+        throw new NotConvertibleException();
     }
 
     @Override
@@ -51,7 +65,7 @@ public class ModelDomainIOManager implements IPersistableModel {
                 String newFileName = fxFuzzySetSystem.getFuzzySystemName() + "_" + fxFuzzySetSystem.getUuid() + ".xml";
 
                 Path path = Paths.get(dirPath, newFileName);
-                descriptorHandler.saveToXML(path.toString(), descriptorHandler.getXml(descriptorFuzzySetSystem));
+                descriptorHandler.saveToXmlFile(path.toString(), descriptorHandler.generateXmlStringFromModel(descriptorFuzzySetSystem));
 
             } catch (Exception e){
                 shellDialogServices.informErrorWithStacktraceDialog(e,
@@ -77,9 +91,9 @@ public class ModelDomainIOManager implements IPersistableModel {
             DescriptorHandler descriptorHandler = new DescriptorHandler();
 
             if (filePath.endsWith("xml")) {
-                descriptorHandler.saveToXML(filePath, descriptorHandler.getXml(descriptorFuzzySetSystem));
+                descriptorHandler.saveToXmlFile(filePath, descriptorHandler.generateXmlStringFromModel(descriptorFuzzySetSystem));
             } else {
-                descriptorHandler.saveToText(filePath, descriptorHandler.getJson(descriptorFuzzySetSystem));
+                descriptorHandler.saveToTextFile(filePath, descriptorHandler.generateJsonStringFromModel(descriptorFuzzySetSystem));
             }
 
         } catch (Exception e){

@@ -1,5 +1,7 @@
 package net.prokhyon.modularfuzzy.common;
 
+import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import javafx.collections.ObservableList;
@@ -27,4 +29,5 @@ public interface CommonServices {
 
 	void registerPersistenceMethod(PersistableModelInfo information);
 
+	void loadFiles(List<File> filesToLoad);
 }

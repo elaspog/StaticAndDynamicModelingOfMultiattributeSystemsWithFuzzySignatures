@@ -22,6 +22,10 @@ public class FuzzySignatureModuleDescriptor implements ModuleDescriptor {
 		services.registerView(viewOfModuleInfo);
 
 		PersistableModelInfo pmt = new PersistableModelInfo(null,
+				null,
+				null,
+				null,
+				null,
 				net.prokhyon.modularfuzzy.fuzzySignature.model.FuzzySignature.class,
 				net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature.class);
 

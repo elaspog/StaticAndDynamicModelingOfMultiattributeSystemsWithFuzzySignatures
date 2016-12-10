@@ -22,6 +22,10 @@ public class FuzzyAutomatonModuleDescriptor implements ModuleDescriptor {
 		services.registerView(viewOfModuleInfo);
 
 		PersistableModelInfo pmt = new PersistableModelInfo(null,
+				null,
+				null,
+				null,
+				null,
 				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.FuzzyAutomaton.class,
 				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton.class);
 

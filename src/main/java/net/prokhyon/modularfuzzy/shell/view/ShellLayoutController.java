@@ -127,7 +127,9 @@ public class ShellLayoutController {
 	@FXML
 	private void loadModels() {
 
-		List <File> filesToOpen = shellDialogServices.openFilesDialog();
+		List<File> filesToLoad = shellDialogServices.openFilesDialog();
+		commonServices.loadFiles(filesToLoad);
+		// TODO commonServices.validateLoadedFiles();
 	}
 
 	@FXML

@@ -1,6 +1,7 @@
 package net.prokhyon.modularfuzzy.common.modelDescriptor;
 
 import java.io.*;
+import java.util.List;
 import javax.xml.transform.*;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -9,9 +10,13 @@ import javax.xml.transform.stream.StreamSource;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.json.JsonWriter;
+import net.prokhyon.modularfuzzy.common.errors.ErrorHandler;
+import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
+import net.prokhyon.modularfuzzy.common.errors.NotConvertibleException;
 import org.xml.sax.InputSource;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class DescriptorHandler {
 
@@ -41,14 +46,14 @@ public class DescriptorHandler {
 		}
 	}
 
-	public <T extends FuzzyDescriptorRootBase> String getXml(T model) {
+	public <T extends FuzzyDescriptorRootBase> String generateXmlStringFromModel(T model) {
 		xstream = new XStream(new StaxDriver());
 		xstream.autodetectAnnotations(true);
 		String xml = xstream.toXML(model);
 		return formatXml(xml);
 	}
 
-	public <T extends FuzzyDescriptorRootBase> String getJson(T model) {
+	public <T extends FuzzyDescriptorRootBase> String generateJsonStringFromModel(T model) {
 		xstream = new XStream(new JsonHierarchicalStreamDriver() {
 
 			public HierarchicalStreamWriter createWriter(Writer writer) {
@@ -59,7 +64,7 @@ public class DescriptorHandler {
 		return xstream.toXML(model);
 	}
 
-	public void saveToXML(String xmlFilePath, String xmlFileData) {
+	public void saveToXmlFile(String xmlFilePath, String xmlFileData) {
 
 		try {
 			Transformer tr = TransformerFactory.newInstance().newTransformer();
@@ -78,7 +83,7 @@ public class DescriptorHandler {
 		}
 	}
 
-	public void saveToText(String filePath, String txtFileData) {
+	public void saveToTextFile(String filePath, String txtFileData) {
 
 		try {
 			FileWriter file = new FileWriter(filePath);
@@ -89,6 +94,66 @@ public class DescriptorHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public <T extends FuzzyDescriptorRootBase>
+	T readFromXmlFile(File file,
+					  Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
+					  List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
+			throws NotConvertibleException {
+
+		try {
+			xstream = new XStream(new StaxDriver());
+			for (Class<? extends FuzzyDescriptorBase> dm : descriptorModels){
+				xstream.processAnnotations(dm);
+			}
+			xstream.autodetectAnnotations(true);
+			final Object o = xstream.fromXML(file);
+
+			if (((T) o).getClass() == descriptorRootModel.cast(o).getClass())
+				return (T) o;
+
+			throw new ModuleImplementationException();
+
+		} catch (Exception e){
+			throw new NotConvertibleException();
+		}
+	}
+
+	public <T extends FuzzyDescriptorRootBase>
+	T readFromJsonFile(File file,
+					   Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
+					   List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
+			throws NotConvertibleException {
+
+		try {
+			//xstream = new XStream(new JettisonMappedXmlDriver());
+			xstream = new XStream(new JsonHierarchicalStreamDriver() {
+
+				public HierarchicalStreamWriter createWriter(Writer writer) {
+					return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);
+				}
+			});
+			for (Class<? extends FuzzyDescriptorBase> dm : descriptorModels){
+				xstream.processAnnotations(dm);
+			}
+			xstream.autodetectAnnotations(true);
+			final Object o = xstream.fromXML(file);
+
+			if (((T) o).getClass() == descriptorRootModel.cast(o).getClass())
+				return (T) o;
+
+			throw new ModuleImplementationException();
+
+		} catch (Exception e){
+			throw new NotConvertibleException();
+		}
+	}
+
+	public <T extends FuzzyDescriptorRootBase> T readFromTextFile(File file, Class clazz)
+			throws NotConvertibleException {
+
+		throw new NotImplementedException();
 	}
 
 }

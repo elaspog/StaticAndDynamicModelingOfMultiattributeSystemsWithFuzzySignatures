@@ -1,11 +1,9 @@
 package net.prokhyon.modularfuzzy.shell.services;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
@@ -13,16 +11,25 @@ import javafx.stage.Stage;
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.*;
+import net.prokhyon.modularfuzzy.common.conversion.ConvertibleDescriptor2FxModel;
+import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
+import net.prokhyon.modularfuzzy.common.errors.ErrorHandler;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
+import net.prokhyon.modularfuzzy.common.errors.NotConvertibleException;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
+import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetModuleDescriptor;
+import net.prokhyon.modularfuzzy.fuzzySet.model.ModelConverter;
 import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureModuleDescriptor;
 import net.prokhyon.modularfuzzy.pathValues.PathValuesModuleDescriptor;
 import net.prokhyon.modularfuzzy.shell.util.FxDialogHelper;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class CommonServicesImplSingleton implements CommonServices, ShellServices, ShellDialogServices {
 
@@ -151,6 +158,72 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	public void registerPersistenceMethod(PersistableModelInfo information) {
 
 		registeredPersistenceMethods.add(information);
+	}
+
+	@Override
+	public void loadFiles(List<File> filesToLoad) {
+
+		for (File file : filesToLoad) {
+			for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores
+					.entrySet()) {
+				try {
+					final PersistableModelInfo persistableModelInfo = entry.getKey().getPersistableModelInfo();
+					final IPersistableModel persistableModel = persistableModelInfo.getPersistableModel();
+					final Class<? extends ConvertibleDescriptor2FxModel.External> descriptor2FxModelConverterExternal = persistableModelInfo.getDescriptor2FxModelConverterExternal();
+					final Class<? extends ConvertibleDescriptor2FxModel.Internal> descriptor2FxModelConverterInternal = persistableModelInfo.getDescriptor2FxModelConverterInternal();
+					final Class<? extends FuzzyDescriptorRootBase> descriptorRootModel = persistableModelInfo.getDescriptorRootModel();
+					final Class<? extends WorkspaceElement> fxModel = persistableModelInfo.getFxModel();
+					final List<Class<? extends FuzzyDescriptorBase>> descriptorModels = persistableModelInfo.getDescriptorModels();
+
+					if (FuzzyDescriptorRootBase.class.isAssignableFrom(descriptorRootModel)) {
+
+						FuzzyDescriptorRootBase fuzzyDescriptorRootBase = null;
+						if (persistableModel != null) {
+							fuzzyDescriptorRootBase = persistableModel.importModel(file, descriptorRootModel, descriptorModels);
+
+							ConvertibleDescriptor2FxModel.External convertibleDescriptor2FxModelExternal = null;
+							ConvertibleDescriptor2FxModel.Internal convertibleDescriptor2FxModelInternal = null;
+
+							try {
+								convertibleDescriptor2FxModelExternal = descriptor2FxModelConverterExternal.newInstance();
+							} catch (NullPointerException e){}
+							try {
+								convertibleDescriptor2FxModelInternal = descriptor2FxModelConverterInternal.newInstance();
+							} catch (NullPointerException e){}
+
+							FuzzyFxBase fuzzyFxBase;
+							if (convertibleDescriptor2FxModelExternal != null){
+								fuzzyFxBase = convertibleDescriptor2FxModelExternal.convert2FxModel(fuzzyDescriptorRootBase);
+							} else if (convertibleDescriptor2FxModelInternal != null){
+								// TODO implement Internal conversion
+								throw new NotImplementedException();
+							} else
+								throw new NotConvertibleException();
+
+							if (fuzzyFxBase != null){
+								addModelToRegisteredStore(fxModel.cast(fuzzyFxBase));
+							} else {
+								throw new ModuleImplementationException();
+							}
+						}
+
+					}
+
+				} catch (ModuleImplementationException e){
+					this.informErrorWithStacktraceDialog(e, "Module error",
+							"Error has occurred while importing file.",
+							"Error in a module implementation.");
+				} catch (NotConvertibleException e){
+					this.informErrorWithStacktraceDialog(e, "Conversion error",
+							"Error has occurred while importing file.",
+							"The selected file is not convertible to internal representation of the model.");
+				} catch (IllegalAccessException | InstantiationException e) {
+					this.informErrorWithStacktraceDialog(e, "Unknown exception",
+							"Error has occurred while importing file.",
+							"The reason of this exception is unknown.");
+				}
+			}
+		}
 	}
 
 	/*

@@ -22,8 +22,20 @@ public class FuzzySetModuleDescriptor implements ModuleDescriptor {
 		services.registerView(viewOfModuleInfo);
 
 		PersistableModelInfo pmt = new PersistableModelInfo(new ModelDomainIOManager(),
+				net.prokhyon.modularfuzzy.fuzzySet.model.ModelConverter.class,
+				null,
+				null,
 				net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem.class,
-				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem.class);
+				net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem.class,
+				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem.class,
+				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetBase.class,
+				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTrapezoidal.class,
+				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTriangular.class,
+				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetPolygonal.class,
+				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase.class,
+				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointAbove.class,
+				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBelow.class,
+				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointCustom.class);
 
 		WorkspaceInfo storeInfo = new WorkspaceInfo("Fuzzy Sets", viewOfModuleInfo, pmt);
 
