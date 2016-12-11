@@ -21,8 +21,9 @@ public class ModelConverter
         List<net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet> fuzzySets = new ArrayList<>();
         for (net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetBase element : sets) {
 
-            final String fuzySetName = element.getId();
-            //TODO element.getLabel();
+            // TODO use Id or delete it from base class if unnecessary
+            //final String fuzySetId = element.getId();
+            final String fuzySetName = element.getLabel();
             final String fuzzySetDescription = element.getDescription();
             final net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetTypeEnum fuzzySetType = element.getType();
             final List<FuzzyPointBase> fuzzySetPoints = element.getPoints();
@@ -56,7 +57,7 @@ public class ModelConverter
             fuzzySets.add(fuzzySet);
         }
 
-        return new net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem(fuzzySystemName, fuzzySystemDescription, fuzzySystemType, fuzzySets, fuzzySystemUUID);
+        return new net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem(fuzzySystemUUID, fuzzySystemName, fuzzySystemDescription, fuzzySystemType, fuzzySets);
     }
 
 }

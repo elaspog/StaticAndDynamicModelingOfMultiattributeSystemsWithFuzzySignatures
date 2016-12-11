@@ -190,7 +190,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 	void unbindSetViewElementsFromControllerProperties(){
 
 		if (fuzzySetToEdit.getValue() != null) {
-			setNameTextField.textProperty().unbindBidirectional(fuzzySetToEdit.get().fuzySetNameProperty());
+			setNameTextField.textProperty().unbindBidirectional(fuzzySetToEdit.get().fuzzySetNameProperty());
 			fuzzySetTypeComboBox.valueProperty().unbindBidirectional(fuzzySetToEdit.get().fuzzySetTypeProperty());
 			setDescriptionTextArea.textProperty().unbindBidirectional(fuzzySetToEdit.get().fuzzySetDescriptionProperty());
 		}
@@ -200,7 +200,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 	private void createFuzzySetSystem() {
 
 		createdSetSystemCounter++;
-		loadWithData(new FuzzySetSystem("fuzzySystem" + Integer.toString(createdSetSystemCounter),
+		loadWithData(new FuzzySetSystem(null, "fuzzySystem" + Integer.toString(createdSetSystemCounter),
 				"That's a custom fuzzy system", FuzzySetSystemTypeEnum.CUSTOM, null));
 		this.originallyLoadedFuzzySystem = null;
 	}
@@ -283,7 +283,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 			return;
 
 		fuzzySetToEdit.setValue(selectedItems.get(0));
-		setNameTextField.textProperty().bindBidirectional(fuzzySetToEdit.get().fuzySetNameProperty());
+		setNameTextField.textProperty().bindBidirectional(fuzzySetToEdit.get().fuzzySetNameProperty());
 		fuzzySetTypeComboBox.setItems(FXCollections.observableArrayList(FuzzySetTypeEnum.values()));
 		fuzzySetTypeComboBox.valueProperty().bindBidirectional(fuzzySetToEdit.get().fuzzySetTypeProperty());
 		setDescriptionTextArea.textProperty().bindBidirectional(fuzzySetToEdit.get().fuzzySetDescriptionProperty());

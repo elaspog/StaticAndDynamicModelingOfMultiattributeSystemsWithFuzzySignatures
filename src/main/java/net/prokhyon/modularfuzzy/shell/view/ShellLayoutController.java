@@ -128,7 +128,8 @@ public class ShellLayoutController {
 	private void loadModels() {
 
 		List<File> filesToLoad = shellDialogServices.openFilesDialog();
-		commonServices.loadFiles(filesToLoad);
+		if (filesToLoad != null)
+			commonServices.loadFiles(filesToLoad);
 		// TODO commonServices.validateLoadedFiles();
 	}
 

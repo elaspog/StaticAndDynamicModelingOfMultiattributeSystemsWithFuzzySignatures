@@ -21,7 +21,7 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.*;
 public class FuzzySet extends FuzzyFxBase
 		implements ConvertibleFxModel2Descriptor.Internal<FuzzySetBase, FuzzySet> {
 
-	private final StringProperty fuzySetName;
+	private final StringProperty fuzzySetName;
 	private final StringProperty fuzzySetDescription;
 	private final ObjectProperty<FuzzySetTypeEnum> fuzzySetType;
 	private final ListProperty<FuzzySetPoint> fuzzySetPoints;
@@ -30,47 +30,43 @@ public class FuzzySet extends FuzzyFxBase
 		return new Callback<FuzzySet, Observable[]>() {
 			@Override
 			public Observable[] call(FuzzySet param) {
-				return new Observable[] { param.fuzySetNameProperty(), param.fuzzySetDescriptionProperty(),
+				return new Observable[] { param.fuzzySetNameProperty(), param.fuzzySetDescriptionProperty(),
 						param.fuzzySetTypeProperty(), param.fuzzySetPointsProperty() };
 			}
 		};
 	}
 
-	public FuzzySet(String fuzySetName, String fuzzySetDescription, FuzzySetTypeEnum fuzzySetType,
-			List<FuzzySetPoint> fuzzySetPoints) {
+	public FuzzySet(String fuzzySetName, String fuzzySetDescription, FuzzySetTypeEnum fuzzySetType,
+					List<FuzzySetPoint> fuzzySetPoints) {
 		super();
-		this.fuzySetName = new SimpleStringProperty(fuzySetName);
+		this.fuzzySetName = new SimpleStringProperty(fuzzySetName);
 		this.fuzzySetDescription = new SimpleStringProperty(fuzzySetDescription);
 		this.fuzzySetType = new SimpleObjectProperty<>(fuzzySetType);
-		if (fuzzySetPoints == null)
-			fuzzySetPoints = new ArrayList<>();
-		this.fuzzySetPoints = new SimpleListProperty<>(FXCollections.observableArrayList(fuzzySetPoints));
-	}
 
-	public FuzzySet(FuzzySet otherFuzzySet) {
-		super();
-		this.fuzySetName = new SimpleStringProperty(otherFuzzySet.fuzySetName.get());
-		this.fuzzySetDescription = new SimpleStringProperty(otherFuzzySet.fuzzySetDescription.get());
-		this.fuzzySetType = new SimpleObjectProperty<>(otherFuzzySet.fuzzySetType.get());
-
-		final ObservableList<FuzzySetPoint> fuzzySetPoints = otherFuzzySet.fuzzySetPoints.get();
 		List<FuzzySetPoint> copiedFuzzySetPoints = new ArrayList<>();
-		for (FuzzySetPoint fs : fuzzySetPoints){
-			copiedFuzzySetPoints.add(fs.deepCopy());
+		if (fuzzySetPoints != null) {
+			for (FuzzySetPoint fs : fuzzySetPoints) {
+				copiedFuzzySetPoints.add(fs.deepCopy());
+			}
 		}
 		this.fuzzySetPoints = new SimpleListProperty<>(FXCollections.observableArrayList(copiedFuzzySetPoints));
 	}
 
-	public String getFuzySetName() {
-		return fuzySetName.get();
+	public FuzzySet(FuzzySet otherFuzzySet) {
+		this(otherFuzzySet.fuzzySetName.get(), otherFuzzySet.fuzzySetDescription.get(),
+				otherFuzzySet.fuzzySetType.get(), otherFuzzySet.fuzzySetPoints.get());
 	}
 
-	public void setFuzySetName(String fuzySetName) {
-		this.fuzySetName.set(fuzySetName);
+	public String getFuzzySetName() {
+		return fuzzySetName.get();
 	}
 
-	public StringProperty fuzySetNameProperty() {
-		return fuzySetName;
+	public void setFuzzySetName(String fuzzySetName) {
+		this.fuzzySetName.set(fuzzySetName);
+	}
+
+	public StringProperty fuzzySetNameProperty() {
+		return fuzzySetName;
 	}
 
 	public String getFuzzySetDescription() {
@@ -111,7 +107,7 @@ public class FuzzySet extends FuzzyFxBase
 
 	@Override
 	public String toString() {
-		return fuzySetName.get() + " : " + fuzzySetType.get();
+		return fuzzySetName.get() + " : " + fuzzySetType.get();
 	}
 
 	@Override
@@ -124,11 +120,11 @@ public class FuzzySet extends FuzzyFxBase
 			descriptorFuzzySetPoints.add(fuzzyPointBase);
 		}
 		if (this.getFuzzySetType().equals(FuzzySetTypeEnum.TRIANGULAR)){
-			return new FuzzySetTriangular(null, getFuzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
+			return new FuzzySetTriangular(null, getFuzzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
 		} else if (this.getFuzzySetType().equals(FuzzySetTypeEnum.POLYGONAL)) {
-			return new FuzzySetPolygonal(null, getFuzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
+			return new FuzzySetPolygonal(null, getFuzzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
 		} else if (this.getFuzzySetType().equals(FuzzySetTypeEnum.TRAPEZOID)) {
-			return new FuzzySetTrapezoidal(null, getFuzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
+			return new FuzzySetTrapezoidal(null, getFuzzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
 		}
 		throw new ModuleImplementationException("Unknown FuzzySetTypeEnum while converting to FuzzySetBase descriptor model.");
 	}

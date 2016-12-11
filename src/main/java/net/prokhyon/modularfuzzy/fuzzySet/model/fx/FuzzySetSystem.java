@@ -37,39 +37,28 @@ public class FuzzySetSystem extends WorkspaceElement
 		return fuzzySetUUIDProp;
 	}
 
-	public FuzzySetSystem(String fuzzySystemName, String fuzzySystemDescription, FuzzySetSystemTypeEnum fuzzySystemType,
-						  List<FuzzySet> fuzzySets, String uuid) {
+	public FuzzySetSystem(String uuid, String fuzzySystemName, String fuzzySystemDescription, FuzzySetSystemTypeEnum fuzzySystemType,
+						  List<FuzzySet> fuzzySets) {
 		super();
 		this.uuid = initializeUUIDPropertyFromString(uuid);
 		this.fuzzySystemName = new SimpleStringProperty(fuzzySystemName);
 		this.fuzzySystemDescription = new SimpleStringProperty(fuzzySystemDescription);
 		this.fuzzySystemType = new SimpleObjectProperty<>(fuzzySystemType);
-		this.fuzzySets = new SimpleListProperty<>(FXCollections.observableArrayList(FuzzySet.extractor()));
-	}
+		//this.fuzzySets = new SimpleListProperty<>(FXCollections.observableArrayList(FuzzySet.extractor()));
 
-	public FuzzySetSystem(String fuzzySystemName, String fuzzySystemDescription, FuzzySetSystemTypeEnum fuzzySystemType,
-			List<FuzzySet> fuzzySets) {
-		super();
-		this.uuid = initializeUUIDPropertyFromString(null);
-		this.fuzzySystemName = new SimpleStringProperty(fuzzySystemName);
-		this.fuzzySystemDescription = new SimpleStringProperty(fuzzySystemDescription);
-		this.fuzzySystemType = new SimpleObjectProperty<>(fuzzySystemType);
-		this.fuzzySets = new SimpleListProperty<>(FXCollections.observableArrayList(FuzzySet.extractor()));
+		List<FuzzySet> copiedFuzzySets = new ArrayList<>();
+		if (fuzzySets != null) {
+			for (FuzzySet fs : fuzzySets) {
+				copiedFuzzySets.add(fs.deepCopy());
+			}
+		}
+		this.fuzzySets = new SimpleListProperty<>(FXCollections.observableArrayList(copiedFuzzySets));
 	}
 
 	public FuzzySetSystem(FuzzySetSystem otherFuzzySetSystem){
-		super();
-		this.uuid = initializeUUIDPropertyFromString(otherFuzzySetSystem.uuid.get());
-		this.fuzzySystemName = new SimpleStringProperty(otherFuzzySetSystem.fuzzySystemName.get());
-		this.fuzzySystemDescription = new SimpleStringProperty(otherFuzzySetSystem.fuzzySystemDescription.get());
-		this.fuzzySystemType = new SimpleObjectProperty<>(otherFuzzySetSystem.fuzzySystemType.get());
-
-		final ObservableList<FuzzySet> fuzzySets = otherFuzzySetSystem.fuzzySets.get();
-		List<FuzzySet> copiedFuzzySets = new ArrayList<>();
-		for (FuzzySet fs : fuzzySets){
-			copiedFuzzySets.add(fs.deepCopy());
-		}
-		this.fuzzySets = new SimpleListProperty<>(FXCollections.observableArrayList(copiedFuzzySets));
+		this(otherFuzzySetSystem.uuid.get(), otherFuzzySetSystem.fuzzySystemName.get(),
+				otherFuzzySetSystem.fuzzySystemDescription.get(), otherFuzzySetSystem.fuzzySystemType.get(),
+				otherFuzzySetSystem.fuzzySets.get());
 	}
 
 	public String getFuzzySystemName() {
