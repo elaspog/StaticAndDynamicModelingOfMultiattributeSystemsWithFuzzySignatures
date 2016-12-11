@@ -9,13 +9,14 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane hgap="15.0" vgap="15.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.prokhyon.modularfuzzy.fuzzyAutomaton.view.FuzzyAutomatonEditorController">
+<GridPane hgap="15.0" vgap="15.0" xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.prokhyon.modularfuzzy.fuzzyAutomaton.view.FuzzyAutomatonEditorController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" />
@@ -43,9 +44,9 @@
                      </rowConstraints>
                      <children>
                         <Label text="Automaton name" />
-                        <TextField GridPane.columnIndex="1" />
+                        <TextField fx:id="automatonNameTextField" GridPane.columnIndex="1" />
                         <Label text="Description" GridPane.rowIndex="1" />
-                        <TextArea GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                        <TextArea fx:id="automatonDescriptionTextArea" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2" />
                      </children>
                   </GridPane>
                   <GridPane>
@@ -58,9 +59,9 @@
                      <children>
                         <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Button prefWidth="100.0" text="Save" />
-                              <Button prefWidth="100.0" text="Clear" />
-                              <Button prefWidth="100.0" text="Create" />
+                              <Button fx:id="saveAutomatonButton" onAction="#saveAutomatonButton" prefWidth="100.0" text="Save" />
+                              <Button fx:id="clearAutomatonButton" onAction="#clearAutomatonButton" prefWidth="100.0" text="Clear" />
+                              <Button fx:id="createAutomatonButton" onAction="#createAutomatonButton" prefWidth="100.0" text="Create" />
                            </children>
                         </HBox>
                      </children>
@@ -78,7 +79,7 @@
                      <children>
                         <Label text="Fuzzy set" />
                         <Label text="Cost vector size" GridPane.rowIndex="1" />
-                        <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+                        <ComboBox fx:id="fuzzySetSystem" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" />
                         <Spinner GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
@@ -95,11 +96,11 @@
             <VBox GridPane.rowIndex="1">
                <children>
                   <Label text="States" />
-                  <ListView prefHeight="175.0" prefWidth="135.0" />
+                  <ListView fx:id="statesListView" prefHeight="175.0" prefWidth="135.0" />
                   <HBox>
                      <children>
-                        <Button prefWidth="90.0" text="Add" />
-                        <Button prefWidth="90.0" text="Remove" />
+                        <Button fx:id="addStateButton" onAction="#addStateButton" prefWidth="90.0" text="Add" />
+                        <Button fx:id="removeStateButton" onAction="#removeStateButton" prefWidth="90.0" text="Remove" />
                      </children>
                   </HBox>
                </children>
@@ -107,16 +108,20 @@
             <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <Label text="Edges" />
-                  <ListView prefHeight="175.0" prefWidth="135.0" />
+                  <ListView fx:id="edgesListView" prefHeight="175.0" prefWidth="135.0" />
                   <HBox>
                      <children>
-                        <Button prefWidth="90.0" text="Add" />
-                        <Button prefWidth="90.0" text="Remove" />
+                        <Button fx:id="addEdgeButton" onAction="#addEdgeButton" prefWidth="90.0" text="Add" />
+                        <Button fx:id="removeEdgeButton" onAction="#removeEdgeButton" prefWidth="90.0" text="Remove" />
                      </children>
                   </HBox>
                </children>
             </VBox>
          </children>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
       </GridPane>
       <HBox GridPane.rowIndex="1">
          <children>
@@ -138,16 +143,19 @@
                      </rowConstraints>
                      <children>
                         <Label text="Name" />
-                        <TextField GridPane.columnIndex="1" GridPane.columnSpan="2" />
-                        <TextArea GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                        <TextField fx:id="stateNameTextField" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+                        <TextArea fx:id="stateDescriptionTextArea" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2" />
                         <Label text="Description" GridPane.rowIndex="1" />
-                        <RadioButton mnemonicParsing="false" text="Initial" GridPane.rowIndex="3" />
-                        <RadioButton mnemonicParsing="false" text="Normal" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <RadioButton mnemonicParsing="false" text="Terminal" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <RadioButton fx:id="initialStateRadioButton" mnemonicParsing="false" text="Initial" GridPane.rowIndex="3">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="stateGroup" />
+                           </toggleGroup></RadioButton>
+                        <RadioButton fx:id="normalStateRadioButton" mnemonicParsing="false" text="Normal" toggleGroup="$stateGroup" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <RadioButton fx:id="terminalStateRadioButton" mnemonicParsing="false" text="Terminal" toggleGroup="$stateGroup" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                         <Label text="From State" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <ComboBox prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <ComboBox fx:id="fromState" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                         <Label text="To State" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <ComboBox prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                        <ComboBox fx:id="toState" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
                </children>
@@ -169,17 +177,17 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button prefWidth="100.0" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Button prefWidth="100.0" text="Ok" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Button fx:id="cancelButton" onAction="#cancelButton" prefWidth="100.0" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Button fx:id="okButton" onAction="#okButton" prefWidth="100.0" text="Ok" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <Label text="From fuzzy set" GridPane.halignment="LEFT" />
             <Label text="To fuzzy set" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
-            <ComboBox prefWidth="150.0" GridPane.rowIndex="1" />
-            <ComboBox prefWidth="150.0" GridPane.rowIndex="3" />
+            <ComboBox fx:id="fromFuzzySet" prefWidth="150.0" GridPane.rowIndex="1" />
+            <ComboBox fx:id="toFuzzySet" prefWidth="150.0" GridPane.rowIndex="3" />
             <Label text="Costs" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-            <ListView GridPane.columnIndex="2" GridPane.rowSpan="4" />
-            <Button prefWidth="100.0" text="Add Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-            <Spinner prefWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-            <Button prefWidth="100.0" text="Remove Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <ListView fx:id="costsListView" GridPane.columnIndex="2" GridPane.rowSpan="4" />
+            <Button fx:id="addCostValueButton" onAction="#addCostValueButton" prefWidth="100.0" text="Add Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <Spinner fx:id="costValueSpinner" prefWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <Button fx:id="removeCostValueButton" onAction="#removeCostValue" prefWidth="100.0" text="Remove Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
          </children>
       </GridPane>
    </children>
