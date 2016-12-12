@@ -174,6 +174,19 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 			}
 		});
 
+		fuzzySetSystemComboBox.setButtonCell(
+				new ListCell<FuzzySetSystem>() {
+					@Override
+					protected void updateItem(FuzzySetSystem t, boolean bln) {
+						super.updateItem(t, bln);
+						if (bln) {
+							setText("");
+						} else {
+							setText(t.getFuzzySystemName());
+						}
+					}
+				});
+
 	}
 
 
@@ -401,7 +414,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 
 		final ObservableList<FuzzySetSystem> fuzzySetSystems = (ObservableList<FuzzySetSystem>) workspaceElements;
 		this.fuzzySetSystemComboBox.setItems(FXCollections.observableArrayList(fuzzySetSystems));
-		fuzzySetSystemComboBox.valueProperty().bind(fuzzyAutomaton.get().fuzzySetSystemProperty());
+		//fuzzySetSystemComboBox.valueProperty().bind(fuzzyAutomaton.get().fuzzySetSystemProperty());
 	}
 
 }
