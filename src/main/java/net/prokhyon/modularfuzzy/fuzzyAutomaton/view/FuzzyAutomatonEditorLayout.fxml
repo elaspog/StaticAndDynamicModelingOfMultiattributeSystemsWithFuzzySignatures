@@ -59,8 +59,8 @@
                      <children>
                         <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Button fx:id="saveAutomatonButton" onAction="#saveAutomatonButton" prefWidth="100.0" text="Save" />
-                              <Button fx:id="clearAutomatonButton" onAction="#clearAutomatonButton" prefWidth="100.0" text="Clear" />
+                              <Button fx:id="saveAutomatonButton" onAction="#saveAutomaton" prefWidth="100.0" text="Save" />
+                              <Button fx:id="clearAutomatonButton" onAction="#clearAutomaton" prefWidth="100.0" text="Clear" />
                               <Button fx:id="createAutomatonButton" onAction="#createAutomatonButton" prefWidth="100.0" text="Create" />
                            </children>
                         </HBox>
@@ -99,8 +99,8 @@
                   <ListView fx:id="statesListView" prefHeight="175.0" prefWidth="135.0" />
                   <HBox>
                      <children>
-                        <Button fx:id="addStateButton" onAction="#addStateButton" prefWidth="90.0" text="Add" />
-                        <Button fx:id="removeStateButton" onAction="#removeStateButton" prefWidth="90.0" text="Remove" />
+                        <Button fx:id="addStateButton" onAction="#addState" prefWidth="90.0" text="Add" />
+                        <Button fx:id="removeStateButton" onAction="#removeState" prefWidth="90.0" text="Remove" />
                      </children>
                   </HBox>
                </children>
@@ -111,8 +111,8 @@
                   <ListView fx:id="edgesListView" prefHeight="175.0" prefWidth="135.0" />
                   <HBox>
                      <children>
-                        <Button fx:id="addEdgeButton" onAction="#addEdgeButton" prefWidth="90.0" text="Add" />
-                        <Button fx:id="removeEdgeButton" onAction="#removeEdgeButton" prefWidth="90.0" text="Remove" />
+                        <Button fx:id="addEdgeButton" onAction="#addEdge" prefWidth="90.0" text="Add" />
+                        <Button fx:id="removeEdgeButton" onAction="#removeEdge" prefWidth="90.0" text="Remove" />
                      </children>
                   </HBox>
                </children>
@@ -177,15 +177,15 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button fx:id="cancelButton" onAction="#cancelButton" prefWidth="100.0" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Button fx:id="okButton" onAction="#okButton" prefWidth="100.0" text="Ok" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Button fx:id="cancelButton" onAction="#cancelButtonPressed" prefWidth="100.0" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Button fx:id="okButton" onAction="#okButtonPressed" prefWidth="100.0" text="Ok" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <Label text="From fuzzy set" GridPane.halignment="LEFT" />
             <Label text="To fuzzy set" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
             <ComboBox fx:id="fromFuzzySet" prefWidth="150.0" GridPane.rowIndex="1" />
             <ComboBox fx:id="toFuzzySet" prefWidth="150.0" GridPane.rowIndex="3" />
             <Label text="Costs" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
             <ListView fx:id="costsListView" GridPane.columnIndex="2" GridPane.rowSpan="4" />
-            <Button fx:id="addCostValueButton" onAction="#addCostValueButton" prefWidth="100.0" text="Add Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <Button fx:id="addCostValueButton" onAction="#addCostValue" prefWidth="100.0" text="Add Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
             <Spinner fx:id="costValueSpinner" prefWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
             <Button fx:id="removeCostValueButton" onAction="#removeCostValue" prefWidth="100.0" text="Remove Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
          </children>

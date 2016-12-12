@@ -1,13 +1,26 @@
 package net.prokhyon.modularfuzzy.fuzzyAutomaton.view;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet;
 
 public class FuzzyAutomatonEditorController implements LoadableDataController {
+
+	private ObjectProperty<FuzzyAutomaton> fuzzyAutomaton;
+
+	private ObjectProperty<FuzzyState> fuzzyStateToEdit;
+
+	private ObjectProperty<FuzzyTransition> fuzzyTransitionToEdit;
+
+	private FuzzyAutomaton originallyLoadedFuzzyAutomaton;
 
 	@FXML
 	private TextField automatonNameTextField;
@@ -90,54 +103,99 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	@FXML
 	private Button okButton;
 
+	private int createdAutomatonCounter;
+	private int createdStateCounter;
+	private int createdTransitionCounter;
+
 
 	@FXML
 	private void initialize() {
 
+		this.fuzzyAutomaton = new SimpleObjectProperty<>();
+		this.fuzzyStateToEdit = new SimpleObjectProperty<>();
+		this.fuzzyTransitionToEdit = new SimpleObjectProperty<>();
+
+		bindViewElementsToControllerProperties();
+
+		this.createdAutomatonCounter = 0;
+		this.createdStateCounter = 0;
+		this.createdTransitionCounter = 0;
+	}
+
+
+	void bindViewElementsToControllerProperties() {
+
+	}
+
+	void unbindViewElementsFromControllerProperties(){
+
+		if (fuzzyAutomaton.getValue() != null){
+			automatonNameTextField.textProperty().unbindBidirectional(fuzzyAutomaton.getValue().fuzzyAutomationNameProperty());
+			automatonDescriptionTextArea.textProperty().unbindBidirectional(fuzzyAutomaton.getValue().fuzzyAutomatonDescriptionProperty());
+		}
 	}
 
 	@Override
 	public <T extends WorkspaceElement> void loadWithData(T modelToLoad) {
 
+		clearAutomaton();
+		if (modelToLoad == null)
+			return;
+
+		this.originallyLoadedFuzzyAutomaton = (FuzzyAutomaton) modelToLoad;
+		FuzzyAutomaton fa = ((FuzzyAutomaton)modelToLoad).deepCopy();
+		this.fuzzyAutomaton.set(fa);
+
+		automatonNameTextField.textProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyAutomationNameProperty());
+		automatonDescriptionTextArea.textProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyAutomatonDescriptionProperty());
 	}
 
 	@FXML
 	private void createAutomatonButton(){
 
+		createdAutomatonCounter++;
+		loadWithData(new FuzzyAutomaton(null, "automaton" + Integer.toString(createdAutomatonCounter),
+				"That's a custom fuzzy automaton"));
+		this.originallyLoadedFuzzyAutomaton = null;
 	}
 
 	@FXML
-	private void clearAutomatonButton(){
+	private void clearAutomaton(){
 
+		unbindViewElementsFromControllerProperties();
+		this.fuzzyAutomaton.setValue(null);
+		automatonNameTextField.textProperty().set(null);
+		automatonDescriptionTextArea.textProperty().set(null);
+		this.originallyLoadedFuzzyAutomaton = null;
 	}
 
 	@FXML
-	private void saveAutomatonButton(){
-
-	}
-
-	@FXML
-	private void addStateButton(){
-
-	}
-
-	@FXML
-	private void removeStateButton(){
-
-	}
-
-	@FXML
-	private void addEdgeButton(){
+	private void saveAutomaton(){
 
 	}
 
 	@FXML
-	private void removeEdgeButton(){
+	private void addState(){
 
 	}
 
 	@FXML
-	private void addCostValueButton(){
+	private void removeState(){
+
+	}
+
+	@FXML
+	private void addEdge(){
+
+	}
+
+	@FXML
+	private void removeEdge(){
+
+	}
+
+	@FXML
+	private void addCostValue(){
 
 	}
 
@@ -147,12 +205,12 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	}
 
 	@FXML
-	private void cancelButton(){
+	private void cancelButtonPressed(){
 
 	}
 
 	@FXML
-	private void okButton(){
+	private void okButtonPressed(){
 
 	}
 

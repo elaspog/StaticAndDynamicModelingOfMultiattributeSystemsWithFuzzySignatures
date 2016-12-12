@@ -112,8 +112,8 @@ public class FuzzySetEditorController implements LoadableDataController {
 	@FXML
 	private void initialize() {
 
-		this.fuzzySystem = new SimpleObjectProperty<FuzzySetSystem>();
-		this.fuzzySetToEdit = new SimpleObjectProperty<FuzzySet>();
+		this.fuzzySystem = new SimpleObjectProperty<>();
+		this.fuzzySetToEdit = new SimpleObjectProperty<>();
 
 		bindViewElementsToControllerProperties();
 
@@ -165,9 +165,9 @@ public class FuzzySetEditorController implements LoadableDataController {
 		});
 
 		xCoordinateColumn.setCellValueFactory(cellData -> cellData.getValue().xPointProperty());
-		xCoordinateColumn.setCellFactory(TextFieldTableCell.<FuzzySetPoint, Number> forTableColumn(new ExtendedNumberStringConverter()));
+		xCoordinateColumn.setCellFactory(TextFieldTableCell.forTableColumn(new ExtendedNumberStringConverter()));
 		yCoordinateColumn.setCellValueFactory(cellData -> cellData.getValue().yPointProperty());
-		yCoordinateColumn.setCellFactory(TextFieldTableCell.<FuzzySetPoint, Number> forTableColumn(new ExtendedNumberStringConverter()));
+		yCoordinateColumn.setCellFactory(TextFieldTableCell.forTableColumn(new ExtendedNumberStringConverter()));
 
 	}
 
