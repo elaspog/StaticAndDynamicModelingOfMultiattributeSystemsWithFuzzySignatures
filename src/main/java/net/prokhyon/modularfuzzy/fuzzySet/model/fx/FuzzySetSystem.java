@@ -2,7 +2,6 @@ package net.prokhyon.modularfuzzy.fuzzySet.model.fx;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -11,7 +10,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.*;
@@ -25,22 +24,11 @@ public class FuzzySetSystem extends WorkspaceElement
 	private final ObjectProperty<FuzzySetSystemTypeEnum> fuzzySystemType;
 	private final ListProperty<FuzzySet> fuzzySets;
 
-	private StringProperty initializeUUIDPropertyFromString(String uuid){
-
-		StringProperty fuzzySetUUIDProp = null;
-		try{
-			String uuidStr = UUID.fromString(uuid).toString();
-			fuzzySetUUIDProp = new SimpleStringProperty(uuidStr);
-		} catch (Exception exception){
-			fuzzySetUUIDProp = new SimpleStringProperty(UUID.randomUUID().toString());
-		}
-		return fuzzySetUUIDProp;
-	}
 
 	public FuzzySetSystem(String uuid, String fuzzySystemName, String fuzzySystemDescription, FuzzySetSystemTypeEnum fuzzySystemType,
 						  List<FuzzySet> fuzzySets) {
 		super();
-		this.uuid = initializeUUIDPropertyFromString(uuid);
+		this.uuid = CommonUtils.initializeUUIDPropertyFromString(uuid);
 		this.fuzzySystemName = new SimpleStringProperty(fuzzySystemName);
 		this.fuzzySystemDescription = new SimpleStringProperty(fuzzySystemDescription);
 		this.fuzzySystemType = new SimpleObjectProperty<>(fuzzySystemType);
