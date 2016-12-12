@@ -6,7 +6,7 @@ import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
-import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.FuzzyAutomaton;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.util.ModelDomainIOManager;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 
 public class FuzzyAutomatonModuleDescriptor implements ModuleDescriptor {
@@ -21,17 +21,19 @@ public class FuzzyAutomatonModuleDescriptor implements ModuleDescriptor {
 				"view/FuzzyAutomatonEditorLayout.fxml", FuzzyAutomatonModuleDescriptor.class, GridPane.class);
 		services.registerView(viewOfModuleInfo);
 
-		PersistableModelInfo pmt = new PersistableModelInfo(null,
+		PersistableModelInfo pmt = new PersistableModelInfo(new ModelDomainIOManager(),
+				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.ModelConverter.class,
 				null,
 				null,
 				null,
-				null,
-				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.FuzzyAutomaton.class,
-				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton.class);
+				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton.class,
+				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton.class,
+				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState.class,
+				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition.class);
 
 		WorkspaceInfo storeInfo = new WorkspaceInfo("Automatons", viewOfModuleInfo, pmt);
 
-		services.<FuzzyAutomaton> registerModelTypeInStore(storeInfo);
+		services.<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton> registerModelTypeInStore(storeInfo);
 		services.registerPersistenceMethod(pmt);
 
 	}
