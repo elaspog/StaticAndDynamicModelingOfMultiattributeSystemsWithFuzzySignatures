@@ -1,6 +1,7 @@
 package net.prokhyon.modularfuzzy.fuzzySet.util;
 
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
+import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.errors.NotConvertibleException;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
@@ -54,7 +55,7 @@ public class ModelDomainIOManager implements IPersistableModel {
         File selectedDirectory = shellDialogServices.saveFilesIntoDirectoryDialog();
         if (selectedDirectory == null)
             return;
-        String dirPath = getCanonicalPathFromFile(selectedDirectory);
+        String dirPath = CommonUtils.getCanonicalPathFromFile(selectedDirectory);
 
         DescriptorHandler descriptorHandler = new DescriptorHandler();
         for (T m : models) {
@@ -70,7 +71,7 @@ public class ModelDomainIOManager implements IPersistableModel {
             } catch (Exception e){
                 shellDialogServices.informErrorWithStacktraceDialog(e,
                         "Model export error",
-                        "Error occured while exporting",
+                        "Error occurred while exporting",
                         "Something went wrong while exporting");
             }
         }
@@ -87,7 +88,7 @@ public class ModelDomainIOManager implements IPersistableModel {
             File selectedFile = shellDialogServices.saveFileDialog(initialName, "xml", "json");
             if (selectedFile == null)
                 return;
-            String filePath  = getCanonicalPathFromFile(selectedFile);
+            String filePath  = CommonUtils.getCanonicalPathFromFile(selectedFile);
             DescriptorHandler descriptorHandler = new DescriptorHandler();
 
             if (filePath.endsWith("xml")) {
@@ -99,21 +100,9 @@ public class ModelDomainIOManager implements IPersistableModel {
         } catch (Exception e){
             shellDialogServices.informErrorWithStacktraceDialog(e,
                     "Model export error",
-                    "Error occured while exporting",
+                    "Error occurred while exporting",
                     "Something went wrong while exporting");
         }
-    }
-
-    private String getCanonicalPathFromFile(File file){
-        String filePath;
-        try {
-            filePath = file.getCanonicalPath();
-            return filePath;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        filePath = file.getAbsolutePath();
-        return filePath;
     }
 
 }

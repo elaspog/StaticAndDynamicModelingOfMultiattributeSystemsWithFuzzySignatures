@@ -79,7 +79,7 @@
                      <children>
                         <Label text="Fuzzy set system" />
                         <Label text="Cost vec. dim." GridPane.rowIndex="1" />
-                        <ComboBox fx:id="fuzzySetSystemComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+                        <ComboBox fx:id="fuzzySetSystemComboBox" onMouseClicked="#loadActualFuzzySetSystems" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" />
                         <Spinner fx:id="costVectorDimensionSpinner" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>

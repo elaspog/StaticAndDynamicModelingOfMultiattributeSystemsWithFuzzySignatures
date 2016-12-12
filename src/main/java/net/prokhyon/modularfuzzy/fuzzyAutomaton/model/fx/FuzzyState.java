@@ -7,31 +7,35 @@ import javafx.beans.property.StringProperty;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
+import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet;
 
 public class FuzzyState extends FuzzyFxBase
         implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState, net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState>{
 
     private final StringProperty fuzzyStateName;
     private final StringProperty fuzzyStateDescription;
-    private final ObjectProperty<FuzzyState> fuzzyState;
+    private final ObjectProperty<FuzzySet> fuzzySet;
     private final ObjectProperty<FuzzyStateTypeEnum> fuzzyStateType;
 
-    public FuzzyState(String fuzzyStateName, String fuzzyStateDescription, FuzzyState fuzzyState, FuzzyStateTypeEnum fuzzyStateType) {
+    public FuzzyState(String fuzzyStateName, String fuzzyStateDescription, FuzzySet fuzzySet, FuzzyStateTypeEnum fuzzyStateType) {
         super();
         this.fuzzyStateName = new SimpleStringProperty(fuzzyStateName);
         this.fuzzyStateDescription = new SimpleStringProperty(fuzzyStateDescription);
-        this.fuzzyState = new SimpleObjectProperty<>(fuzzyState);
+        this.fuzzySet = new SimpleObjectProperty<>(fuzzySet);
         this.fuzzyStateType = new SimpleObjectProperty<>(fuzzyStateType);
     }
 
     public FuzzyState(FuzzyState otherFuzzyState) {
         this(otherFuzzyState.getFuzzyStateName(), otherFuzzyState.getFuzzyStateDescription(),
-                otherFuzzyState.getFuzzyState(), otherFuzzyState.getFuzzyStateType());
+                otherFuzzyState.getFuzzySet(), otherFuzzyState.getFuzzyStateType());
     }
 
     @Override
     public net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState convert2DescriptorModel() {
-        return null;
+
+        // TODO Handle reference to FuzzySetSystem's set (fuzzyValue)
+        return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState(null, getFuzzyStateName(),
+                getFuzzyStateDescription(),  getFuzzyStateType(), null);
     }
 
     public FuzzyState deepCopy() {
@@ -62,16 +66,16 @@ public class FuzzyState extends FuzzyFxBase
         this.fuzzyStateDescription.set(fuzzyStateDescription);
     }
 
-    public FuzzyState getFuzzyState() {
-        return fuzzyState.get();
+    public FuzzySet getFuzzySet() {
+        return fuzzySet.get();
     }
 
-    public ObjectProperty<FuzzyState> fuzzyStateProperty() {
-        return fuzzyState;
+    public ObjectProperty<FuzzySet> fuzzySetProperty() {
+        return fuzzySet;
     }
 
-    public void setFuzzyState(FuzzyState fuzzyState) {
-        this.fuzzyState.set(fuzzyState);
+    public void setFuzzySet(FuzzySet fuzzySet) {
+        this.fuzzySet.set(fuzzySet);
     }
 
     public FuzzyStateTypeEnum getFuzzyStateType() {

@@ -3,10 +3,7 @@ package net.prokhyon.modularfuzzy.common;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.UUID;
 
 public class CommonUtils {
@@ -37,4 +34,17 @@ public class CommonUtils {
 		}
 		return fuzzySetUUIDProp;
 	}
+
+	public static String getCanonicalPathFromFile(File file){
+		String filePath;
+		try {
+			filePath = file.getCanonicalPath();
+			return filePath;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		filePath = file.getAbsolutePath();
+		return filePath;
+	}
+
 }

@@ -1,15 +1,13 @@
 package net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx;
 
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +20,17 @@ public class FuzzyAutomaton extends WorkspaceElement
     private final StringProperty fuzzyAutomatonDescription;
     private final ListProperty<FuzzyState> fuzzyStates;
     private final ListProperty<FuzzyTransition> fuzzyTransitions;
+    private final ObjectProperty<FuzzySetSystem> fuzzySetSystem;
 
 
     public FuzzyAutomaton(String uuid, String fuzzyAutomatonName, String fuzzyAutomatonDescription,
-                          List<FuzzyState> fuzzyStates, List<FuzzyTransition> fuzzyTransitions){
+                          List<FuzzyState> fuzzyStates, List<FuzzyTransition> fuzzyTransitions,
+                          FuzzySetSystem fuzzySetSystem){
         super();
         this.uuid = CommonUtils.initializeUUIDPropertyFromString(uuid);
         this.fuzzyAutomationName = new SimpleStringProperty(fuzzyAutomatonName);
         this.fuzzyAutomatonDescription = new SimpleStringProperty(fuzzyAutomatonDescription);
+        this.fuzzySetSystem = new SimpleObjectProperty<>(fuzzySetSystem);
 
         List<FuzzyState> copiedFuzzyStates = new ArrayList<>();
         List<FuzzyTransition> copiedFuzzyTransitions = new ArrayList<>();
@@ -50,7 +51,7 @@ public class FuzzyAutomaton extends WorkspaceElement
     public FuzzyAutomaton(FuzzyAutomaton otherFuzzyAutomaton){
         this(otherFuzzyAutomaton.getUuid(), otherFuzzyAutomaton.getFuzzyAutomationName(),
                 otherFuzzyAutomaton.getFuzzyAutomatonDescription(), otherFuzzyAutomaton.getFuzzyStates(),
-                otherFuzzyAutomaton.getFuzzyTransitions());
+                otherFuzzyAutomaton.getFuzzyTransitions(), otherFuzzyAutomaton.getFuzzySetSystem());
     }
 
     public FuzzyAutomaton deepCopy() {
@@ -59,7 +60,21 @@ public class FuzzyAutomaton extends WorkspaceElement
 
     @Override
     public net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton convert2DescriptorModel() {
-        return null;
+
+        List<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState> descriptorFuzzyStates = new ArrayList<>();
+        List<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition> descriptorFuzzyTransitions = new ArrayList<>();
+        for (FuzzyState fxFuzzyState : this.getFuzzyStates()){
+            final net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState fuzzyState = fxFuzzyState.convert2DescriptorModel();
+            descriptorFuzzyStates.add(fuzzyState);
+        }
+        for (FuzzyTransition fxFuzzyTransition : this.getFuzzyTransitions()){
+            final net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition fuzzyTransition = fxFuzzyTransition.convert2DescriptorModel();
+            descriptorFuzzyTransitions.add(fuzzyTransition);
+        }
+
+        return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton(this.getUuid(),
+                this.getFuzzyAutomationName(), this.getFuzzyAutomatonDescription(), null, descriptorFuzzyStates,
+                descriptorFuzzyTransitions);
     }
 
     public String getUuid() {
@@ -122,4 +137,15 @@ public class FuzzyAutomaton extends WorkspaceElement
         this.fuzzyTransitions.set(fuzzyTransitions);
     }
 
+    public FuzzySetSystem getFuzzySetSystem() {
+        return fuzzySetSystem.get();
+    }
+
+    public ObjectProperty<FuzzySetSystem> fuzzySetSystemProperty() {
+        return fuzzySetSystem;
+    }
+
+    public void setFuzzySetSystem(FuzzySetSystem fuzzySetSystem) {
+        this.fuzzySetSystem.set(fuzzySetSystem);
+    }
 }

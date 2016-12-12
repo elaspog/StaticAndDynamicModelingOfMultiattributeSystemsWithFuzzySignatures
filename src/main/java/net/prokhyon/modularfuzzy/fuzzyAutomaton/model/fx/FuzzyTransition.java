@@ -1,6 +1,5 @@
 package net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
@@ -24,7 +23,10 @@ public class FuzzyTransition extends FuzzyFxBase
 
     @Override
     public net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition convert2DescriptorModel() {
-        return null;
+
+        // TODO Handle start/to state ids here
+        return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition(null,
+                getFuzzyTransitionName(), getFuzzyTransitionDescription(), null, null);
     }
 
     public FuzzyTransition deepCopy() {

@@ -4,21 +4,32 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
+import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyTransition;
+import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
+import java.util.Map;
+
 public class FuzzyAutomatonEditorController implements LoadableDataController {
+
+	private CommonServices commonServices;
+
+	private FuzzySetModuleDescriptor fuzzySetModuleDescriptor;
 
 	private ObjectProperty<FuzzyAutomaton> fuzzyAutomaton;
 
@@ -120,6 +131,19 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	@FXML
 	private void initialize() {
 
+		this.commonServices = new ServiceFactory().getCommonServices();
+		final Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = this.commonServices.getPseudoModules();
+		for (Map.Entry<Class<? extends ModuleDescriptor>, ModuleDescriptor> classModuleDescriptorEntry : pseudoModules.entrySet()) {
+			final Class<? extends ModuleDescriptor> key = classModuleDescriptorEntry.getKey();
+			final ModuleDescriptor value = classModuleDescriptorEntry.getValue();
+			if (key == FuzzySetModuleDescriptor.class ) {
+				final FuzzySetModuleDescriptor fsmdv = (FuzzySetModuleDescriptor) value;
+				if(fsmdv.getViewName().equals("Fuzzy Sets")){
+					this.fuzzySetModuleDescriptor = fsmdv;
+				}
+			}
+		}
+
 		this.fuzzyAutomaton = new SimpleObjectProperty<>();
 		this.fuzzyStateToEdit = new SimpleObjectProperty<>();
 		this.fuzzyTransitionToEdit = new SimpleObjectProperty<>();
@@ -129,6 +153,27 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		this.createdAutomatonCounter = 0;
 		this.createdStateCounter = 0;
 		this.createdTransitionCounter = 0;
+
+		fuzzySetSystemComboBox.setCellFactory(new Callback<ListView<FuzzySetSystem>,ListCell<FuzzySetSystem>>(){
+
+			@Override
+			public ListCell<FuzzySetSystem> call(ListView<FuzzySetSystem> p) {
+
+				final ListCell<FuzzySetSystem> cell = new ListCell<FuzzySetSystem>(){
+
+					@Override
+					protected void updateItem(FuzzySetSystem t, boolean bln) {
+						super.updateItem(t, bln);
+						if (t != null)
+							setText(t.getFuzzySystemName() + " : " + t.getUuid());
+						else
+							setText(null);
+					}
+				};
+				return cell;
+			}
+		});
+
 	}
 
 
@@ -227,7 +272,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 
 		createdAutomatonCounter++;
 		loadWithData(new FuzzyAutomaton(null, "automaton" + Integer.toString(createdAutomatonCounter),
-				"That's a custom fuzzy automaton", null, null));
+				"That's a custom fuzzy automaton", null, null, null));
 		this.originallyLoadedFuzzyAutomaton = null;
 	}
 
@@ -244,7 +289,6 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	@FXML
 	private void saveAutomaton(){
 
-		CommonServices commonServices = new ServiceFactory().getCommonServices();
 		ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();
 		FuzzyAutomaton fuzzyAutomaton = this.fuzzyAutomaton.get();
 		if (fuzzyAutomaton != null){
@@ -346,6 +390,18 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		fuzzyTransitionToEdit.setValue(null);
 		stateOrTransitionNameTextField.textProperty().set(null);
 		stateOrTransitionDescriptionTextArea.textProperty().set(null);
+	}
+
+	@FXML
+	private void loadActualFuzzySetSystems(){
+
+		final Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = this.commonServices.getRegisteredStores();
+		final WorkspaceInfo workspaceInfo = fuzzySetModuleDescriptor.getWorkspaceInfo();
+		final ObservableList<? extends WorkspaceElement> workspaceElements = registeredStores.get(workspaceInfo);
+
+		final ObservableList<FuzzySetSystem> fuzzySetSystems = (ObservableList<FuzzySetSystem>) workspaceElements;
+		this.fuzzySetSystemComboBox.setItems(FXCollections.observableArrayList(fuzzySetSystems));
+		fuzzySetSystemComboBox.valueProperty().bind(fuzzyAutomaton.get().fuzzySetSystemProperty());
 	}
 
 }

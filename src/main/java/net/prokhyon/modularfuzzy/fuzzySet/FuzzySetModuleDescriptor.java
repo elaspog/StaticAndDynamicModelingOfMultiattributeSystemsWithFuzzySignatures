@@ -13,15 +13,20 @@ public class FuzzySetModuleDescriptor implements ModuleDescriptor {
 
 	private CommonServices services;
 
+	private final String VIEW_NAME = "Fuzzy Sets";
+	private FxModulesViewInfo fxModulesViewInfo;
+	private PersistableModelInfo persistableModelInfo;
+	private WorkspaceInfo workspaceInfo;
+
 	@Override
 	public void initializeModule() {
 		services = new ServiceFactory().getCommonServices();
 
-		FxModulesViewInfo viewOfModuleInfo = new FxModulesViewInfo("Fuzzy Set Editor",
+		this.fxModulesViewInfo = new FxModulesViewInfo("Fuzzy Set Editor",
 				"view/FuzzySetEditorLayout.fxml", FuzzySetModuleDescriptor.class, TilePane.class);
-		services.registerView(viewOfModuleInfo);
+		services.registerView(fxModulesViewInfo);
 
-		PersistableModelInfo pmt = new PersistableModelInfo(new ModelDomainIOManager(),
+		this.persistableModelInfo = new PersistableModelInfo(new ModelDomainIOManager(),
 				net.prokhyon.modularfuzzy.fuzzySet.model.ModelConverter.class,
 				null,
 				null,
@@ -37,11 +42,27 @@ public class FuzzySetModuleDescriptor implements ModuleDescriptor {
 				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBelow.class,
 				net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointCustom.class);
 
-		WorkspaceInfo storeInfo = new WorkspaceInfo("Fuzzy Sets", viewOfModuleInfo, pmt);
+		this.workspaceInfo = new WorkspaceInfo(VIEW_NAME, fxModulesViewInfo, persistableModelInfo);
 
-		services.<net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem> registerModelTypeInStore(storeInfo);
-		services.registerPersistenceMethod(pmt);
+		services.<net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem> registerModelTypeInStore(workspaceInfo);
+		services.registerPersistenceMethod(persistableModelInfo);
 
+	}
+
+	public String getViewName() {
+		return VIEW_NAME;
+	}
+
+	public FxModulesViewInfo getFxModulesViewInfo() {
+		return fxModulesViewInfo;
+	}
+
+	public PersistableModelInfo getPersistableModelInfo() {
+		return persistableModelInfo;
+	}
+
+	public WorkspaceInfo getWorkspaceInfo() {
+		return workspaceInfo;
 	}
 
 }
