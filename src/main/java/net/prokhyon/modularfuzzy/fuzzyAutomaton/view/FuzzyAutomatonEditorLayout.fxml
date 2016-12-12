@@ -79,8 +79,8 @@
                      <children>
                         <Label text="Fuzzy set system" />
                         <Label text="Cost vec. dim." GridPane.rowIndex="1" />
-                        <ComboBox fx:id="fuzzySetSystem" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" />
-                        <Spinner GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="fuzzySetSystemComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+                        <Spinner fx:id="costVectorDimensionSpinner" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </children>
@@ -145,8 +145,8 @@
                      </rowConstraints>
                      <children>
                         <Label text="Name" />
-                        <TextField fx:id="stateNameTextField" GridPane.columnIndex="1" GridPane.columnSpan="2" />
-                        <TextArea fx:id="stateDescriptionTextArea" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                        <TextField fx:id="stateOrTransitionNameTextField" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+                        <TextArea fx:id="stateOrTransitionDescriptionTextArea" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2" />
                         <Label text="Description" GridPane.rowIndex="1" />
                         <RadioButton fx:id="initialStateRadioButton" mnemonicParsing="false" text="Initial" GridPane.rowIndex="3">
                            <toggleGroup>
@@ -154,7 +154,7 @@
                            </toggleGroup></RadioButton>
                         <RadioButton fx:id="normalStateRadioButton" mnemonicParsing="false" text="Normal" toggleGroup="$stateGroup" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <RadioButton fx:id="terminalStateRadioButton" mnemonicParsing="false" text="Terminal" toggleGroup="$stateGroup" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <ComboBox fx:id="stateFuzzySet" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <ComboBox fx:id="stateFuzzySetComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Label layoutX="10.0" layoutY="47.0" text="Fuzzy set" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
@@ -177,15 +177,14 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button fx:id="cancelButton" onAction="#cancelButtonPressed" prefWidth="100.0" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Button fx:id="saveButton" onAction="#okButtonPressed" prefWidth="100.0" text="Save" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Button fx:id="saveButton" onAction="#saveButtonPressed" prefWidth="100.0" text="Save" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <Label text="Costs" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
             <ListView fx:id="costsListView" GridPane.columnIndex="2" GridPane.rowSpan="4" />
             <Button fx:id="addCostValueButton" onAction="#addCostValue" prefWidth="100.0" text="Add Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
             <Spinner fx:id="costValueSpinner" prefWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
             <Button fx:id="removeCostValueButton" onAction="#removeCostValue" prefWidth="100.0" text="Remove Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-            <ComboBox fx:id="fromState" prefWidth="150.0" GridPane.rowIndex="1" />
-            <ComboBox fx:id="toState" prefWidth="150.0" GridPane.rowIndex="3" />
+            <ComboBox fx:id="fromStateComboBox" prefWidth="150.0" GridPane.rowIndex="1" />
+            <ComboBox fx:id="toStateComboBox" prefWidth="150.0" GridPane.rowIndex="3" />
             <Label text="From State" />
             <Label text="To State" GridPane.rowIndex="2" />
          </children>
