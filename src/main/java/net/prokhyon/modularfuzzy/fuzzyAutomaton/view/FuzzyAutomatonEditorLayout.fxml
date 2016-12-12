@@ -77,8 +77,8 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Fuzzy set" />
-                        <Label text="Cost vector size" GridPane.rowIndex="1" />
+                        <Label text="Fuzzy set system" />
+                        <Label text="Cost vec. dim." GridPane.rowIndex="1" />
                         <ComboBox fx:id="fuzzySetSystem" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" />
                         <Spinner GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                      </children>
@@ -99,20 +99,22 @@
                   <ListView fx:id="statesListView" prefHeight="175.0" prefWidth="135.0" />
                   <HBox>
                      <children>
-                        <Button fx:id="addStateButton" onAction="#addState" prefWidth="90.0" text="Add" />
-                        <Button fx:id="removeStateButton" onAction="#removeState" prefWidth="90.0" text="Remove" />
+                        <Button fx:id="addStateButton" onAction="#addState" prefWidth="55.0" text="Add" />
+                        <Button fx:id="editStateButton" mnemonicParsing="false" onAction="#editState" prefWidth="55.0" text="Edit" />
+                        <Button fx:id="removeStateButton" onAction="#removeState" prefWidth="60.0" text="Remove" />
                      </children>
                   </HBox>
                </children>
             </VBox>
             <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Label text="Edges" />
-                  <ListView fx:id="edgesListView" prefHeight="175.0" prefWidth="135.0" />
+                  <Label text="Transitions" />
+                  <ListView fx:id="transitionsListView" prefHeight="175.0" prefWidth="135.0" />
                   <HBox>
                      <children>
-                        <Button fx:id="addEdgeButton" onAction="#addEdge" prefWidth="90.0" text="Add" />
-                        <Button fx:id="removeEdgeButton" onAction="#removeEdge" prefWidth="90.0" text="Remove" />
+                        <Button fx:id="addTransitionButton" onAction="#addTransition" prefWidth="55.0" text="Add" />
+                        <Button fx:id="editTransitionButton" mnemonicParsing="false" onAction="#editTransition" prefWidth="55.0" text="Edit" />
+                        <Button fx:id="removeTransitionButton" onAction="#removeTransition" prefWidth="60.0" text="Remove" />
                      </children>
                   </HBox>
                </children>
@@ -152,10 +154,8 @@
                            </toggleGroup></RadioButton>
                         <RadioButton fx:id="normalStateRadioButton" mnemonicParsing="false" text="Normal" toggleGroup="$stateGroup" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <RadioButton fx:id="terminalStateRadioButton" mnemonicParsing="false" text="Terminal" toggleGroup="$stateGroup" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <Label text="From State" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <ComboBox fx:id="fromState" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                        <Label text="To State" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <ComboBox fx:id="toState" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                        <ComboBox fx:id="stateFuzzySet" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label layoutX="10.0" layoutY="47.0" text="Fuzzy set" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
                </children>
@@ -178,16 +178,16 @@
          </rowConstraints>
          <children>
             <Button fx:id="cancelButton" onAction="#cancelButtonPressed" prefWidth="100.0" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Button fx:id="okButton" onAction="#okButtonPressed" prefWidth="100.0" text="Ok" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-            <Label text="From fuzzy set" GridPane.halignment="LEFT" />
-            <Label text="To fuzzy set" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
-            <ComboBox fx:id="fromFuzzySet" prefWidth="150.0" GridPane.rowIndex="1" />
-            <ComboBox fx:id="toFuzzySet" prefWidth="150.0" GridPane.rowIndex="3" />
+            <Button fx:id="saveButton" onAction="#okButtonPressed" prefWidth="100.0" text="Save" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <Label text="Costs" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
             <ListView fx:id="costsListView" GridPane.columnIndex="2" GridPane.rowSpan="4" />
             <Button fx:id="addCostValueButton" onAction="#addCostValue" prefWidth="100.0" text="Add Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
             <Spinner fx:id="costValueSpinner" prefWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
             <Button fx:id="removeCostValueButton" onAction="#removeCostValue" prefWidth="100.0" text="Remove Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <ComboBox fx:id="fromState" prefWidth="150.0" GridPane.rowIndex="1" />
+            <ComboBox fx:id="toState" prefWidth="150.0" GridPane.rowIndex="3" />
+            <Label text="From State" />
+            <Label text="To State" GridPane.rowIndex="2" />
          </children>
       </GridPane>
    </children>

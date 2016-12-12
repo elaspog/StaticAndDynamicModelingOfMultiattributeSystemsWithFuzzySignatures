@@ -5,12 +5,15 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
+import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
-import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState;
-import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
-import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystemTypeEnum;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyTransition;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet;
+import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
+import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
+import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
 public class FuzzyAutomatonEditorController implements LoadableDataController {
 
@@ -35,28 +38,25 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	private TextArea stateDescriptionTextArea;
 
 	@FXML
-	private ListView<FuzzySet> statesListView;
+	private ListView<FuzzyState> statesListView;
 
 	@FXML
-	private ListView<FuzzySet> edgesListView;
+	private ListView<FuzzyTransition> transitionsListView;
 
 	@FXML
-	private ListView<FuzzySet> costsListView;
+	private ListView<Double> costsListView;
 
 	@FXML
-	private ComboBox<FuzzySetSystemTypeEnum> fuzzySetSystem;
+	private ComboBox<FuzzySetSystem> fuzzySetSystem;
 
 	@FXML
-	private ComboBox<FuzzySetSystemTypeEnum> fromState;
+	private ComboBox<FuzzyState> fromState;
 
 	@FXML
-	private ComboBox<FuzzySetSystemTypeEnum> toState;
+	private ComboBox<FuzzyState> toState;
 
 	@FXML
-	private ComboBox<FuzzySetSystemTypeEnum> fromFuzzySet;
-
-	@FXML
-	private ComboBox<FuzzySetSystemTypeEnum> toFuzzySet;
+	private ComboBox<FuzzySet> stateFuzzySet;
 
 	@FXML
 	private Spinner<Double> costValueSpinner;
@@ -83,13 +83,19 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	private Button addStateButton;
 
 	@FXML
+	private Button editStateButton;
+
+	@FXML
 	private Button removeStateButton;
 
 	@FXML
-	private Button addEdgeButton;
+	private Button addTransitionButton;
 
 	@FXML
-	private Button removeEdgeButton;
+	private Button editTransitionButton;
+
+	@FXML
+	private Button removeTransitionButton;
 
 	@FXML
 	private Button addCostValueButton;
@@ -101,7 +107,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	private Button cancelButton;
 
 	@FXML
-	private Button okButton;
+	private Button saveButton;
 
 	private int createdAutomatonCounter;
 	private int createdStateCounter;
@@ -132,6 +138,9 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		if (fuzzyAutomaton.getValue() != null){
 			automatonNameTextField.textProperty().unbindBidirectional(fuzzyAutomaton.getValue().fuzzyAutomationNameProperty());
 			automatonDescriptionTextArea.textProperty().unbindBidirectional(fuzzyAutomaton.getValue().fuzzyAutomatonDescriptionProperty());
+
+			statesListView.itemsProperty().unbindBidirectional(fuzzyAutomaton.get().fuzzyStatesProperty());
+			transitionsListView.itemsProperty().unbindBidirectional(fuzzyAutomaton.get().fuzzyTransitionsProperty());
 		}
 	}
 
@@ -148,6 +157,8 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 
 		automatonNameTextField.textProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyAutomationNameProperty());
 		automatonDescriptionTextArea.textProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyAutomatonDescriptionProperty());
+		statesListView.itemsProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyStatesProperty());
+		transitionsListView.itemsProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyTransitionsProperty());
 	}
 
 	@FXML
@@ -155,7 +166,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 
 		createdAutomatonCounter++;
 		loadWithData(new FuzzyAutomaton(null, "automaton" + Integer.toString(createdAutomatonCounter),
-				"That's a custom fuzzy automaton"));
+				"That's a custom fuzzy automaton", null, null));
 		this.originallyLoadedFuzzyAutomaton = null;
 	}
 
@@ -172,10 +183,42 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	@FXML
 	private void saveAutomaton(){
 
+		CommonServices commonServices = new ServiceFactory().getCommonServices();
+		ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();
+		FuzzyAutomaton fuzzyAutomaton = this.fuzzyAutomaton.get();
+		if (fuzzyAutomaton != null){
+			final FuzzyAutomaton fa = fuzzyAutomaton.deepCopy();
+			if (this.originallyLoadedFuzzyAutomaton != null ){
+				int choice = shellDialogServices.selectFromOptions(
+						"Model conflict",
+						"This model has an original in model store.",
+						"Would you like to overwrite it, or create a new one instead?",
+						"Overwrite", "Create new");
+				if (choice == 1){
+					commonServices.updateModelInRegisteredStore(this.originallyLoadedFuzzyAutomaton, fa);
+				} else if (choice == 2){
+					commonServices.addModelToRegisteredStore(fa);
+				}
+			} else {
+				commonServices.addModelToRegisteredStore(fa);
+				this.originallyLoadedFuzzyAutomaton = fa;
+			}
+		}
 	}
 
 	@FXML
 	private void addState(){
+
+		if (fuzzyAutomaton != null && fuzzyAutomaton.get() != null && fuzzyAutomaton.get().fuzzyStatesProperty() != null) {
+			unbindViewElementsFromControllerProperties();
+			bindViewElementsToControllerProperties();
+			createdStateCounter++;
+			fuzzyAutomaton.get().fuzzyStatesProperty().add(new FuzzyState("state" + createdStateCounter, null, null, null));
+		}
+	}
+
+	@FXML
+	private void editState(){
 
 	}
 
@@ -185,12 +228,23 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	}
 
 	@FXML
-	private void addEdge(){
+	private void addTransition(){
+
+		if (fuzzyAutomaton != null && fuzzyAutomaton.get() != null && fuzzyAutomaton.get().fuzzyTransitionsProperty() != null) {
+			unbindViewElementsFromControllerProperties();
+			bindViewElementsToControllerProperties();
+			createdTransitionCounter++;
+			fuzzyAutomaton.get().fuzzyTransitionsProperty().add(new FuzzyTransition("transition" + createdTransitionCounter, null));
+		}
+	}
+
+	@FXML
+	private void editTransition(){
 
 	}
 
 	@FXML
-	private void removeEdge(){
+	private void removeTransition(){
 
 	}
 

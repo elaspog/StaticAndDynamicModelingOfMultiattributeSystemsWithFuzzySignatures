@@ -1,11 +1,18 @@
 package net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx;
 
 
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FuzzyAutomaton extends WorkspaceElement
         implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton, net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton> {
@@ -13,19 +20,37 @@ public class FuzzyAutomaton extends WorkspaceElement
     private final StringProperty uuid;
     private final StringProperty fuzzyAutomationName;
     private final StringProperty fuzzyAutomatonDescription;
+    private final ListProperty<FuzzyState> fuzzyStates;
+    private final ListProperty<FuzzyTransition> fuzzyTransitions;
 
 
-    public FuzzyAutomaton(String uuid, String fuzzyAutomatonName, String fuzzyAutomatonDescription){
+    public FuzzyAutomaton(String uuid, String fuzzyAutomatonName, String fuzzyAutomatonDescription,
+                          List<FuzzyState> fuzzyStates, List<FuzzyTransition> fuzzyTransitions){
         super();
         this.uuid = CommonUtils.initializeUUIDPropertyFromString(uuid);
         this.fuzzyAutomationName = new SimpleStringProperty(fuzzyAutomatonName);
         this.fuzzyAutomatonDescription = new SimpleStringProperty(fuzzyAutomatonDescription);
 
+        List<FuzzyState> copiedFuzzyStates = new ArrayList<>();
+        List<FuzzyTransition> copiedFuzzyTransitions = new ArrayList<>();
+        if (fuzzyStates != null) {
+            for (FuzzyState fs : fuzzyStates) {
+                copiedFuzzyStates.add(fs.deepCopy());
+            }
+        }
+        if (fuzzyTransitions != null) {
+            for (FuzzyTransition ft : fuzzyTransitions) {
+                copiedFuzzyTransitions.add(ft.deepCopy());
+            }
+        }
+        this.fuzzyTransitions = new SimpleListProperty<>(FXCollections.observableArrayList(copiedFuzzyTransitions));
+        this.fuzzyStates = new SimpleListProperty<>(FXCollections.observableArrayList(copiedFuzzyStates));
     }
 
     public FuzzyAutomaton(FuzzyAutomaton otherFuzzyAutomaton){
         this(otherFuzzyAutomaton.getUuid(), otherFuzzyAutomaton.getFuzzyAutomationName(),
-                otherFuzzyAutomaton.getFuzzyAutomatonDescription());
+                otherFuzzyAutomaton.getFuzzyAutomatonDescription(), otherFuzzyAutomaton.getFuzzyStates(),
+                otherFuzzyAutomaton.getFuzzyTransitions());
     }
 
     public FuzzyAutomaton deepCopy() {
@@ -71,6 +96,30 @@ public class FuzzyAutomaton extends WorkspaceElement
 
     public void setFuzzyAutomatonDescription(String fuzzyAutomatonDescription) {
         this.fuzzyAutomatonDescription.set(fuzzyAutomatonDescription);
+    }
+
+    public ObservableList<FuzzyState> getFuzzyStates() {
+        return fuzzyStates.get();
+    }
+
+    public ListProperty<FuzzyState> fuzzyStatesProperty() {
+        return fuzzyStates;
+    }
+
+    public void setFuzzyStates(ObservableList<FuzzyState> fuzzyStates) {
+        this.fuzzyStates.set(fuzzyStates);
+    }
+
+    public ObservableList<FuzzyTransition> getFuzzyTransitions() {
+        return fuzzyTransitions.get();
+    }
+
+    public ListProperty<FuzzyTransition> fuzzyTransitionsProperty() {
+        return fuzzyTransitions;
+    }
+
+    public void setFuzzyTransitions(ObservableList<FuzzyTransition> fuzzyTransitions) {
+        this.fuzzyTransitions.set(fuzzyTransitions);
     }
 
 }
