@@ -206,7 +206,6 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 			}
 		});
 
-
 		transitionsListView.setCellFactory(new Callback<ListView<FuzzyTransition>,ListCell<FuzzyTransition>>(){
 
 			@Override
@@ -229,6 +228,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 				return cell;
 			}
 		});
+
 	}
 
 

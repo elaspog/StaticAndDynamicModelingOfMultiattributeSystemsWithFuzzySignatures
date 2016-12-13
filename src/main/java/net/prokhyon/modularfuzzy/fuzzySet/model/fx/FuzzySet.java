@@ -106,11 +106,6 @@ public class FuzzySet extends FuzzyFxBase
 	}
 
 	@Override
-	public String toString() {
-		return fuzzySetName.get() + " : " + fuzzySetType.get();
-	}
-
-	@Override
 	public FuzzySetBase convert2DescriptorModel() {
 
 		final List<FuzzySetPoint> fxFuzzySetPoints = getFuzzySetPoints();

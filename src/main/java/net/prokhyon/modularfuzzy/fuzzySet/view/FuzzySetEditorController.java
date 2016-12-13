@@ -7,18 +7,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
 
+import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
@@ -161,6 +154,26 @@ public class FuzzySetEditorController implements LoadableDataController {
 			pointsTableView.itemsProperty().setValue(null);
 			if (newSelection != null) {
 				pointsTableView.itemsProperty().bind(newSelection.fuzzySetPointsProperty());
+			}
+		});
+
+		fuzzySetListView.setCellFactory(new Callback<ListView<FuzzySet>,ListCell<FuzzySet>>(){
+
+			@Override
+			public ListCell<FuzzySet> call(ListView<FuzzySet> p) {
+
+				final ListCell<FuzzySet> cell = new ListCell<FuzzySet>(){
+
+					@Override
+					protected void updateItem(FuzzySet t, boolean bln) {
+						super.updateItem(t, bln);
+						if (t != null)
+							setText(t.getFuzzySetName() + " : " + t.getFuzzySetType());
+						else
+							setText(null);
+					}
+				};
+				return cell;
 			}
 		});
 
