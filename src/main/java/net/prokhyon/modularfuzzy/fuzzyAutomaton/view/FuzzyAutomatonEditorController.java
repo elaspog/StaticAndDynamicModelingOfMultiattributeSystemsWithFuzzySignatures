@@ -245,7 +245,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 
 		if (fuzzyStateToEdit.getValue() != null) {
 			stateOrTransitionNameTextField.textProperty().unbindBidirectional(fuzzyStateToEdit.get().fuzzyStateNameProperty());
-			stateOrTransitionNameTextField.textProperty().unbindBidirectional(fuzzyStateToEdit.get().fuzzyStateDescriptionProperty());
+			stateOrTransitionDescriptionTextArea.textProperty().unbindBidirectional(fuzzyStateToEdit.get().fuzzyStateDescriptionProperty());
 		}
 	}
 
@@ -253,7 +253,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 
 		if (fuzzyTransitionToEdit.getValue() != null) {
 			stateOrTransitionNameTextField.textProperty().unbindBidirectional(fuzzyTransitionToEdit.get().fuzzyTransitionNameProperty());
-			stateOrTransitionNameTextField.textProperty().unbindBidirectional(fuzzyTransitionToEdit.get().fuzzyTransitionDescriptionProperty());
+			stateOrTransitionDescriptionTextArea.textProperty().unbindBidirectional(fuzzyTransitionToEdit.get().fuzzyTransitionDescriptionProperty());
 		}
 	}
 
