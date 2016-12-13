@@ -27,7 +27,6 @@ import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class FuzzyAutomatonEditorController implements LoadableDataController {
@@ -229,6 +228,45 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 			}
 		});
 
+		final Callback<ListView<FuzzyState>, ListCell<FuzzyState>> callback = new Callback<ListView<FuzzyState>, ListCell<FuzzyState>>() {
+
+			@Override
+			public ListCell<FuzzyState> call(ListView<FuzzyState> p) {
+
+				final ListCell<FuzzyState> cell = new ListCell<FuzzyState>() {
+
+					@Override
+					protected void updateItem(FuzzyState t, boolean bln) {
+						super.updateItem(t, bln);
+						if (t != null) {
+							setText(t.getFuzzyStateName());
+						} else
+							setText(null);
+					}
+				};
+				return cell;
+			}
+		};
+		fromStateComboBox.setCellFactory(callback);
+		toStateComboBox.setCellFactory(callback);
+		fromStateComboBox.setButtonCell(getListCell());
+		toStateComboBox.setButtonCell(getListCell());
+
+	}
+
+	private ListCell<FuzzyState> getListCell() {
+
+		return new ListCell<FuzzyState>() {
+			@Override
+			protected void updateItem(FuzzyState t, boolean bln) {
+				super.updateItem(t, bln);
+				if (bln) {
+					setText("");
+				} else {
+					setText(t.getFuzzyStateName());
+				}
+			}
+		};
 	}
 
 
@@ -304,6 +342,13 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		}
 	}
 
+	void updateTransitionComboBox(){
+
+		final ObservableList<FuzzyState> fuzzyStates = fuzzyAutomaton.get().fuzzyStatesProperty();
+		this.fromStateComboBox.setItems(FXCollections.observableArrayList(fuzzyStates));
+		this.toStateComboBox.setItems(FXCollections.observableArrayList(fuzzyStates));
+	}
+
 	@Override
 	public <T extends WorkspaceElement> void loadWithData(T modelToLoad) {
 
@@ -376,6 +421,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 			createdStateCounter++;
 			fuzzyAutomaton.get().fuzzyStatesProperty().add(new FuzzyState("state" + createdStateCounter, null, null, null));
 		}
+		updateTransitionComboBox();
 	}
 
 	@FXML
@@ -395,6 +441,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 
 		ObservableList<FuzzyState> selectedItems = statesListView.getSelectionModel().getSelectedItems();
 		fuzzyAutomaton.get().fuzzyStatesProperty().removeAll(selectedItems);
+		updateTransitionComboBox();
 	}
 
 	@FXML
