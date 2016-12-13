@@ -316,6 +316,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		BooleanBinding isNothingSelectedForEditing = isStateNotSetSelectedForEditing.and(isTransitionNotSetSelectedForEditing);
 		BooleanBinding isSelectedState = Bindings.isNull(statesListView.getSelectionModel().selectedItemProperty());
 		BooleanBinding isSelectedTransition = Bindings.isNull(transitionsListView.getSelectionModel().selectedItemProperty());
+		BooleanBinding isStateOrTransitionCreated = Bindings.isNotEmpty(transitionsListView.getItems()).or(Bindings.isNotEmpty(statesListView.getItems()));
 
 		createAutomatonButton.disableProperty().bind(isInEditingMode);
 
@@ -325,8 +326,8 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		transitionsListView.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode));
 		clearAutomatonButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode));
 		saveAutomatonButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode));
-		fuzzySetSystemComboBox.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode));
-		costVectorDimensionSpinner.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode));
+		fuzzySetSystemComboBox.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode).or(isStateOrTransitionCreated));
+		costVectorDimensionSpinner.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode).or(isStateOrTransitionCreated));
 		addStateButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode));
 		addTransitionButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode));
 
