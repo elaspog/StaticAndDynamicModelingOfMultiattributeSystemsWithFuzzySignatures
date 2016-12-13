@@ -10,9 +10,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
@@ -66,6 +68,27 @@ public class SharedWorkspaceControlAndController<T extends WorkspaceElement> ext
 		BooleanBinding isNoItemSelected = Bindings.isNull(selectedItemProperty);
 		loadButton.disableProperty().bind(isNoItemSelected);
 		removeButton.disableProperty().bind(isNoItemSelected);
+
+		sharedWorkspace.setCellFactory(new Callback<ListView<T>,ListCell<T>>(){
+
+			@Override
+			public ListCell<T> call(ListView<T> p) {
+
+				final ListCell<T> cell = new ListCell<T>(){
+
+					@Override
+					protected void updateItem(T t, boolean bln) {
+						super.updateItem(t, bln);
+						if (t != null)
+							setText(t.getListElementIdentifier());
+						else
+							setText(null);
+					}
+				};
+				return cell;
+			}
+		});
+
 	}
 
 	@FXML

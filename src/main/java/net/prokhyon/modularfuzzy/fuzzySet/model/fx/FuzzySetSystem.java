@@ -127,4 +127,9 @@ public class FuzzySetSystem extends WorkspaceElement
 	public FuzzySetSystem deepCopy() {
 		return new FuzzySetSystem(this);
 	}
+
+	@Override
+	public String getListElementIdentifier() {
+		return fuzzySystemName.get() + " (" + fuzzySets.size() + ")" + " [" + fuzzySystemType.get() + "]";
+	}
 }

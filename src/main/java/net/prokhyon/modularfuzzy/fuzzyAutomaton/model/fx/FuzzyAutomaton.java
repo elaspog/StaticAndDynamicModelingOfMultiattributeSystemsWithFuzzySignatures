@@ -178,4 +178,16 @@ public class FuzzyAutomaton extends WorkspaceElement
         this.fuzzySetSystem.set(fuzzySetSystem);
     }
 
+    @Override
+    public String getListElementIdentifier() {
+        String str = fuzzyAutomationName.get();
+        str += " (" + fuzzyStates.size() + ", " + fuzzyTransitions.size() + ")";
+        // TODO temporary soulution, in future the value is always present
+        str += " [";
+        if (fuzzySetSystem.get() != null)
+            str += fuzzySetSystem.get().getFuzzySystemName();
+        str += "]";
+        return str;
+    }
+
 }
