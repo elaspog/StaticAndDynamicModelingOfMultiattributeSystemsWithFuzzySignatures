@@ -14,6 +14,7 @@ import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyTransition;
@@ -73,19 +74,13 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	private ComboBox<FuzzySet> stateFuzzySetComboBox;
 
 	@FXML
+	private ComboBox<FuzzyStateTypeEnum> stateTypeComboBox;
+
+	@FXML
 	private Spinner<Integer> costVectorDimensionSpinner;
 
 	@FXML
 	private Spinner<Double> costValueSpinner;
-
-	@FXML
-	private RadioButton initialStateRadioButton;
-
-	@FXML
-	private RadioButton normalStateRadioButton;
-
-	@FXML
-	private RadioButton terminalStateRadioButton;
 
 	@FXML
 	private Button createAutomatonButton;
@@ -222,9 +217,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		stateOrTransitionDescriptionTextArea.disableProperty().bind(isNothingSelectedForEditing);
 		saveButton.disableProperty().bind(isNothingSelectedForEditing);
 
-		initialStateRadioButton.disableProperty().bind(isStateNotSetSelectedForEditing);
-		normalStateRadioButton.disableProperty().bind(isStateNotSetSelectedForEditing);
-		terminalStateRadioButton.disableProperty().bind(isStateNotSetSelectedForEditing);
+		stateTypeComboBox.disableProperty().bind(isStateNotSetSelectedForEditing);
 		stateFuzzySetComboBox.disableProperty().bind(isStateNotSetSelectedForEditing);
 
 		addCostValueButton.disableProperty().bind(isTransitionNotSetSelectedForEditing);
@@ -234,6 +227,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		costsListView.disableProperty().bind(isTransitionNotSetSelectedForEditing);
 		costValueSpinner.disableProperty().bind(isTransitionNotSetSelectedForEditing);
 
+		costVectorDimensionSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
 	}
 
 	void unbindAutomatonViewElementsFromControllerProperties(){
@@ -278,6 +272,8 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		automatonDescriptionTextArea.textProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyAutomatonDescriptionProperty());
 		statesListView.itemsProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyStatesProperty());
 		transitionsListView.itemsProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyTransitionsProperty());
+
+		costVectorDimensionSpinner.getValueFactory().valueProperty().bindBidirectional(fuzzyAutomaton.get().costVectorDimensionObjProperty());
 	}
 
 	@FXML
@@ -285,7 +281,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 
 		createdAutomatonCounter++;
 		loadWithData(new FuzzyAutomaton(null, "automaton" + Integer.toString(createdAutomatonCounter),
-				"That's a custom fuzzy automaton", null, null, null));
+				"That's a custom fuzzy automaton", null, null, null, 0));
 		this.originallyLoadedFuzzyAutomaton = null;
 	}
 

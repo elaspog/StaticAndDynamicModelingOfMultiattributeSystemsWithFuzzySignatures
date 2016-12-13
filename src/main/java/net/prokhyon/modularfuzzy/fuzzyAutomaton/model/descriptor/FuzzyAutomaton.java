@@ -14,6 +14,9 @@ public class FuzzyAutomaton extends FuzzyDescriptorRootBase {
 	@XStreamAsAttribute
 	private String fuzzyTypeId;
 
+	@XStreamAsAttribute
+	private Integer costVectorDimension;
+
 	@XStreamImplicit
 	private List<FuzzyState> states;
 
@@ -21,11 +24,12 @@ public class FuzzyAutomaton extends FuzzyDescriptorRootBase {
 	private List<FuzzyTransition> transitions;
 
 	public FuzzyAutomaton(String uuid, String typeName, String typeDescription, String fuzzyTypeId, List<FuzzyState> states,
-			List<FuzzyTransition> transitions) {
+			List<FuzzyTransition> transitions, Integer costVectorDimension) {
 		super(uuid, typeName, typeDescription);
 		this.fuzzyTypeId = fuzzyTypeId;
 		this.states = states;
 		this.transitions = transitions;
+		this.costVectorDimension = costVectorDimension;
 	}
 
 	public String getFuzzytypeid() {
