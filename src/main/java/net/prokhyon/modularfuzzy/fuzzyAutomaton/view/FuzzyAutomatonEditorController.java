@@ -24,7 +24,11 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class FuzzyAutomatonEditorController implements LoadableDataController {
 
@@ -182,6 +186,49 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 					}
 				});
 
+		statesListView.setCellFactory(new Callback<ListView<FuzzyState>,ListCell<FuzzyState>>(){
+
+			@Override
+			public ListCell<FuzzyState> call(ListView<FuzzyState> p) {
+
+				final ListCell<FuzzyState> cell = new ListCell<FuzzyState>(){
+
+					@Override
+					protected void updateItem(FuzzyState t, boolean bln) {
+						super.updateItem(t, bln);
+						if (t != null)
+							setText(t.getFuzzyStateName() + " : " + t.getFuzzySet());
+						else
+							setText(null);
+					}
+				};
+				return cell;
+			}
+		});
+
+
+		transitionsListView.setCellFactory(new Callback<ListView<FuzzyTransition>,ListCell<FuzzyTransition>>(){
+
+			@Override
+			public ListCell<FuzzyTransition> call(ListView<FuzzyTransition> p) {
+
+				final ListCell<FuzzyTransition> cell = new ListCell<FuzzyTransition>(){
+
+					@Override
+					protected void updateItem(FuzzyTransition t, boolean bln) {
+						super.updateItem(t, bln);
+						if (t != null) {
+							String states = "(->)";
+							final List<String> costParts = Arrays.stream(t.getCostVector().toArray()).map(s -> s.toString()).collect(Collectors.toList());
+							final String costs = "[" + String.join(",", costParts) + "]";
+							setText(t.getFuzzyTransitionName() + " : " + states + " : "  + costs );
+						} else
+							setText(null);
+					}
+				};
+				return cell;
+			}
+		});
 	}
 
 
@@ -357,7 +404,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 			unbindAutomatonViewElementsFromControllerProperties();
 			bindViewElementsToControllerProperties();
 			createdTransitionCounter++;
-			fuzzyAutomaton.get().fuzzyTransitionsProperty().add(new FuzzyTransition("transition" + createdTransitionCounter, null));
+			fuzzyAutomaton.get().fuzzyTransitionsProperty().add(new FuzzyTransition("transition" + createdTransitionCounter, null, null, null, null));
 		}
 	}
 
