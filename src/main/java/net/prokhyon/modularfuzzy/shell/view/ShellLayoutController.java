@@ -2,9 +2,15 @@ package net.prokhyon.modularfuzzy.shell.view;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -153,6 +159,19 @@ public class ShellLayoutController {
 					"Error occured while exporting",
 					"A module has implemented incorrectly the IPersistableModel interface.");
 		}
+	}
+
+	public void loadCoreModels() {
+
+		List<File> filesToLoad = new ArrayList<>();
+		try(Stream<Path> paths = Files.walk(Paths.get("./coremodels/"))) {
+			paths.forEach(filePath -> {
+				if (Files.isRegularFile(filePath)) {
+					filesToLoad.add(filePath.toFile());
+				}
+			});
+		} catch (Exception e){ }
+		commonServices.loadFiles(filesToLoad);
 	}
 
 }

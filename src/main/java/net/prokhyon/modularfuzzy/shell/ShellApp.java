@@ -44,6 +44,7 @@ public class ShellApp extends Application {
 			shellLayout = (BorderPane) loader.load();
 			shellLayoutController = loader.getController();
 			shellLayoutController.loadModules();
+			shellLayoutController.loadCoreModels();
 			Scene scene = new Scene(shellLayout);
 			primaryStage.setScene(scene);
 			primaryStage.setMinWidth(800);

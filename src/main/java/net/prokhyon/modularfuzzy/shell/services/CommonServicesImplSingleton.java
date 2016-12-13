@@ -210,9 +210,9 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 					}
 
 				} catch (ModuleImplementationException e){
-					this.informErrorWithStacktraceDialog(e, "Module error",
-							"Error has occurred while importing file.",
-							"Error in a module implementation.");
+					//this.informErrorWithStacktraceDialog(e, "Module error",
+					//		"Error has occurred while importing file.",
+					//		"Error in a module implementation.");
 				} catch (NotConvertibleException e){
 					this.informErrorWithStacktraceDialog(e, "Conversion error",
 							"Error has occurred while importing file.",
