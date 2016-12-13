@@ -22,9 +22,9 @@ public class FuzzyTransition extends FuzzyDescriptorModelBase {
 	@XStreamAlias("costs")
 	private List<Double> costs;
 
-	public FuzzyTransition(String id, String label, String description, String fromState, String toState,
+	public FuzzyTransition(String label, String description, String fromState, String toState,
 						   List<Double> costs) {
-		super(id, label, description);
+		super(label, description);
 		this.fromState = fromState;
 		this.toState = toState;
 		this.costs = costs;

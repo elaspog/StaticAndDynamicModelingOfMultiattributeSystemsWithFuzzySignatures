@@ -41,7 +41,7 @@ public class FuzzyTransition extends FuzzyFxBase
     public net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition convert2DescriptorModel() {
 
         // TODO Handle start/to state ids here
-        return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition(null,
+        return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition(
                 getFuzzyTransitionName(), getFuzzyTransitionDescription(), null, null,
                 costVector.get());
     }

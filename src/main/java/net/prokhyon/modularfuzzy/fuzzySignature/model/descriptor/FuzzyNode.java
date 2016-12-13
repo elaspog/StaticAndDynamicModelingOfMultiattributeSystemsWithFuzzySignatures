@@ -24,9 +24,9 @@ public class FuzzyNode extends FuzzyDescriptorModelBase {
 	@XStreamAsAttribute
 	private String fuzzySetTypeId;
 
-	public FuzzyNode(String id, String label, String description, List<ChildNodeInfo> children,
+	public FuzzyNode(String label, String description, List<ChildNodeInfo> children,
 			List<SubTreeInfo> subTrees, String aggregatorOperator, String fuzzySetTypeId) {
-		super(id, label, description);
+		super(label, description);
 		this.children = children;
 		this.subTrees = subTrees;
 		this.aggregatorOperator = aggregatorOperator;
@@ -68,7 +68,7 @@ public class FuzzyNode extends FuzzyDescriptorModelBase {
 	@Override
 	public String toString() {
 		return "FuzzyNode [children=" + children + ", aggregatorOperator=" + aggregatorOperator + ", fuzzySetTypeId="
-				+ fuzzySetTypeId + ", id=" + id + ", label=" + label + ", description=" + description + "]";
+				+ fuzzySetTypeId + ", label=" + label + ", description=" + description + "]";
 	}
 
 }

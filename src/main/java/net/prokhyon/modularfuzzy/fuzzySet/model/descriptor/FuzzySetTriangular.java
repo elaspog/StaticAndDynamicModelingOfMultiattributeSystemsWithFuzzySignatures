@@ -7,8 +7,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("fuzzyset")
 public class FuzzySetTriangular extends FuzzySetBase {
 
-	public FuzzySetTriangular(String id, String label, String description, List<FuzzyPointBase> points) {
-		super(id, label, description, FuzzySetTypeEnum.TRIANGULAR, points);
+	public FuzzySetTriangular(String label, String description, List<FuzzyPointBase> points) {
+		super(label, description, FuzzySetTypeEnum.TRIANGULAR, points);
 	}
 
 }

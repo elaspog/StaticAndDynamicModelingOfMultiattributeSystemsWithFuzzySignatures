@@ -34,7 +34,7 @@ public class FuzzyState extends FuzzyFxBase
     public net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState convert2DescriptorModel() {
 
         // TODO Handle reference to FuzzySetSystem's set (fuzzyValue)
-        return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState(null, getFuzzyStateName(),
+        return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState(getFuzzyStateName(),
                 getFuzzyStateDescription(),  getFuzzyStateType(), null);
     }
 

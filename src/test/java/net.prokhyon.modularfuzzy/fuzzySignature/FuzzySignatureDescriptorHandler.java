@@ -20,7 +20,7 @@ public class FuzzySignatureDescriptorHandler extends DescriptorHandler implement
 
 		List<FuzzyNode> nodes = new ArrayList<FuzzyNode>();
 
-		nodes.add(new FuzzyNode("n1", "rootNode", "some descr", new ArrayList<ChildNodeInfo>() {
+		nodes.add(new FuzzyNode( "rootNode", "some descr", new ArrayList<ChildNodeInfo>() {
 			{
 				add(new ChildNodeInfo("n11"));
 				add(new ChildNodeInfo("n12"));
@@ -30,7 +30,7 @@ public class FuzzySignatureDescriptorHandler extends DescriptorHandler implement
 				add(new SubTreeInfo("tree_01"));
 			}
 		}, "OWA", "3set"));
-		nodes.add(new FuzzyNode("n11", null, null, new ArrayList<ChildNodeInfo>() {
+		nodes.add(new FuzzyNode( null, null, new ArrayList<ChildNodeInfo>() {
 			{
 				add(new ChildNodeInfo("n111"));
 				add(new ChildNodeInfo("n112"));
@@ -41,9 +41,9 @@ public class FuzzySignatureDescriptorHandler extends DescriptorHandler implement
 				add(new SubTreeInfo("tree_03"));
 			}
 		}, "OWA", "5set"));
-		nodes.add(new FuzzyNode("n12", null, "nincd leszarmazott", null, null, "OWA2", "5set"));
-		nodes.add(new FuzzyNode("n111", "level1", null, null, null, "SMA1", "5set"));
-		nodes.add(new FuzzyNode("n112", "level1", null, null, null, "SMA3", null));
+		nodes.add(new FuzzyNode( null, "nincd leszarmazott", null, null, "OWA2", "5set"));
+		nodes.add(new FuzzyNode( "level1", null, null, null, "SMA1", "5set"));
+		nodes.add(new FuzzyNode( "level1", null, null, null, "SMA3", null));
 
 		return new FuzzySignature("uuid", "3set", "szignatura leiras", FuzzyTreeTypeEnum.PARTIAL_TYPE, "rootNodeId", nodes);
 	}

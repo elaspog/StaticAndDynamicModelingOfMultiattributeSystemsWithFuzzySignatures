@@ -5,10 +5,6 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 public abstract class FuzzyDescriptorModelBase extends FuzzyDescriptorBase {
 
-	@XStreamAlias("id")
-	@XStreamAsAttribute
-	protected String id;
-
 	@XStreamAlias("label")
 	@XStreamAsAttribute
 	protected String label;
@@ -16,19 +12,10 @@ public abstract class FuzzyDescriptorModelBase extends FuzzyDescriptorBase {
 	@XStreamAlias("description")
 	protected String description;
 
-	public FuzzyDescriptorModelBase(String id, String label, String description) {
+	public FuzzyDescriptorModelBase(String label, String description) {
 		super();
-		this.id = id;
 		this.label = label;
 		this.description = description;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getLabel() {

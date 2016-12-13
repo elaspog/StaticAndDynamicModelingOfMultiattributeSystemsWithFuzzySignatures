@@ -15,8 +15,8 @@ public abstract class FuzzySetBase extends FuzzyDescriptorModelBase {
 	@XStreamImplicit
 	private List<FuzzyPointBase> points;
 
-	public FuzzySetBase(String id, String label, String description, FuzzySetTypeEnum type, List<FuzzyPointBase> points) {
-		super(id, label, description);
+	public FuzzySetBase(String label, String description, FuzzySetTypeEnum type, List<FuzzyPointBase> points) {
+		super(label, description);
 		this.type = type;
 		this.points = points;
 	}
@@ -39,7 +39,7 @@ public abstract class FuzzySetBase extends FuzzyDescriptorModelBase {
 
 	@Override
 	public String toString() {
-		return "FuzzySetBase [type=" + type + ", points=" + points + ", id=" + id + ", label=" + label
+		return "FuzzySetBase [type=" + type + ", points=" + points + ", label=" + label
 				+ ", description=" + description + "]";
 	}
 

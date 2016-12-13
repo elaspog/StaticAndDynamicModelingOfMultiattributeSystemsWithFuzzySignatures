@@ -120,11 +120,11 @@ public class FuzzySet extends FuzzyFxBase
 			descriptorFuzzySetPoints.add(fuzzyPointBase);
 		}
 		if (this.getFuzzySetType().equals(FuzzySetTypeEnum.TRIANGULAR)){
-			return new FuzzySetTriangular(null, getFuzzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
+			return new FuzzySetTriangular( getFuzzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
 		} else if (this.getFuzzySetType().equals(FuzzySetTypeEnum.POLYGONAL)) {
-			return new FuzzySetPolygonal(null, getFuzzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
+			return new FuzzySetPolygonal( getFuzzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
 		} else if (this.getFuzzySetType().equals(FuzzySetTypeEnum.TRAPEZOID)) {
-			return new FuzzySetTrapezoidal(null, getFuzzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
+			return new FuzzySetTrapezoidal( getFuzzySetName(), getFuzzySetDescription(), descriptorFuzzySetPoints);
 		}
 		throw new ModuleImplementationException("Unknown FuzzySetTypeEnum while converting to FuzzySetBase descriptor model.");
 	}

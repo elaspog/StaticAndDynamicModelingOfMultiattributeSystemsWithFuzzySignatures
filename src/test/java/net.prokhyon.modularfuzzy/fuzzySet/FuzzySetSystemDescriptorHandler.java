@@ -50,10 +50,10 @@ public class FuzzySetSystemDescriptorHandler extends DescriptorHandler implement
 		list24.add(new FuzzyPointAbove(0.6));
 		list24.add(new FuzzyPointBelow(0.7));
 
-		list1.add(new FuzzySetTriangular("haromszog", "rossz", "rossz", list21));
-		list1.add(new FuzzySetTrapezoidal("negyszog", "elfogadhato", null, list22));
-		list1.add(new FuzzySetPolygonal("toredek1", "kozepes", null, list23));
-		list1.add(new FuzzySetPolygonal("toredek2", "kivallo", "szuperjo ezt nem szabad elcseszni", list24));
+		list1.add(new FuzzySetTriangular( "rossz", "rossz", list21));
+		list1.add(new FuzzySetTrapezoidal( "elfogadhato", null, list22));
+		list1.add(new FuzzySetPolygonal( "kozepes", null, list23));
+		list1.add(new FuzzySetPolygonal( "kivallo", "szuperjo ezt nem szabad elcseszni", list24));
 
 		return new FuzzySetSystem("uuid", "5set", "haromhalmazos leiras", FuzzySetSystemTypeEnum.RUSPINNI_PARTITION, list1);
 	}
