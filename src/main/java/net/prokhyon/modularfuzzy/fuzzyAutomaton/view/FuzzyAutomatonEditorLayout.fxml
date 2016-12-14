@@ -59,7 +59,7 @@
                            <children>
                               <Button fx:id="saveAutomatonButton" onAction="#saveAutomaton" prefWidth="100.0" text="Save" />
                               <Button fx:id="clearAutomatonButton" onAction="#clearAutomaton" prefWidth="100.0" text="Clear" />
-                              <Button fx:id="createAutomatonButton" onAction="#createAutomatonButton" prefWidth="100.0" text="Create" />
+                              <Button fx:id="createAutomatonButton" onAction="#createAutomaton" prefWidth="100.0" text="Create" />
                            </children>
                         </HBox>
                      </children>
@@ -94,7 +94,7 @@
             <VBox GridPane.rowIndex="1">
                <children>
                   <Label text="States" />
-                  <ListView fx:id="statesListView" prefHeight="175.0" prefWidth="135.0" />
+                  <ListView fx:id="statesListView" onMouseClicked="#statesListViewGetsFocus" prefHeight="175.0" prefWidth="135.0" />
                   <HBox>
                      <children>
                         <Button fx:id="addStateButton" onAction="#addState" prefWidth="55.0" text="Add" />
@@ -107,7 +107,7 @@
             <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <Label text="Transitions" />
-                  <ListView fx:id="transitionsListView" prefHeight="175.0" prefWidth="135.0" />
+                  <ListView fx:id="transitionsListView" onMouseClicked="#transitionsListViewGetsFocus" prefHeight="175.0" prefWidth="135.0" />
                   <HBox>
                      <children>
                         <Button fx:id="addTransitionButton" onAction="#addTransition" prefWidth="55.0" text="Add" />

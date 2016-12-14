@@ -3,7 +3,6 @@ package net.prokhyon.modularfuzzy.fuzzyAutomaton.view;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,8 +24,6 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -244,28 +241,12 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 
 		statesListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 
-			unbindStateViewElementsFromControllerProperties();
-			unbindTransitionViewElementsFromControllerProperties();
-			clearStateOrTransitionEditingFields();
-			if (newSelection != null){
-				stateOrTransitionNameTextField.textProperty().set(newSelection.getFuzzyStateName());
-				stateOrTransitionDescriptionTextArea.textProperty().set(newSelection.getFuzzyStateDescription());
-				stateTypeComboBox.valueProperty().setValue(newSelection.getFuzzyStateType());
-				stateFuzzySetComboBox.valueProperty().setValue(newSelection.getFuzzySet());
-			}
+			refreshStateEditorFields(newSelection);
 		});
 
 		transitionsListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 
-			unbindStateViewElementsFromControllerProperties();
-			unbindTransitionViewElementsFromControllerProperties();
-			clearStateOrTransitionEditingFields();
-			if (newSelection != null){
-				stateOrTransitionNameTextField.textProperty().set(newSelection.getFuzzyTransitionName());
-				stateOrTransitionDescriptionTextArea.textProperty().set(newSelection.getFuzzyTransitionDescription());
-				fromStateComboBox.valueProperty().setValue(newSelection.getFromState());
-				toStateComboBox.valueProperty().setValue(newSelection.getToState());
-			}
+			refreshTransitionEditorFields(newSelection);
 		});
 
 		final Callback<ListView<FuzzyState>, ListCell<FuzzyState>> callback = new Callback<ListView<FuzzyState>, ListCell<FuzzyState>>() {
@@ -336,7 +317,6 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		fromStateComboBox.valueProperty().set(null);
 		toStateComboBox.valueProperty().set(null);
 		costsListView.itemsProperty().set(null);
-		// TODO costVectorDimensionSpinner.valueProperty()
 	}
 
 	private ListCell<FuzzyState> getListCell() {
@@ -406,6 +386,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		if (fuzzyAutomaton.getValue() != null){
 			automatonNameTextField.textProperty().unbindBidirectional(fuzzyAutomaton.getValue().fuzzyAutomationNameProperty());
 			automatonDescriptionTextArea.textProperty().unbindBidirectional(fuzzyAutomaton.getValue().fuzzyAutomatonDescriptionProperty());
+			costVectorDimensionSpinner.getValueFactory().valueProperty().unbindBidirectional(fuzzyAutomaton.get().costVectorDimensionObjProperty());
 
 			statesListView.itemsProperty().unbindBidirectional(fuzzyAutomaton.get().fuzzyStatesProperty());
 			transitionsListView.itemsProperty().unbindBidirectional(fuzzyAutomaton.get().fuzzyTransitionsProperty());
@@ -431,7 +412,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 
 			fromStateComboBox.valueProperty().unbindBidirectional(fuzzyTransitionToEdit.get().fromStateProperty());
 			toStateComboBox.valueProperty().unbindBidirectional(fuzzyTransitionToEdit.get().toStateProperty());
-			// TODO costsListView.itemsProperty().unbindBidirectional();
+			costsListView.itemsProperty().unbindBidirectional(fuzzyTransitionToEdit.get().costVectorProperty());
 		}
 	}
 
@@ -462,7 +443,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	}
 
 	@FXML
-	private void createAutomatonButton(){
+	private void createAutomaton(){
 
 		createdAutomatonCounter++;
 		loadWithData(new FuzzyAutomaton(null, "automaton" + Integer.toString(createdAutomatonCounter),
@@ -478,16 +459,20 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		unbindTransitionViewElementsFromControllerProperties();
 
 		this.fuzzyAutomaton.setValue(null);
+		this.fuzzyStateToEdit.setValue(null);
+		this.fuzzyTransitionToEdit.setValue(null);
+		this.originallyLoadedFuzzyAutomaton = null;
+
 		automatonNameTextField.textProperty().set(null);
 		automatonDescriptionTextArea.textProperty().set(null);
+		fuzzySetSystemComboBox.getItems().clear();
 		stateTypeComboBox.getItems().clear();
 		stateFuzzySetComboBox.getItems().clear();
-
 		fromStateComboBox.getItems().clear();
 		toStateComboBox.getItems().clear();
-		costsListView.getItems().clear();
-
-		this.originallyLoadedFuzzyAutomaton = null;
+		statesListView.getItems().clear();
+		transitionsListView.getItems().clear();
+		// TODO costsListView.getItems().clear();
 	}
 
 	@FXML
@@ -585,7 +570,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		fromStateComboBox.valueProperty().bindBidirectional(fuzzyTransitionToEdit.get().fromStateProperty());
 		toStateComboBox.setItems(FXCollections.observableArrayList(fuzzyAutomaton.get().getFuzzyStates()));
 		toStateComboBox.valueProperty().bindBidirectional(fuzzyTransitionToEdit.get().toStateProperty());
-		// TODO costsListView.itemsProperty().unbindBidirectional();
+		costsListView.itemsProperty().bindBidirectional(fuzzyTransitionToEdit.get().costVectorProperty());
 	}
 
 	@FXML
@@ -636,6 +621,47 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		ObservableList<T> items = lsv.<T>getItems();
 		lsv.<T>setItems(null);
 		lsv.<T>setItems(items);
+	}
+
+	@FXML
+	private void statesListViewGetsFocus(){
+
+		final FuzzyState selectedItem = statesListView.getSelectionModel().getSelectedItem();
+		refreshStateEditorFields(selectedItem);
+	}
+
+	@FXML
+	private void transitionsListViewGetsFocus(){
+
+		final FuzzyTransition selectedItem = transitionsListView.getSelectionModel().getSelectedItem();
+		refreshTransitionEditorFields(selectedItem);
+	}
+
+	private void refreshStateEditorFields(FuzzyState newSelection) {
+
+		unbindStateViewElementsFromControllerProperties();
+		unbindTransitionViewElementsFromControllerProperties();
+		clearStateOrTransitionEditingFields();
+		if (newSelection != null){
+			stateOrTransitionNameTextField.textProperty().set(newSelection.getFuzzyStateName());
+			stateOrTransitionDescriptionTextArea.textProperty().set(newSelection.getFuzzyStateDescription());
+			stateTypeComboBox.valueProperty().setValue(newSelection.getFuzzyStateType());
+			stateFuzzySetComboBox.valueProperty().setValue(newSelection.getFuzzySet());
+		}
+	}
+
+	private void refreshTransitionEditorFields(FuzzyTransition newSelection) {
+
+		unbindStateViewElementsFromControllerProperties();
+		unbindTransitionViewElementsFromControllerProperties();
+		clearStateOrTransitionEditingFields();
+		if (newSelection != null){
+			stateOrTransitionNameTextField.textProperty().set(newSelection.getFuzzyTransitionName());
+			stateOrTransitionDescriptionTextArea.textProperty().set(newSelection.getFuzzyTransitionDescription());
+			fromStateComboBox.valueProperty().setValue(newSelection.getFromState());
+			toStateComboBox.valueProperty().setValue(newSelection.getToState());
+			costsListView.itemsProperty().setValue(newSelection.getCostVector());
+		}
 	}
 
 }
