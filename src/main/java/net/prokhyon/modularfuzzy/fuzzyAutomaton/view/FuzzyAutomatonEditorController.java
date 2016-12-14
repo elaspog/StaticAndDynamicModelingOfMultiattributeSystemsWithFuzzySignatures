@@ -365,7 +365,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		BooleanBinding isSelectedState = Bindings.isNull(statesListView.getSelectionModel().selectedItemProperty());
 		BooleanBinding isSelectedTransition = Bindings.isNull(transitionsListView.getSelectionModel().selectedItemProperty());
 		BooleanBinding isStateOrTransitionCreated = Bindings.isNotEmpty(transitionsListView.getItems()).or(Bindings.isNotEmpty(statesListView.getItems()));
-		BooleanBinding isSetSystemNotSelectedOrBadDimension = Bindings.isNull(fuzzySetSystemComboBox.getSelectionModel().selectedItemProperty());
+		BooleanBinding isSetSystemNotSelected = Bindings.isNull(fuzzySetSystemComboBox.getSelectionModel().selectedItemProperty());
 		BooleanBinding isBadDimension = Bindings.when(costVectorDimensionSpinner.valueProperty().isEqualTo(new Integer(0))).then(true).otherwise(false);
 
 		createAutomatonButton.disableProperty().bind(isInEditingMode);
@@ -377,9 +377,9 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		clearAutomatonButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode));
 		saveAutomatonButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode));
 		fuzzySetSystemComboBox.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode).or(isStateOrTransitionCreated));
-		costVectorDimensionSpinner.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode).or(isStateOrTransitionCreated));
-		addStateButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode).or(isSetSystemNotSelectedOrBadDimension).or(isBadDimension));
-		addTransitionButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode).or(isSetSystemNotSelectedOrBadDimension).or(isBadDimension));
+		costVectorDimensionSpinner.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode));
+		addStateButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode).or(isSetSystemNotSelected).or(isBadDimension));
+		addTransitionButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode).or(isSetSystemNotSelected).or(isBadDimension));
 
 		editStateButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode).or(isSelectedState));
 		removeStateButton.disableProperty().bind(isNotLoadedAutomaton.or(isInEditingMode).or(isSelectedState));
