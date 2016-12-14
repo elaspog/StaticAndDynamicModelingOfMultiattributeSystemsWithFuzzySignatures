@@ -182,8 +182,8 @@
               </rowConstraints>
                <children>
                   <ListView fx:id="costsListView" GridPane.rowSpan="2" />
-                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text=" U" GridPane.columnIndex="1" />
-                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="moveSelectedCostValueUp" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveCostValueUp" text=" U" GridPane.columnIndex="1" />
+                  <Button fx:id="moveSelectedCostValueDown" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveCostValueDown" text="D" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
             <Button fx:id="saveButton" onAction="#saveButtonPressed" prefWidth="100.0" text="Save" GridPane.columnIndex="2" GridPane.rowIndex="5" />

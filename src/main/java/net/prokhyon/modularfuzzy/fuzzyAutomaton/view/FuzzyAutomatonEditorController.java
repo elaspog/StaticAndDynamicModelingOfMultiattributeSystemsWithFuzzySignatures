@@ -24,6 +24,7 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -117,6 +118,12 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	private Button removeCostValueButton;
 
 	@FXML
+	private Button moveSelectedCostValueUp;
+
+	@FXML
+	private Button moveSelectedCostValueDown;
+
+	@FXML
 	private Button saveButton;
 
 	private int createdAutomatonCounter;
@@ -151,7 +158,9 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		this.createdTransitionCounter = 0;
 
 		costVectorDimensionSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
-		costValueSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(Double.MIN_VALUE, Double.MAX_VALUE));
+		costValueSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(Double.MIN_VALUE, Double.MAX_VALUE, 0.0, 0.1));
+		costVectorDimensionSpinner.setEditable(true);
+		costValueSpinner.setEditable(true);
 
 		fuzzySetSystemComboBox.setCellFactory(new Callback<ListView<FuzzySetSystem>,ListCell<FuzzySetSystem>>(){
 
@@ -347,6 +356,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		BooleanBinding isStateOrTransitionCreated = Bindings.isNotEmpty(transitionsListView.getItems()).or(Bindings.isNotEmpty(statesListView.getItems()));
 		BooleanBinding isSetSystemNotSelected = Bindings.isNull(fuzzySetSystemComboBox.getSelectionModel().selectedItemProperty());
 		BooleanBinding isBadDimension = Bindings.when(costVectorDimensionSpinner.valueProperty().isEqualTo(new Integer(0))).then(true).otherwise(false);
+		BooleanBinding isCostVectorComponentNotSelected = Bindings.isEmpty(costsListView.getSelectionModel().getSelectedItems());
 
 		createAutomatonButton.disableProperty().bind(isInEditingMode);
 
@@ -374,7 +384,9 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		stateFuzzySetComboBox.disableProperty().bind(isStateNotSetSelectedForEditing);
 
 		addCostValueButton.disableProperty().bind(isTransitionNotSetSelectedForEditing);
-		removeCostValueButton.disableProperty().bind(isTransitionNotSetSelectedForEditing);
+		removeCostValueButton.disableProperty().bind(isTransitionNotSetSelectedForEditing.or(isCostVectorComponentNotSelected));
+		moveSelectedCostValueUp.disableProperty().bind(isTransitionNotSetSelectedForEditing.or(isCostVectorComponentNotSelected));
+		moveSelectedCostValueDown.disableProperty().bind(isTransitionNotSetSelectedForEditing.or(isCostVectorComponentNotSelected));
 		fromStateComboBox.disableProperty().bind(isTransitionNotSetSelectedForEditing);
 		toStateComboBox.disableProperty().bind(isTransitionNotSetSelectedForEditing);
 		costsListView.disableProperty().bind(isTransitionNotSetSelectedForEditing);
@@ -583,11 +595,36 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	@FXML
 	private void addCostValue(){
 
+		fuzzyTransitionToEdit.getValue().getCostVector().add(costValueSpinner.getValue().doubleValue());
 	}
 
 	@FXML
 	private void removeCostValue(){
 
+		fuzzyTransitionToEdit.get().getCostVector().remove(costsListView.getSelectionModel().getSelectedIndices().get(0).intValue());
+	}
+
+	@FXML
+	private void moveCostValueUp(){
+
+		final int actualIndex = costsListView.getSelectionModel().getSelectedIndices().get(0).intValue();
+		if (actualIndex > 0){
+			final int newIndex = actualIndex - 1;
+			Collections.swap(fuzzyTransitionToEdit.get().getCostVector(), actualIndex, newIndex);
+			costsListView.getSelectionModel().select(newIndex);
+		}
+	}
+
+	@FXML
+	private void moveCostValueDown(){
+
+		final int actualIndex = costsListView.getSelectionModel().getSelectedIndices().get(0).intValue();
+		final int maxIndex = costsListView.getItems().size() - 1;
+		if (actualIndex < maxIndex){
+			final int newIndex = actualIndex + 1;
+			Collections.swap(fuzzyTransitionToEdit.get().getCostVector(), actualIndex, newIndex);
+			costsListView.getSelectionModel().select(newIndex);
+		}
 	}
 
 	@FXML
