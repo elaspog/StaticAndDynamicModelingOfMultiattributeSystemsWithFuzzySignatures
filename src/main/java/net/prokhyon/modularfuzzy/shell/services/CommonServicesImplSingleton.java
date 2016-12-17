@@ -12,6 +12,7 @@ import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.*;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleDescriptor2FxModel;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
+import net.prokhyon.modularfuzzy.common.errors.NotConvertibleDescriptorException;
 import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
@@ -228,6 +229,74 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 			}
 		}
 	}
+
+	@Override
+	public List<FuzzyDescriptorBase> loadFilesIntoDescriptorsAndFilterByPersistableModel(List<File> filesToLoad, PersistableModelInfo persistableModelInfoFilter) {
+
+		List<FuzzyDescriptorBase> fuzzyDescriptors = new ArrayList<>();
+		for (File file : filesToLoad) {
+			for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores.entrySet()) {
+				try {
+					final PersistableModelInfo persistableModelInfo = entry.getKey().getPersistableModelInfo();
+
+					if (! persistableModelInfoFilter.equals(persistableModelInfo))
+						continue;
+
+					final IPersistableModel persistableModel = persistableModelInfo.getPersistableModel();
+					final Class<? extends FuzzyDescriptorRootBase> descriptorRootModel = persistableModelInfo.getDescriptorRootModel();
+					final List<Class<? extends FuzzyDescriptorBase>> descriptorModels = persistableModelInfo.getDescriptorModels();
+
+					if (FuzzyDescriptorRootBase.class.isAssignableFrom(descriptorRootModel)) {
+						FuzzyDescriptorRootBase fuzzyDescriptorRootBase = null;
+						if (persistableModel != null) {
+							fuzzyDescriptorRootBase = persistableModel.importModel(file, descriptorRootModel, descriptorModels);
+							fuzzyDescriptors.add(fuzzyDescriptorRootBase);
+						}
+					}
+				} catch (NotParsableDescriptorException e){}
+			}
+		}
+		return fuzzyDescriptors;
+	}
+
+	@Override
+	public void loadDescriptorsIntoWorkspaceElementsByPersistableModel(List<FuzzyDescriptorBase> descriptorsToLoad, PersistableModelInfo persistableModelInfo) {
+
+		if (persistableModelInfo == null)
+			return;
+
+		final Class<? extends ConvertibleDescriptor2FxModel.External> descriptor2FxModelConverterExternal = persistableModelInfo.getDescriptor2FxModelConverterExternal();
+		final Class<? extends ConvertibleDescriptor2FxModel.Internal> descriptor2FxModelConverterInternal = persistableModelInfo.getDescriptor2FxModelConverterInternal();
+		final Class<? extends WorkspaceElement> fxModel = persistableModelInfo.getFxModel();
+
+		ConvertibleDescriptor2FxModel.External convertibleDescriptor2FxModelExternal = null;
+		ConvertibleDescriptor2FxModel.Internal convertibleDescriptor2FxModelInternal = null;
+
+		for (FuzzyDescriptorBase fuzzyDescriptorBase : descriptorsToLoad) {
+
+			try {
+				convertibleDescriptor2FxModelExternal = descriptor2FxModelConverterExternal.newInstance();
+			} catch (NullPointerException | IllegalAccessException | InstantiationException e){}
+			try {
+				convertibleDescriptor2FxModelInternal = descriptor2FxModelConverterInternal.newInstance();
+			} catch (NullPointerException | IllegalAccessException | InstantiationException e){}
+
+			FuzzyFxBase fuzzyFxBase;
+			if (convertibleDescriptor2FxModelExternal != null){
+				fuzzyFxBase = convertibleDescriptor2FxModelExternal.convert2FxModel(fuzzyDescriptorBase);
+			} else if (convertibleDescriptor2FxModelInternal != null){
+				fuzzyFxBase = ((ConvertibleDescriptor2FxModel.Internal) fuzzyDescriptorBase).convert2FxModel();
+			} else
+				throw new NotConvertibleDescriptorException();
+
+			if (fuzzyFxBase != null){
+				addModelToRegisteredStore(fxModel.cast(fuzzyFxBase));
+			} else {
+				throw new ModuleImplementationException();
+			}
+		}
+	}
+
 
 	/*
 		Implementing interface: ShellDialogServices

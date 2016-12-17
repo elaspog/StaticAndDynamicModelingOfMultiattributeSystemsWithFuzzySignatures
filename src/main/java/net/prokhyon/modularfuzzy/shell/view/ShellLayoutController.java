@@ -22,9 +22,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import net.prokhyon.modularfuzzy.common.CommonServices;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
 import net.prokhyon.modularfuzzy.common.modules.DefaultModelLoaderInfo;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
@@ -133,8 +135,20 @@ public class ShellLayoutController {
 
 		final List<DefaultModelLoaderInfo> defaultModelLoaderInfos = commonServices.gerRegitsteredDefaultModelLoaders();
 		for (DefaultModelLoaderInfo defaultModelLoaderInfo : defaultModelLoaderInfos){
+			final PersistableModelInfo persistableModelInfo = defaultModelLoaderInfo.getPersistableModelInfo();
 
-			defaultModelLoaderMenu.getItems().add(new MenuItem(defaultModelLoaderInfo.getViewName()));
+			final MenuItem menuItem = new MenuItem(defaultModelLoaderInfo.getViewName());
+			menuItem.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+
+					List<File> defaultModelFiles = listDefaultModelFiles();
+					final List<FuzzyDescriptorBase> fuzzyDescriptorBases
+							= commonServices.loadFilesIntoDescriptorsAndFilterByPersistableModel(defaultModelFiles, persistableModelInfo);
+					commonServices.loadDescriptorsIntoWorkspaceElementsByPersistableModel(fuzzyDescriptorBases, persistableModelInfo);
+				}
+			});
+			defaultModelLoaderMenu.getItems().add(menuItem);
 		}
 	}
 
