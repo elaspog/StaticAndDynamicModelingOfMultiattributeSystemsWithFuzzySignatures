@@ -165,7 +165,8 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	}
 
 	@Override
-	public void loadFiles(List<File> filesToLoad) {
+	public void loadFiles(List<File> filesToLoad)
+			throws ModuleImplementationException, NotParsableDescriptorException, NotConvertibleDescriptorException {
 
 		for (File file : filesToLoad) {
 			for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores
@@ -231,7 +232,8 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	}
 
 	@Override
-	public List<FuzzyDescriptorBase> loadFilesIntoDescriptorsAndFilterByPersistableModel(List<File> filesToLoad, PersistableModelInfo persistableModelInfoFilter) {
+	public List<FuzzyDescriptorBase> loadFilesIntoDescriptorsAndFilterByPersistableModel(List<File> filesToLoad, PersistableModelInfo persistableModelInfoFilter)
+			throws ModuleImplementationException, NotParsableDescriptorException {
 
 		List<FuzzyDescriptorBase> fuzzyDescriptors = new ArrayList<>();
 		for (File file : filesToLoad) {
@@ -260,7 +262,8 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	}
 
 	@Override
-	public void loadDescriptorsIntoWorkspaceElementsByPersistableModel(List<FuzzyDescriptorBase> descriptorsToLoad, PersistableModelInfo persistableModelInfo) {
+	public void loadDescriptorsIntoWorkspaceElementsByPersistableModel(List<FuzzyDescriptorBase> descriptorsToLoad, PersistableModelInfo persistableModelInfo)
+			throws ModuleImplementationException, NotConvertibleDescriptorException{
 
 		if (persistableModelInfo == null)
 			return;
