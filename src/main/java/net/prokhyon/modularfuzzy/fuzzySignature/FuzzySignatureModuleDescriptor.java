@@ -32,8 +32,6 @@ public class FuzzySignatureModuleDescriptor implements ModuleDescriptor {
 		WorkspaceInfo storeInfo = new WorkspaceInfo("Signatures", viewOfModuleInfo, pmt);
 
 		services.<FuzzySignature> registerModelTypeInStore(storeInfo);
-		services.registerPersistenceMethod(pmt);
-
 	}
 
 }

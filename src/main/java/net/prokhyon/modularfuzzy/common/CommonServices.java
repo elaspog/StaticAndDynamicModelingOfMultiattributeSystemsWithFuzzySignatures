@@ -27,7 +27,5 @@ public interface CommonServices {
 
 	<T extends WorkspaceElement> void updateModelInRegisteredStore(T original, T model);
 
-	void registerPersistenceMethod(PersistableModelInfo information);
-
 	void loadFiles(List<File> filesToLoad);
 }

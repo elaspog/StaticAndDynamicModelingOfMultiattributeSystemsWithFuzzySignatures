@@ -34,8 +34,6 @@ public class FuzzyAutomatonModuleDescriptor implements ModuleDescriptor {
 		WorkspaceInfo storeInfo = new WorkspaceInfo("Automatons", viewOfModuleInfo, pmt);
 
 		services.<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton> registerModelTypeInStore(storeInfo);
-		services.registerPersistenceMethod(pmt);
-
 	}
 
 }

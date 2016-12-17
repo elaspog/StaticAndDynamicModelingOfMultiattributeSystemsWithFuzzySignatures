@@ -45,8 +45,6 @@ public class FuzzySetModuleDescriptor implements ModuleDescriptor {
 		this.workspaceInfo = new WorkspaceInfo(VIEW_NAME, fxModulesViewInfo, persistableModelInfo);
 
 		services.<net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem> registerModelTypeInStore(workspaceInfo);
-		services.registerPersistenceMethod(persistableModelInfo);
-
 	}
 
 	public String getViewName() {

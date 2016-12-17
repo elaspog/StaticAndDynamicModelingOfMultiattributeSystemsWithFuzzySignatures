@@ -1,7 +1,6 @@
 package net.prokhyon.modularfuzzy.shell.services;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import javafx.collections.FXCollections;
@@ -12,8 +11,6 @@ import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.*;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleDescriptor2FxModel;
-import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
-import net.prokhyon.modularfuzzy.common.errors.ErrorHandler;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.common.errors.NotConvertibleException;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
@@ -25,7 +22,6 @@ import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetModuleDescriptor;
-import net.prokhyon.modularfuzzy.fuzzySet.model.ModelConverter;
 import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureModuleDescriptor;
 import net.prokhyon.modularfuzzy.pathValues.PathValuesModuleDescriptor;
 import net.prokhyon.modularfuzzy.shell.util.FxDialogHelper;
@@ -36,7 +32,6 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	private Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = new HashMap<>();
 	private List<FxModulesViewInfo> registeredViews = new ArrayList<>();
 	private Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = new HashMap<>();
-	private List<PersistableModelInfo> registeredPersistenceMethods = new ArrayList<>();
 	private Stage stage;
 
 
@@ -152,12 +147,6 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 				}
 			}
 		}
-	}
-
-	@Override
-	public void registerPersistenceMethod(PersistableModelInfo information) {
-
-		registeredPersistenceMethods.add(information);
 	}
 
 	@Override
