@@ -7,6 +7,7 @@ import java.util.Map;
 import javafx.collections.ObservableList;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modules.DefaultModelLoaderInfo;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
@@ -19,7 +20,12 @@ public interface CommonServices {
 
 	void registerModelTypeInStore(WorkspaceInfo storeInfo);
 
+	void registerDefaultModelLoader(DefaultModelLoaderInfo defaultModelLoaderInfo);
+
 	Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> getRegisteredStores();
+
+	// TODO this should not be a common service, only ShellLayoutController should use this method
+	List<DefaultModelLoaderInfo> gerRegitsteredDefaultModelLoaders();
 
 	void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInfo modelInformation);
 

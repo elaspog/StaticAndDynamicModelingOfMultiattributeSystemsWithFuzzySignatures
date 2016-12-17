@@ -17,13 +17,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import net.prokhyon.modularfuzzy.common.CommonServices;
+import net.prokhyon.modularfuzzy.common.modules.DefaultModelLoaderInfo;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
@@ -43,6 +42,10 @@ public class ShellLayoutController {
 
 	@FXML
 	private TabPane workspaceTabPane;
+
+	@FXML
+	private Menu defaultModelLoaderMenu;
+
 
 	private CommonServices commonServices;
 	private ShellDialogServices shellDialogServices;
@@ -69,6 +72,7 @@ public class ShellLayoutController {
 		initializeContentsForContentArea();
 		initializeTabTablesWorkspaceArea();
 		initializeSideButtonSelectorArea();
+		initializeDefaultModelLoaderArea();
 	}
 
 	private void initializeContentsForContentArea() {
@@ -122,6 +126,15 @@ public class ShellLayoutController {
 				}
 			});
 
+		}
+	}
+
+	private void initializeDefaultModelLoaderArea() {
+
+		final List<DefaultModelLoaderInfo> defaultModelLoaderInfos = commonServices.gerRegitsteredDefaultModelLoaders();
+		for (DefaultModelLoaderInfo defaultModelLoaderInfo : defaultModelLoaderInfos){
+
+			defaultModelLoaderMenu.getItems().add(new MenuItem(defaultModelLoaderInfo.getViewName()));
 		}
 	}
 

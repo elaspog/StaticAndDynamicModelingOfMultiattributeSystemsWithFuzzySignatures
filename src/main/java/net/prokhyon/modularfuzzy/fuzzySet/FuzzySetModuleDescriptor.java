@@ -3,6 +3,7 @@ package net.prokhyon.modularfuzzy.fuzzySet;
 import javafx.scene.layout.TilePane;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
+import net.prokhyon.modularfuzzy.common.modules.DefaultModelLoaderInfo;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
@@ -45,6 +46,8 @@ public class FuzzySetModuleDescriptor implements ModuleDescriptor {
 		this.workspaceInfo = new WorkspaceInfo(VIEW_NAME, fxModulesViewInfo, persistableModelInfo);
 
 		services.<net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem> registerModelTypeInStore(workspaceInfo);
+
+		services.registerDefaultModelLoader(new DefaultModelLoaderInfo("Load Fuzzy Systems", persistableModelInfo));
 	}
 
 	public String getViewName() {

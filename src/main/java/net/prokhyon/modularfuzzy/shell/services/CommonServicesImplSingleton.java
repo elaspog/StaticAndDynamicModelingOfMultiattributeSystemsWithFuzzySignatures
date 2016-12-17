@@ -17,6 +17,7 @@ import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
 import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modules.DefaultModelLoaderInfo;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
@@ -30,8 +31,9 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class CommonServicesImplSingleton implements CommonServices, ShellServices, ShellDialogServices {
 
 	private Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = new HashMap<>();
-	private List<FxModulesViewInfo> registeredViews = new ArrayList<>();
 	private Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = new HashMap<>();
+	private List<FxModulesViewInfo> registeredViews = new ArrayList<>();
+	private List<DefaultModelLoaderInfo> registeredDefaultModelLoaders = new ArrayList<>();
 	private Stage stage;
 
 
@@ -96,8 +98,20 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 		registeredStores.put(storeInfo, FXCollections.observableArrayList());
 	}
 
+	@Override
+	public void registerDefaultModelLoader(DefaultModelLoaderInfo defaultModelLoaderInfo) {
+
+		registeredDefaultModelLoaders.add(defaultModelLoaderInfo);
+	}
+
 	public Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> getRegisteredStores() {
 		return Collections.unmodifiableMap(registeredStores);
+	}
+
+	@Override
+	public List<DefaultModelLoaderInfo> gerRegitsteredDefaultModelLoaders() {
+
+		return registeredDefaultModelLoaders;
 	}
 
 	@Override
