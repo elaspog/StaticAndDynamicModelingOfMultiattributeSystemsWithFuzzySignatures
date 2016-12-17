@@ -12,7 +12,7 @@ import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.*;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleDescriptor2FxModel;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
-import net.prokhyon.modularfuzzy.common.errors.NotConvertibleException;
+import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
 import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
@@ -201,7 +201,7 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 								// TODO implement Internal conversion
 								throw new NotImplementedException();
 							} else
-								throw new NotConvertibleException();
+								throw new NotParsableDescriptorException();
 
 							if (fuzzyFxBase != null){
 								addModelToRegisteredStore(fxModel.cast(fuzzyFxBase));
@@ -216,7 +216,7 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 					//this.informErrorWithStacktraceDialog(e, "Module error",
 					//		"Error has occurred while importing file.",
 					//		"Error in a module implementation.");
-				} catch (NotConvertibleException e){
+				} catch (NotParsableDescriptorException e){
 					this.informErrorWithStacktraceDialog(e, "Conversion error",
 							"Error has occurred while importing file.",
 							"The selected file is not convertible to internal representation of the model.");

@@ -2,7 +2,7 @@ package net.prokhyon.modularfuzzy.fuzzyAutomaton.util;
 
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
-import net.prokhyon.modularfuzzy.common.errors.NotConvertibleException;
+import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorHandler;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
@@ -11,7 +11,6 @@ import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -22,7 +21,7 @@ public class ModelDomainIOManager implements IPersistableModel {
 
 
     @Override
-    public <T extends FuzzyDescriptorRootBase> T importModel(File file, Class<? extends FuzzyDescriptorRootBase> descriptorRootModel, List<Class<? extends FuzzyDescriptorBase>> descriptorModels) throws NotConvertibleException {
+    public <T extends FuzzyDescriptorRootBase> T importModel(File file, Class<? extends FuzzyDescriptorRootBase> descriptorRootModel, List<Class<? extends FuzzyDescriptorBase>> descriptorModels) throws NotParsableDescriptorException {
         return null;
     }
 

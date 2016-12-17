@@ -2,7 +2,7 @@ package net.prokhyon.modularfuzzy.fuzzySet.util;
 
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
-import net.prokhyon.modularfuzzy.common.errors.NotConvertibleException;
+import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorHandler;
@@ -11,7 +11,6 @@ import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -26,16 +25,16 @@ public class ModelDomainIOManager implements IPersistableModel {
     T importModel(File file,
                   Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
                   List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
-            throws NotConvertibleException {
+            throws NotParsableDescriptorException {
 
         DescriptorHandler descriptorHandler = new DescriptorHandler();
         try {
             return descriptorHandler.readFromXmlFile(file, descriptorRootModel, descriptorModels);
-        } catch (NotConvertibleException nce){}
+        } catch (NotParsableDescriptorException nce){}
         try {
             return descriptorHandler.readFromJsonFile(file, descriptorRootModel, descriptorModels);
-        } catch (NotConvertibleException nce){}
-        throw new NotConvertibleException();
+        } catch (NotParsableDescriptorException nce){}
+        throw new NotParsableDescriptorException();
     }
 
     @Override

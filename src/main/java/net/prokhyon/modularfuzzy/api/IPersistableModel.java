@@ -1,6 +1,6 @@
 package net.prokhyon.modularfuzzy.api;
 
-import net.prokhyon.modularfuzzy.common.errors.NotConvertibleException;
+import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
@@ -14,7 +14,7 @@ public interface IPersistableModel {
     T importModel(File file,
                   Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
                   List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
-            throws NotConvertibleException;
+            throws NotParsableDescriptorException;
 
     abstract public <T extends WorkspaceElement> void exportModel(List<T> models);
 }

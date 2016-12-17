@@ -10,9 +10,8 @@ import javax.xml.transform.stream.StreamSource;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.json.JsonWriter;
-import net.prokhyon.modularfuzzy.common.errors.ErrorHandler;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
-import net.prokhyon.modularfuzzy.common.errors.NotConvertibleException;
+import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
 import org.xml.sax.InputSource;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
@@ -100,7 +99,7 @@ public class DescriptorHandler {
 	T readFromXmlFile(File file,
 					  Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
 					  List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
-			throws NotConvertibleException {
+			throws NotParsableDescriptorException {
 
 		try {
 			xstream = new XStream(new StaxDriver());
@@ -116,7 +115,7 @@ public class DescriptorHandler {
 			throw new ModuleImplementationException();
 
 		} catch (Exception e){
-			throw new NotConvertibleException();
+			throw new NotParsableDescriptorException();
 		}
 	}
 
@@ -124,7 +123,7 @@ public class DescriptorHandler {
 	T readFromJsonFile(File file,
 					   Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
 					   List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
-			throws NotConvertibleException {
+			throws NotParsableDescriptorException {
 
 		try {
 			//xstream = new XStream(new JettisonMappedXmlDriver());
@@ -146,12 +145,12 @@ public class DescriptorHandler {
 			throw new ModuleImplementationException();
 
 		} catch (Exception e){
-			throw new NotConvertibleException();
+			throw new NotParsableDescriptorException();
 		}
 	}
 
 	public <T extends FuzzyDescriptorRootBase> T readFromTextFile(File file, Class clazz)
-			throws NotConvertibleException {
+			throws NotParsableDescriptorException {
 
 		throw new NotImplementedException();
 	}
