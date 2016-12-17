@@ -24,11 +24,10 @@
                   <MenuItem mnemonicParsing="false" onAction="#unloadModels" text="Unload models" />
                   <Menu fx:id="defaultModelLoaderMenu" mnemonicParsing="false" text="Load default models">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Load all default models" />
+                      <MenuItem mnemonicParsing="false" onAction="#loadAllDefaultModels" text="Load all default models" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                     </items>
                   </Menu>
-                  <MenuItem mnemonicParsing="false" onAction="#loadDefaultModels" text="Load default models" />
                   <MenuItem mnemonicParsing="false" onAction="#loadModels" text="Load model" />
                   <MenuItem mnemonicParsing="false" onAction="#saveSelectedModelsFromWorkspace" text="Save selected models" />
               <MenuItem mnemonicParsing="false" text="Close" />

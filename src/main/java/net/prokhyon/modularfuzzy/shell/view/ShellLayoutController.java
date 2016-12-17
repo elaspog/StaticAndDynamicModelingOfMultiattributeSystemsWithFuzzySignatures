@@ -139,8 +139,10 @@ public class ShellLayoutController {
 	}
 
 	@FXML
-	private void loadDefaultModels() {
+	private void loadAllDefaultModels() {
 
+		List<File> defaultModelFiles = listDefaultModelFiles();
+		commonServices.loadFiles(defaultModelFiles);
 	}
 
 	@FXML
@@ -174,7 +176,7 @@ public class ShellLayoutController {
 		}
 	}
 
-	public void loadCoreModels() {
+	public List<File> listDefaultModelFiles() {
 
 		List<File> filesToLoad = new ArrayList<>();
 		try(Stream<Path> paths = Files.walk(Paths.get("./coremodels/"))) {
@@ -184,7 +186,7 @@ public class ShellLayoutController {
 				}
 			});
 		} catch (Exception e){ }
-		commonServices.loadFiles(filesToLoad);
+		return filesToLoad;
 	}
 
 }
