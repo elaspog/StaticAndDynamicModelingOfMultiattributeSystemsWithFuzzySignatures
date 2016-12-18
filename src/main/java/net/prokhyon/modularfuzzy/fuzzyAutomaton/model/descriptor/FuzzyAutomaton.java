@@ -10,9 +10,9 @@ import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
 @XStreamAlias("fuzzyautomaton")
 public class FuzzyAutomaton extends FuzzyDescriptorRootBase {
 
-	@XStreamAlias("fuzzytypeid")
-	@XStreamAsAttribute
-	private String fuzzyTypeId;
+	//@XStreamAlias("fuzzytypeid")
+	//@XStreamAsAttribute
+	//private String fuzzyTypeId;
 
 	@XStreamAsAttribute
 	private Integer costVectorDimension;
@@ -23,21 +23,30 @@ public class FuzzyAutomaton extends FuzzyDescriptorRootBase {
 	@XStreamImplicit
 	private List<FuzzyTransition> transitions;
 
-	public FuzzyAutomaton(String uuid, String typeName, String typeDescription, String fuzzyTypeId, List<FuzzyState> states,
+	//public FuzzyAutomaton(String uuid, String typeName, String typeDescription, String fuzzyTypeId, List<FuzzyState> states, List<FuzzyTransition> transitions, Integer costVectorDimension)
+	public FuzzyAutomaton(String uuid, String typeName, String typeDescription, List<FuzzyState> states,
 			List<FuzzyTransition> transitions, Integer costVectorDimension) {
 		super(uuid, typeName, typeDescription);
-		this.fuzzyTypeId = fuzzyTypeId;
+		//this.fuzzyTypeId = fuzzyTypeId;
 		this.states = states;
 		this.transitions = transitions;
 		this.costVectorDimension = costVectorDimension;
 	}
 
-	public String getFuzzytypeid() {
-		return fuzzyTypeId;
+	//public String getFuzzytypeid() {
+	//	return fuzzyTypeId;
+	//}
+
+	//public void setFuzzytypeid(String fuzzytypeid) {
+	//	this.fuzzyTypeId = fuzzytypeid;
+	//}
+
+	public Integer getCostVectorDimension() {
+		return costVectorDimension;
 	}
 
-	public void setFuzzytypeid(String fuzzytypeid) {
-		this.fuzzyTypeId = fuzzytypeid;
+	public void setCostVectorDimension(Integer costVectorDimension) {
+		this.costVectorDimension = costVectorDimension;
 	}
 
 	public List<FuzzyState> getStates() {
@@ -58,8 +67,8 @@ public class FuzzyAutomaton extends FuzzyDescriptorRootBase {
 
 	@Override
 	public String toString() {
-		return "FuzzyAutomaton [fuzzyTypeId=" + fuzzyTypeId + ", states=" + states + ", transitions=" + transitions
-				+ "]";
+		//return "FuzzyAutomaton [fuzzyTypeId=" + fuzzyTypeId + ", states=" + states + ", transitions=" + transitions + "]";
+		return "FuzzyAutomaton [states=" + states + ", transitions=" + transitions + "]";
 	}
 
 }

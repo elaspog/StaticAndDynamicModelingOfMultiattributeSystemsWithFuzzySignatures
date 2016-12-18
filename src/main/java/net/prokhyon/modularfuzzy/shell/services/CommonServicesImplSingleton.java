@@ -186,6 +186,9 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 						if (persistableModel != null) {
 							fuzzyDescriptorRootBase = persistableModel.importModel(file, descriptorRootModel, descriptorModels);
 
+							if (fuzzyDescriptorRootBase == null)
+								continue;
+
 							ConvertibleDescriptor2FxModel.External convertibleDescriptor2FxModelExternal = null;
 							ConvertibleDescriptor2FxModel.Internal convertibleDescriptor2FxModelInternal = null;
 

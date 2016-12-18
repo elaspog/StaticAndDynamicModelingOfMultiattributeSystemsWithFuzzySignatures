@@ -78,7 +78,7 @@ public class FuzzyAutomaton extends WorkspaceElement
         }
 
         return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton(this.getUuid(),
-                this.getFuzzyAutomationName(), this.getFuzzyAutomatonDescription(), null, descriptorFuzzyStates,
+                this.getFuzzyAutomationName(), this.getFuzzyAutomatonDescription(), descriptorFuzzyStates,
                 descriptorFuzzyTransitions, this.getCostVectorDimensionObj());
     }
 

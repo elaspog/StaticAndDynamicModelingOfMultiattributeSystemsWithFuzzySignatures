@@ -25,7 +25,7 @@ public class FuzzyAutomatonModuleDescriptor implements ModuleDescriptor {
 				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.ModelConverter.class,
 				null,
 				null,
-				null,
+				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton.class,
 				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton.class,
 				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton.class,
 				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState.class,

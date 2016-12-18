@@ -21,8 +21,20 @@ public class ModelDomainIOManager implements IPersistableModel {
 
 
     @Override
-    public <T extends FuzzyDescriptorRootBase> T importModel(File file, Class<? extends FuzzyDescriptorRootBase> descriptorRootModel, List<Class<? extends FuzzyDescriptorBase>> descriptorModels) throws NotParsableDescriptorException {
-        return null;
+    public <T extends FuzzyDescriptorRootBase>
+    T importModel(File file,
+                  Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
+                  List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
+            throws NotParsableDescriptorException {
+
+        DescriptorHandler descriptorHandler = new DescriptorHandler();
+        try {
+            return descriptorHandler.readFromXmlFile(file, descriptorRootModel, descriptorModels);
+        } catch (NotParsableDescriptorException nce){}
+        try {
+            return descriptorHandler.readFromJsonFile(file, descriptorRootModel, descriptorModels);
+        } catch (NotParsableDescriptorException nce){}
+        throw new NotParsableDescriptorException();
     }
 
     @Override
