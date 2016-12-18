@@ -129,6 +129,11 @@ public class FuzzySetSystem extends WorkspaceElement
 	}
 
 	@Override
+	public String getUUID() {
+		return uuid.get();
+	}
+
+	@Override
 	public String getListElementIdentifier() {
 		return fuzzySystemName.get() + " (" + fuzzySets.size() + ")" + " [" + fuzzySystemType.get() + "]";
 	}

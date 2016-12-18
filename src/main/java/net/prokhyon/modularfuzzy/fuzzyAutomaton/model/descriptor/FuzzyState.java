@@ -11,35 +11,27 @@ public class FuzzyState extends FuzzyDescriptorModelBase {
 	@XStreamAsAttribute
 	private FuzzyStateTypeEnum type;
 
-	@XStreamAlias("fuzzyvalue")
+	@XStreamAlias("fuzzySetName")
 	@XStreamAsAttribute
-	private String fuzzyValue;
+	private String fuzzySetName;
 
-	public FuzzyState(String label, String description, FuzzyStateTypeEnum type, String fuzzyValue) {
+	public FuzzyState(String label, String description, FuzzyStateTypeEnum type, String fuzzySetName) {
 		super(label, description);
 		this.type = type;
-		this.fuzzyValue = fuzzyValue;
+		this.fuzzySetName = fuzzySetName;
 	}
 
 	public FuzzyStateTypeEnum getType() {
 		return type;
 	}
 
-	public void setType(FuzzyStateTypeEnum type) {
-		this.type = type;
-	}
-
-	public String getFuzzyvalue() {
-		return fuzzyValue;
-	}
-
-	public void setFuzzyvalue(String fuzzyvalue) {
-		this.fuzzyValue = fuzzyvalue;
+	public String getFuzzySetName() {
+		return fuzzySetName;
 	}
 
 	@Override
 	public String toString() {
-		return "FuzzyState [type=" + type + ", fuzzyValue=" + fuzzyValue + "]";
+		return "FuzzyState [type=" + type + ", fuzzySetName=" + fuzzySetName + "]";
 	}
 
 }

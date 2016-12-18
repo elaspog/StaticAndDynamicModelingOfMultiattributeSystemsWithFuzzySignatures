@@ -45,4 +45,6 @@ public interface CommonServices {
 
 	void loadDescriptorsIntoWorkspaceElementsByPersistableModel(List<FuzzyDescriptorBase> descriptorsToLoad, PersistableModelInfo persistableModelInfo)
 			throws ModuleImplementationException, NotConvertibleDescriptorException;
+
+	<T extends WorkspaceElement> T resolveModelByUUID(String uuid);
 }

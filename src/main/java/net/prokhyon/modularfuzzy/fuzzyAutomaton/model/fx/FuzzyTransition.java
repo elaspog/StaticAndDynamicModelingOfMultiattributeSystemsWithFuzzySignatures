@@ -40,9 +40,11 @@ public class FuzzyTransition extends FuzzyFxBase
     @Override
     public net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition convert2DescriptorModel() {
 
-        // TODO Handle start/to state ids here
+        final String fromStateName = fromState != null ? fromState.get().getFuzzyStateName() : null;
+        final String toStateName = toState != null ? toState.get().getFuzzyStateName() : null;
+
         return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition(
-                getFuzzyTransitionName(), getFuzzyTransitionDescription(), null, null,
+                getFuzzyTransitionName(), getFuzzyTransitionDescription(), fromStateName, toStateName,
                 costVector.get());
     }
 
@@ -58,20 +60,12 @@ public class FuzzyTransition extends FuzzyFxBase
         return fuzzyTransitionName;
     }
 
-    public void setFuzzyTransitionName(String fuzzyTransitionName) {
-        this.fuzzyTransitionName.set(fuzzyTransitionName);
-    }
-
     public String getFuzzyTransitionDescription() {
         return fuzzyTransitionDescription.get();
     }
 
     public StringProperty fuzzyTransitionDescriptionProperty() {
         return fuzzyTransitionDescription;
-    }
-
-    public void setFuzzyTransitionDescription(String fuzzyTransitionDescription) {
-        this.fuzzyTransitionDescription.set(fuzzyTransitionDescription);
     }
 
     public ObservableList<Double> getCostVector() {
@@ -82,20 +76,12 @@ public class FuzzyTransition extends FuzzyFxBase
         return costVector;
     }
 
-    public void setCostVector(ObservableList<Double> costVector) {
-        this.costVector.set(costVector);
-    }
-
     public FuzzyState getFromState() {
         return fromState.get();
     }
 
     public ObjectProperty<FuzzyState> fromStateProperty() {
         return fromState;
-    }
-
-    public void setFromState(FuzzyState fromState) {
-        this.fromState.set(fromState);
     }
 
     public FuzzyState getToState() {
@@ -106,7 +92,4 @@ public class FuzzyTransition extends FuzzyFxBase
         return toState;
     }
 
-    public void setToState(FuzzyState toState) {
-        this.toState.set(toState);
-    }
 }

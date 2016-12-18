@@ -303,6 +303,19 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 		}
 	}
 
+	@Override
+	public <T extends WorkspaceElement> T resolveModelByUUID(String uuid) {
+
+		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> workspaceInfoObservableListEntry : registeredStores.entrySet()) {
+			final ObservableList<? extends WorkspaceElement> value = workspaceInfoObservableListEntry.getValue();
+			for (WorkspaceElement workspaceElement : value) {
+				final String workspaceElementUUID = workspaceElement.getUUID();
+				if (workspaceElementUUID.equals(uuid))
+					return (T) workspaceElement;
+			}
+		}
+		return null;
+	}
 
 	/*
 		Implementing interface: ShellDialogServices

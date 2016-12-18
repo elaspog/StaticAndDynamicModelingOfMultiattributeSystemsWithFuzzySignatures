@@ -10,9 +10,9 @@ import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
 @XStreamAlias("fuzzyautomaton")
 public class FuzzyAutomaton extends FuzzyDescriptorRootBase {
 
-	//@XStreamAlias("fuzzytypeid")
-	//@XStreamAsAttribute
-	//private String fuzzyTypeId;
+	@XStreamAlias("referencedFuzzySetSystemUUID")
+	@XStreamAsAttribute
+	private String referencedFuzzySetSystemUUID;
 
 	@XStreamAsAttribute
 	private Integer costVectorDimension;
@@ -23,46 +23,29 @@ public class FuzzyAutomaton extends FuzzyDescriptorRootBase {
 	@XStreamImplicit
 	private List<FuzzyTransition> transitions;
 
-	//public FuzzyAutomaton(String uuid, String typeName, String typeDescription, String fuzzyTypeId, List<FuzzyState> states, List<FuzzyTransition> transitions, Integer costVectorDimension)
-	public FuzzyAutomaton(String uuid, String typeName, String typeDescription, List<FuzzyState> states,
+	public FuzzyAutomaton(String uuid, String typeName, String typeDescription, String referencedFuzzySetSystemUUID, List<FuzzyState> states,
 			List<FuzzyTransition> transitions, Integer costVectorDimension) {
 		super(uuid, typeName, typeDescription);
-		//this.fuzzyTypeId = fuzzyTypeId;
+		this.referencedFuzzySetSystemUUID = referencedFuzzySetSystemUUID;
 		this.states = states;
 		this.transitions = transitions;
 		this.costVectorDimension = costVectorDimension;
 	}
 
-	//public String getFuzzytypeid() {
-	//	return fuzzyTypeId;
-	//}
-
-	//public void setFuzzytypeid(String fuzzytypeid) {
-	//	this.fuzzyTypeId = fuzzytypeid;
-	//}
-
 	public Integer getCostVectorDimension() {
 		return costVectorDimension;
-	}
-
-	public void setCostVectorDimension(Integer costVectorDimension) {
-		this.costVectorDimension = costVectorDimension;
 	}
 
 	public List<FuzzyState> getStates() {
 		return states;
 	}
 
-	public void setStates(List<FuzzyState> states) {
-		this.states = states;
-	}
-
 	public List<FuzzyTransition> getTransitions() {
 		return transitions;
 	}
 
-	public void setTransitions(List<FuzzyTransition> transitions) {
-		this.transitions = transitions;
+	public String getReferencedFuzzySetSystemUUID() {
+		return referencedFuzzySetSystemUUID;
 	}
 
 	@Override
