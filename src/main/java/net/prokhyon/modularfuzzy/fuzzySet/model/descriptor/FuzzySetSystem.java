@@ -29,16 +29,8 @@ public class FuzzySetSystem extends FuzzyDescriptorRootBase {
 		return type;
 	}
 
-	public void setType(FuzzySetSystemTypeEnum type) {
-		this.type = type;
-	}
-
 	public List<FuzzySetBase> getSets() {
 		return sets;
-	}
-
-	public void setSets(List<FuzzySetBase> sets) {
-		this.sets = sets;
 	}
 
 	@Override

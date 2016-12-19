@@ -25,16 +25,8 @@ public abstract class FuzzySetBase extends FuzzyDescriptorModelBase {
 		return type;
 	}
 
-	public void setType(FuzzySetTypeEnum type) {
-		this.type = type;
-	}
-
 	public List<FuzzyPointBase> getPoints() {
 		return points;
-	}
-
-	public void setPoints(List<FuzzyPointBase> points) {
-		this.points = points;
 	}
 
 	@Override

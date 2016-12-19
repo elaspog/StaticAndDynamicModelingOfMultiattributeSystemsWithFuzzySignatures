@@ -24,10 +24,6 @@ public class FuzzyPointBelow extends FuzzyPointBase {
 		return xCoordinate;
 	}
 
-	public void setxCoordinate(double xCoordinate) {
-		this.xCoordinate = xCoordinate;
-	}
-
 	@Override
 	public String toString() {
 		return "FuzzyPointBelow [xCoordinate=" + xCoordinate + "]";
