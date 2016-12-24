@@ -1,6 +1,6 @@
 package net.prokhyon.modularfuzzy.fuzzySignature;
 
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
@@ -18,7 +18,7 @@ public class FuzzySignatureModuleDescriptor implements ModuleDescriptor {
 		services = new ServiceFactory().getCommonServices();
 
 		FxModulesViewInfo viewOfModuleInfo = new FxModulesViewInfo("Fuzzy Signature Editor",
-				"view/FuzzySignatureLayout.fxml", FuzzySignatureModuleDescriptor.class, StackPane.class);
+				"view/FuzzySignatureLayout.fxml", FuzzySignatureModuleDescriptor.class, AnchorPane.class);
 		services.registerView(viewOfModuleInfo);
 
 		PersistableModelInfo pmt = new PersistableModelInfo(null,
