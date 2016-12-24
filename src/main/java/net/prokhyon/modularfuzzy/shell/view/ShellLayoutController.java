@@ -125,6 +125,10 @@ public class ShellLayoutController {
 
 					PaneAndControllerPair p = contents.get(viewToLoad);
 					ContentLoaderHandler.loadContentPane(contentArea, null, p);
+					AnchorPane.setTopAnchor(p.pane, 0.0);
+					AnchorPane.setLeftAnchor(p.pane, 0.0);
+					AnchorPane.setRightAnchor(p.pane, 0.0);
+					AnchorPane.setBottomAnchor(p.pane, 0.0);
 				}
 			});
 

@@ -1,6 +1,6 @@
 package net.prokhyon.modularfuzzy.fuzzyAutomaton;
 
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.FlowPane;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
@@ -18,7 +18,7 @@ public class FuzzyAutomatonModuleDescriptor implements ModuleDescriptor {
 		services = new ServiceFactory().getCommonServices();
 
 		FxModulesViewInfo viewOfModuleInfo = new FxModulesViewInfo("Fuzzy Automaton Editor",
-				"view/FuzzyAutomatonEditorLayout.fxml", FuzzyAutomatonModuleDescriptor.class, GridPane.class);
+				"view/FuzzyAutomatonEditorLayout.fxml", FuzzyAutomatonModuleDescriptor.class, FlowPane.class);
 		services.registerView(viewOfModuleInfo);
 
 		PersistableModelInfo pmt = new PersistableModelInfo(new ModelDomainIOManager(),
