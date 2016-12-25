@@ -21,9 +21,12 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 	@FXML
 	Button saveSignatureButton;
 
+	private int createdAutomatonCounter;
+
 	@FXML
 	private void initialize() {
 
+		createdAutomatonCounter = 0;
 	}
 
 	@Override
@@ -35,9 +38,10 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 	@FXML
 	public void createSignatureButtonClicked(){
 
+		createdAutomatonCounter++;
 		TreeItem<String> root, node1, node2;
 
-		root = new TreeItem<>("RootNode");
+		root = new TreeItem<>("fuzzySignature" + createdAutomatonCounter);
 		root.setExpanded(true);
 
 		node1 = makeBranch("SampleNode1", root);

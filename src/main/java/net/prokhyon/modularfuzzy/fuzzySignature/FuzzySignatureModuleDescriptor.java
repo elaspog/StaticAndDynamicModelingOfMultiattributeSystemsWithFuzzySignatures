@@ -6,7 +6,7 @@ import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
-import net.prokhyon.modularfuzzy.fuzzySignature.model.FuzzySignature;
+import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 
 public class FuzzySignatureModuleDescriptor implements ModuleDescriptor {
@@ -26,7 +26,7 @@ public class FuzzySignatureModuleDescriptor implements ModuleDescriptor {
 				null,
 				null,
 				null,
-				net.prokhyon.modularfuzzy.fuzzySignature.model.FuzzySignature.class,
+				net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature.class,
 				net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature.class);
 
 		WorkspaceInfo storeInfo = new WorkspaceInfo("Signatures", viewOfModuleInfo, pmt);

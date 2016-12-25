@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
@@ -25,7 +26,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0">
                <children>
-                  <VBox spacing="10.0">
+                  <VBox layoutX="7.0" spacing="10.0">
                      <children>
                         <GridPane>
                           <columnConstraints>
@@ -57,6 +58,73 @@
                                     <Button fx:id="saveSignatureButton" prefWidth="100.0" text="Save" />
                                     <Button fx:id="clearSignatureButton" onAction="#clearSignatureButtonClicked" prefWidth="100.0" text="Clear" />
                                     <Button fx:id="createSignatureButton" onAction="#createSignatureButtonClicked" prefWidth="100.0" text="Create" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </GridPane>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Node name" />
+                              <Label text="Description" GridPane.rowIndex="1" />
+                              <TextField GridPane.columnIndex="1" />
+                              <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                           </children>
+                        </GridPane>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Aggregation op." />
+                              <AnchorPane GridPane.columnIndex="1">
+                                 <children>
+                                    <ComboBox prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </GridPane>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Automaton type" />
+                              <AnchorPane GridPane.columnIndex="1">
+                                 <children>
+                                    <ComboBox prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </GridPane>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="saveSignatureButton1" prefWidth="100.0" text="Save" />
+                                    <Button fx:id="createSignatureButton1" prefWidth="100.0" text="Cancel" />
                                  </children>
                               </HBox>
                            </children>

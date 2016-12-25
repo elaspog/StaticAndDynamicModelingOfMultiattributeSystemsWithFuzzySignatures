@@ -1,9 +1,8 @@
-package net.prokhyon.modularfuzzy.fuzzySignature.model;
+package net.prokhyon.modularfuzzy.fuzzySignature.model.fx;
 
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 
 public class FuzzySignature extends WorkspaceElement {
-
 
     @Override
     public String getUUID() {
@@ -14,4 +13,5 @@ public class FuzzySignature extends WorkspaceElement {
     public String getListElementIdentifier() {
         return "_";
     }
+
 }
