@@ -7,10 +7,9 @@ import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzyNode;
 
 public class FuzzyNodeTreeCell extends TextFieldTreeCell<FuzzyNode> {
 
-	TreeView<FuzzyNode> signatureTreeView;
 	private ContextMenu rootContextMenu;
 
-	public FuzzyNodeTreeCell() {
+	public FuzzyNodeTreeCell(FuzzySignatureEditorController fuzzySignatureEditorController) {
 
 		rootContextMenu = new ContextMenu();
 		MenuItem addMenuItem = new MenuItem("Add child node");
@@ -22,27 +21,32 @@ public class FuzzyNodeTreeCell extends TextFieldTreeCell<FuzzyNode> {
 		addMenuItem.setOnAction(t -> {
 
 			final TreeItem<FuzzyNode> item = getTreeItem();
-			final TreeItem<FuzzyNode> parentItem = item.getParent();
-			final FuzzyNode parentNode = (parentItem != null ? parentItem.getValue() : null);
+			final FuzzyNode thisNode = (item != null ? item.getValue() : null);
 
 			// Handling tree in fuzzy model
-			final FuzzyNode fuzzyNode = new FuzzyNode("Node" , parentNode);
-			if (parentNode != null)
-				parentNode.getChildNodes().add(fuzzyNode);
+			final FuzzyNode fuzzyNode = new FuzzyNode("Node" + fuzzySignatureEditorController.getNextNodeCounterValue(), thisNode);
+			thisNode.getChildNodes().add(fuzzyNode);
 
-			// Handling tree in treeView
-			TreeItem newItem = new TreeItem<FuzzyNode>(fuzzyNode);
-			getTreeItem().getChildren().add(newItem);
+			// Handling tree in TreeView
+			TreeItem fuzzyNodeTreeItem = new TreeItem<>(fuzzyNode);
+			getTreeItem().getChildren().add(fuzzyNodeTreeItem);
 		});
 
 		removeMenuItem.setOnAction(t -> {
 
 			final TreeItem<FuzzyNode> item = getTreeItem();
-			item.getParent().getChildren().remove(item);
-			if(signatureTreeView.getRoot().getChildren().size() == 0) {  // check for empty tree
-				signatureTreeView.getSelectionModel().clearSelection();
-			}
+			final TreeItem<FuzzyNode> parent = item.getParent();
+
+			// Handling tree in TreeView
+			if (parent != null)
+				parent.getChildren().remove(item);
 			t.consume();
+
+			// Handling tree in fuzzy model
+			final FuzzyNode thisNode = (item != null ? item.getValue() : null);
+			final FuzzyNode parentNode = (parent != null ? parent.getValue() : null);
+			if (parentNode != null)
+				parentNode.getChildNodes().remove(thisNode);
 		});
 
 	}
@@ -60,7 +64,8 @@ public class FuzzyNodeTreeCell extends TextFieldTreeCell<FuzzyNode> {
 			try {
 				str = item.getName();
 			} catch (Exception e) {}
-			setText(str + " : ");
+			String parentName = (item.getParentNode() != null ? item.getParentNode().getName() : "" );
+			setText(str + " : " +"parent=" + parentName);
 		} else
 			setText(null);
 	}

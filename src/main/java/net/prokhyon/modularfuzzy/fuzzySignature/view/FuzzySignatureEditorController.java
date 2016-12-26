@@ -30,16 +30,16 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 
 		createdSignatureCounter = 0;
 		latestCreatedSignatureCounterValue = 0;
+		createdNodeCounter = 0;
 	}
 
 	public int getNextNodeCounterValue(){
 
-		if (createdSignatureCounter == latestCreatedSignatureCounterValue)
-			createdNodeCounter++;
-		else {
-			latestCreatedSignatureCounterValue = createdSignatureCounter;
+		if (createdSignatureCounter != latestCreatedSignatureCounterValue) {
 			createdNodeCounter = 0;
+			latestCreatedSignatureCounterValue = createdSignatureCounter;
 		}
+		createdNodeCounter++;
 		return createdNodeCounter;
 	}
 
@@ -58,12 +58,15 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		root = new TreeItem<>(rootNode);
 		root.setExpanded(true);
 
+		FuzzySignatureEditorController tmp = this;
+
 		signatureTreeView.setCellFactory(new Callback<TreeView<FuzzyNode>, TreeCell<FuzzyNode>>() {
 
 			@Override
 			public TreeCell<FuzzyNode> call(TreeView<FuzzyNode> arg0) {
 				// custom tree cell that defines a context menu for the root tree item
-				return new FuzzyNodeTreeCell();
+				final FuzzyNodeTreeCell fuzzyNodeTreeCell = new FuzzyNodeTreeCell(tmp);
+				return fuzzyNodeTreeCell;
 			}
 
 		});
