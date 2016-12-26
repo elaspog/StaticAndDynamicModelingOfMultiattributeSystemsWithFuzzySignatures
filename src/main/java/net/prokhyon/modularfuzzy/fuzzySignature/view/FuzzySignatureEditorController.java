@@ -1,16 +1,16 @@
 package net.prokhyon.modularfuzzy.fuzzySignature.view;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzyNode;
 
 public class FuzzySignatureEditorController implements LoadableDataController {
 
 	@FXML
-	TreeView<String> signatureTreeView;
+	TreeView<FuzzyNode> signatureTreeView;
 
 	@FXML
 	Button createSignatureButton;
@@ -21,12 +21,26 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 	@FXML
 	Button saveSignatureButton;
 
-	private int createdAutomatonCounter;
+	private int createdSignatureCounter;
+	private int latestCreatedSignatureCounterValue;
+	private int createdNodeCounter;
 
 	@FXML
 	private void initialize() {
 
-		createdAutomatonCounter = 0;
+		createdSignatureCounter = 0;
+		latestCreatedSignatureCounterValue = 0;
+	}
+
+	public int getNextNodeCounterValue(){
+
+		if (createdSignatureCounter == latestCreatedSignatureCounterValue)
+			createdNodeCounter++;
+		else {
+			latestCreatedSignatureCounterValue = createdSignatureCounter;
+			createdNodeCounter = 0;
+		}
+		return createdNodeCounter;
 	}
 
 	@Override
@@ -34,24 +48,25 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 
 	}
 
-
 	@FXML
 	public void createSignatureButtonClicked(){
 
-		createdAutomatonCounter++;
-		TreeItem<String> root, node1, node2;
+		createdSignatureCounter++;
+		TreeItem<FuzzyNode> root;
 
-		root = new TreeItem<>("fuzzySignature" + createdAutomatonCounter);
+		final FuzzyNode rootNode = new FuzzyNode("fuzzySignature" + createdSignatureCounter);
+		root = new TreeItem<>(rootNode);
 		root.setExpanded(true);
 
-		node1 = makeBranch("SampleNode1", root);
-		makeBranch("SampleNode1sSampleChild1", node1);
-		makeBranch("SampleNode1sSampleChild2", node1);
-		makeBranch("SampleNode1sSampleChild3", node1);
+		signatureTreeView.setCellFactory(new Callback<TreeView<FuzzyNode>, TreeCell<FuzzyNode>>() {
 
-		node2 = makeBranch("SampleNode2", root);
-		makeBranch("SampleNode2sSampleChild1", node2);
-		makeBranch("SampleNode2sSampleChild1", node2);
+			@Override
+			public TreeCell<FuzzyNode> call(TreeView<FuzzyNode> arg0) {
+				// custom tree cell that defines a context menu for the root tree item
+				return new FuzzyNodeTreeCell();
+			}
+
+		});
 
 		signatureTreeView.setRoot(root);
 	}
@@ -62,9 +77,8 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		signatureTreeView.setRoot(null);
 	}
 
-
-	private TreeItem<String> makeBranch(String title, TreeItem<String> parent) {
-		TreeItem<String> item = new TreeItem<>(title);
+	private TreeItem<FuzzyNode> makeBranch(FuzzyNode fuzzyNode, TreeItem<FuzzyNode> parent) {
+		TreeItem<FuzzyNode> item = new TreeItem<>(fuzzyNode);
 		item.setExpanded(true);
 		parent.getChildren().add(item);
 		return item;

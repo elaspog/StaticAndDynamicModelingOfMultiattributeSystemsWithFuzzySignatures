@@ -2,15 +2,38 @@ package net.prokhyon.modularfuzzy.fuzzySignature.model.fx;
 
 import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FuzzyNode extends FuzzyFxBase {
 
     private String name;
 
-    private FuzzyNode fuzzyNode;
+    private String description;
 
-    public FuzzyNode(String name, FuzzyNode fuzzyNode) {
+    private FuzzyNode parentNode;
+
+    private List<FuzzyNode> childNodes;
+
+    public FuzzyNode(String name) {
+        this(name, null, null);
+    }
+
+    public FuzzyNode(String name, List<FuzzyNode> childNodes) {
+        this(name, null, childNodes);
+    }
+
+    public FuzzyNode(String name, FuzzyNode parentNode) {
+        this(name, parentNode, null);
+    }
+
+    public FuzzyNode(String name, FuzzyNode parentNode, List<FuzzyNode> childNodes) {
         this.name = name;
-        this.fuzzyNode = fuzzyNode;
+        this.parentNode = parentNode;
+        if (childNodes != null)
+            this.childNodes = childNodes;
+        else
+            this.childNodes = new ArrayList<>();
     }
 
     public String getName() {
@@ -21,12 +44,27 @@ public class FuzzyNode extends FuzzyFxBase {
         this.name = name;
     }
 
-    public FuzzyNode getFuzzyNode() {
-        return fuzzyNode;
+    public String getDescription() {
+        return description;
     }
 
-    public void setFuzzyNode(FuzzyNode fuzzyNode) {
-        this.fuzzyNode = fuzzyNode;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
+    public FuzzyNode getParentNode() {
+        return parentNode;
+    }
+
+    public void setParentNode(FuzzyNode parentNode) {
+        this.parentNode = parentNode;
+    }
+
+    public List<FuzzyNode> getChildNodes() {
+        return childNodes;
+    }
+
+    public void setChildNodes(List<FuzzyNode> childNodes) {
+        this.childNodes = childNodes;
+    }
 }
