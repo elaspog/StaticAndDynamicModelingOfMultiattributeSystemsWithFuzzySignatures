@@ -2,13 +2,24 @@ package net.prokhyon.modularfuzzy.fuzzySignature.view;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
+import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
+import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
+import net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.AggregationType;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzyNode;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature;
+import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
+
+import java.util.Map;
 
 public class FuzzySignatureEditorController implements LoadableDataController {
 
@@ -40,10 +51,10 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 	private TextArea nodeDescriptionTextArea;
 
 	@FXML
-	private ComboBox aggregationOperatorComboBox;
+	private ComboBox<AggregationType> aggregationOperatorComboBox;
 
 	@FXML
-	private ComboBox automatonTypeComboBox;
+	private ComboBox<FuzzyAutomaton> automatonTypeComboBox;
 
 	@FXML
 	private Button createSignatureButton;
@@ -54,9 +65,6 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 	@FXML
 	private Button saveSignatureButton;
 
-	@FXML
-	private Button saveNodeButton;
-
     /*
      * Variables
      */
@@ -65,12 +73,33 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 	private int latestCreatedSignatureCounterValue;
 	private int createdNodeCounter;
 
+	/*
+     * Services
+     */
+
+	private CommonServices commonServices;
+
+	private FuzzyAutomatonModuleDescriptor fuzzyAutomatonModuleDescriptor;
+
     /*
      * Methods
      */
 
 	@FXML
 	private void initialize() {
+
+		this.commonServices = new ServiceFactory().getCommonServices();
+		final Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = this.commonServices.getPseudoModules();
+		for (Map.Entry<Class<? extends ModuleDescriptor>, ModuleDescriptor> classModuleDescriptorEntry : pseudoModules.entrySet()) {
+			final Class<? extends ModuleDescriptor> key = classModuleDescriptorEntry.getKey();
+			final ModuleDescriptor value = classModuleDescriptorEntry.getValue();
+			if (key == FuzzyAutomatonModuleDescriptor.class ) {
+				final FuzzyAutomatonModuleDescriptor famdv = (FuzzyAutomatonModuleDescriptor) value;
+				if(famdv.getViewName().equals("Automatons")){
+					this.fuzzyAutomatonModuleDescriptor = famdv;
+				}
+			}
+		}
 
 		createdSignatureCounter = 0;
 		latestCreatedSignatureCounterValue = 0;
@@ -88,12 +117,48 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 				bindNodeViewElementsToControllerProperties();
 			}
         });
+
+
+		automatonTypeComboBox.setCellFactory(new Callback<ListView<FuzzyAutomaton>,ListCell<FuzzyAutomaton>>(){
+
+			@Override
+			public ListCell<FuzzyAutomaton> call(ListView<FuzzyAutomaton> p) {
+
+				final ListCell<FuzzyAutomaton> cell = new ListCell<FuzzyAutomaton>(){
+
+					@Override
+					protected void updateItem(FuzzyAutomaton t, boolean bln) {
+						super.updateItem(t, bln);
+						if (t != null)
+							setText(t.getFuzzyAutomationName() + " : " + t.getUuid());
+						else
+							setText(null);
+					}
+				};
+				return cell;
+			}
+		});
+
+		automatonTypeComboBox.setButtonCell(
+				new ListCell<FuzzyAutomaton>() {
+					@Override
+					protected void updateItem(FuzzyAutomaton t, boolean bln) {
+						super.updateItem(t, bln);
+						if (bln) {
+							setText("");
+						} else {
+							setText(t.getFuzzyAutomationName());
+						}
+					}
+				});
 	}
 
 	private void bindSignatureViewElementsToControllerProperties() {
-	}
 
-	private void unbindSignatureViewElementsFromControllerProperties() {
+		if(fuzzySignature.getValue() != null){
+			signatureNameTextField.textProperty().bindBidirectional(fuzzySignature.getValue().fuzzySignatureNameProperty());
+			signatureDescriptionTextArea.textProperty().bindBidirectional(fuzzySignature.getValue().fuzzySignatureDescriptionProperty());
+		}
 	}
 
 	private void bindNodeViewElementsToControllerProperties() {
@@ -101,8 +166,18 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		if (fuzzyNodeToEdit.getValue() != null) {
 			nodeNameTextField.textProperty().bindBidirectional(fuzzyNodeToEdit.getValue().fuzzyNodeNameProperty());
 			nodeDescriptionTextArea.textProperty().bindBidirectional(fuzzyNodeToEdit.getValue().fuzzyNodeDescriptionProperty());
-			//aggregationOperatorComboBox
-			//automatonTypeComboBox
+
+			aggregationOperatorComboBox.setItems(FXCollections.observableArrayList(AggregationType.values()));
+			aggregationOperatorComboBox.valueProperty().bindBidirectional(fuzzyNodeToEdit.getValue().aggregationTypeProperty());
+			automatonTypeComboBox.valueProperty().bindBidirectional(fuzzyNodeToEdit.getValue().fuzzyAutomatonProperty());
+		}
+	}
+
+	private void unbindSignatureViewElementsFromControllerProperties() {
+
+		if(fuzzySignature.getValue() != null){
+			signatureNameTextField.textProperty().unbindBidirectional(fuzzySignature.getValue().fuzzySignatureNameProperty());
+			signatureDescriptionTextArea.textProperty().unbindBidirectional(fuzzySignature.getValue().fuzzySignatureDescriptionProperty());
 		}
 	}
 
@@ -111,8 +186,8 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		if (fuzzyNodeToEdit.getValue() != null) {
 			nodeNameTextField.textProperty().unbindBidirectional(fuzzyNodeToEdit.getValue().fuzzyNodeNameProperty());
 			nodeDescriptionTextArea.textProperty().unbindBidirectional(fuzzyNodeToEdit.getValue().fuzzyNodeDescriptionProperty());
-			//aggregationOperatorComboBox
-			//automatonTypeComboBox
+			aggregationOperatorComboBox.valueProperty().unbindBidirectional(fuzzyNodeToEdit.get().aggregationTypeProperty());
+			automatonTypeComboBox.valueProperty().unbindBidirectional(fuzzyNodeToEdit.get().fuzzyAutomatonProperty());
 		}
 	}
 
@@ -120,17 +195,24 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 
 		this.fuzzySignature.set(fuzzySignature);
 		signatureNameTextField.textProperty().set(fuzzySignature.fuzzySignatureNameProperty().get());
-		//signatureDescriptionTextArea.textProperty().set();
-	}
-
-	private void clearSignatureViewElements() {
+		signatureDescriptionTextArea.textProperty().set(fuzzySignature.fuzzySignatureDescriptionProperty().get());
 	}
 
 	private void setNodeViewElements(FuzzyNode fuzzyNode) {
 
+		loadActualFuzzyAutomatons();
 		this.fuzzyNodeToEdit.setValue(fuzzyNode);
 		nodeNameTextField.textProperty().set(fuzzyNode.getFuzzyNodeName());
-		nodeDescriptionTextArea.textProperty().set(fuzzyNode.getDescription());
+		nodeDescriptionTextArea.textProperty().set(fuzzyNode.getFuzzyNodeDescription());
+		aggregationOperatorComboBox.valueProperty().set(fuzzyNode.getAggregationType());
+		automatonTypeComboBox.valueProperty().set(fuzzyNode.getFuzzyAutomaton());
+	}
+
+	private void clearSignatureViewElements() {
+
+		this.fuzzySignature.set(null);
+		signatureNameTextField.textProperty().set(null);
+		signatureDescriptionTextArea.textProperty().set(null);
 	}
 
 	private void clearNodeViewElements() {
@@ -138,8 +220,40 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		this.fuzzyNodeToEdit.setValue(null);
 		nodeNameTextField.textProperty().set(null);
 		nodeDescriptionTextArea.textProperty().set(null);
+		aggregationOperatorComboBox.getItems().clear();
+		automatonTypeComboBox.getItems().clear();
 	}
 
+	@FXML
+	public void createSignature(){
+
+		createdSignatureCounter++;
+
+		final FuzzyNode rootNode = new FuzzyNode("Node" + getNextNodeCounterValue());
+		final FuzzySignature fuzzySignature = new FuzzySignature(null, "Signature" + createdSignatureCounter, rootNode, "sample description");
+
+		loadWithData(fuzzySignature);
+	}
+
+	@FXML
+	public void clearSignature(){
+
+		signatureTreeView.setRoot(null);
+		signatureNameTextField.textProperty().set(null);
+		signatureDescriptionTextArea.textProperty().set(null);
+	}
+
+	@FXML
+	private void loadActualFuzzyAutomatons(){
+
+		final Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = this.commonServices.getRegisteredStores();
+		final WorkspaceInfo workspaceInfo = fuzzyAutomatonModuleDescriptor.getWorkspaceInfo();
+		final ObservableList<? extends WorkspaceElement> workspaceElements = registeredStores.get(workspaceInfo);
+
+		final ObservableList<FuzzyAutomaton> fuzzySetSystems = (ObservableList<FuzzyAutomaton>) workspaceElements;
+		this.automatonTypeComboBox.setItems(FXCollections.observableArrayList(fuzzySetSystems));
+		//this.automatonTypeComboBox.valueProperty().bindBidirectional(fuzzyNodeToEdit.get().fuzzyAutomatonProperty());
+	}
 
 	public int getNextNodeCounterValue(){
 
@@ -149,23 +263,6 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		}
 		createdNodeCounter++;
 		return createdNodeCounter - 1;
-	}
-
-	@FXML
-	public void createSignature(){
-
-		createdSignatureCounter++;
-
-		final FuzzyNode rootNode = new FuzzyNode("Node" + getNextNodeCounterValue());
-		final FuzzySignature fuzzySignature = new FuzzySignature(null, "Signature" + createdSignatureCounter, rootNode);
-
-		loadWithData(fuzzySignature);
-	}
-
-	@FXML
-	public void clearSignature(){
-
-		signatureTreeView.setRoot(null);
 	}
 
 	private TreeItem<FuzzyNode> makeBranch(FuzzyNode fuzzyNode, TreeItem<FuzzyNode> parent) {
@@ -181,6 +278,9 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 
 	@Override
 	public <T extends WorkspaceElement> void loadWithData(T modelToLoad) {
+
+		unbindSignatureViewElementsFromControllerProperties();
+		clearSignatureViewElements();
 
 		if (modelToLoad == null)
 			return;
@@ -203,6 +303,7 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		});
 		signatureTreeView.setRoot(root);
 
+		bindSignatureViewElementsToControllerProperties();
 		setSignatureViewElements(signatureToLoad);
 	}
 

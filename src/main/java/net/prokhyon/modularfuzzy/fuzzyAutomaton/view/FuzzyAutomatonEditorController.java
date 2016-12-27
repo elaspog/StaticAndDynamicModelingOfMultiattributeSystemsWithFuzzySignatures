@@ -141,7 +141,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 			final ModuleDescriptor value = classModuleDescriptorEntry.getValue();
 			if (key == FuzzySetModuleDescriptor.class ) {
 				final FuzzySetModuleDescriptor fsmdv = (FuzzySetModuleDescriptor) value;
-				if(fsmdv.getViewName().equals("Fuzzy Sets")){
+				if(fsmdv.getViewName().equals("Sets")){
 					this.fuzzySetModuleDescriptor = fsmdv;
 				}
 			}

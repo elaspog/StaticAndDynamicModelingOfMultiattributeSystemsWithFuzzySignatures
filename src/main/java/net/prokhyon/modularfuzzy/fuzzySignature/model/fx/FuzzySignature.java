@@ -18,6 +18,7 @@ public class FuzzySignature extends WorkspaceElement
 
     private final StringProperty uuid;
     private final StringProperty fuzzySignatureName;
+    private final StringProperty fuzzySignatureDescription;
     private FuzzyNode rootNodeOfTheTree;
     private List<FuzzyNode> allNodesOfTheTree;
 
@@ -25,17 +26,18 @@ public class FuzzySignature extends WorkspaceElement
      * Constructors
      */
 
-    public FuzzySignature(String uuid, String signatureName, FuzzyNode rootNodeOfTheTree){
+    public FuzzySignature(String uuid, String signatureName, FuzzyNode rootNodeOfTheTree, String fuzzySignatureDescription){
 
         this.uuid = CommonUtils.initializeUUIDPropertyFromString(uuid);
         this.fuzzySignatureName = new SimpleStringProperty(signatureName);
+        this.fuzzySignatureDescription = new SimpleStringProperty(fuzzySignatureDescription);
         this.rootNodeOfTheTree = rootNodeOfTheTree;
         this.allNodesOfTheTree = new ArrayList<>();
         allNodesOfTheTree.add(rootNodeOfTheTree);
     }
 
     public FuzzySignature(FuzzySignature otherFuzzySignature){
-        this(otherFuzzySignature.getUUID(), otherFuzzySignature.getFuzzySignatureName(), otherFuzzySignature.getRootNodeOfTheTree());
+        this(otherFuzzySignature.getUUID(), otherFuzzySignature.getFuzzySignatureName(), otherFuzzySignature.getRootNodeOfTheTree(), otherFuzzySignature.getFuzzySignatureDescription());
     }
 
     /*
@@ -100,4 +102,17 @@ public class FuzzySignature extends WorkspaceElement
     public void setAllNodesOfTheTree(List<FuzzyNode> allNodesOfTheTree) {
         this.allNodesOfTheTree = allNodesOfTheTree;
     }
+
+    public String getFuzzySignatureDescription() {
+        return fuzzySignatureDescription.get();
+    }
+
+    public StringProperty fuzzySignatureDescriptionProperty() {
+        return fuzzySignatureDescription;
+    }
+
+    public void setFuzzySignatureDescription(String fuzzySignatureDescription) {
+        this.fuzzySignatureDescription.set(fuzzySignatureDescription);
+    }
+
 }

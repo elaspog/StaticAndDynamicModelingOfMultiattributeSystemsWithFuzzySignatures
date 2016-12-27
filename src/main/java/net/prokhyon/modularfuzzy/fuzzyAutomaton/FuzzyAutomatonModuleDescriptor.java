@@ -3,6 +3,7 @@ package net.prokhyon.modularfuzzy.fuzzyAutomaton;
 import javafx.scene.layout.FlowPane;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
+import net.prokhyon.modularfuzzy.common.modules.DefaultModelLoaderInfo;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
@@ -13,15 +14,20 @@ public class FuzzyAutomatonModuleDescriptor implements ModuleDescriptor {
 
 	private CommonServices services;
 
+	private final String VIEW_NAME = "Automatons";
+	private FxModulesViewInfo fxModulesViewInfo;
+	private PersistableModelInfo persistableModelInfo;
+	private WorkspaceInfo workspaceInfo;
+
 	@Override
 	public void initializeModule() {
 		services = new ServiceFactory().getCommonServices();
 
-		FxModulesViewInfo viewOfModuleInfo = new FxModulesViewInfo("Fuzzy Automaton Editor",
+		this.fxModulesViewInfo = new FxModulesViewInfo("Fuzzy Automaton Editor",
 				"view/FuzzyAutomatonEditorLayout.fxml", FuzzyAutomatonModuleDescriptor.class, FlowPane.class);
-		services.registerView(viewOfModuleInfo);
+		services.registerView(fxModulesViewInfo);
 
-		PersistableModelInfo pmt = new PersistableModelInfo(new ModelDomainIOManager(),
+		this.persistableModelInfo = new PersistableModelInfo(new ModelDomainIOManager(),
 				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.ModelConverter.class,
 				null,
 				null,
@@ -31,9 +37,27 @@ public class FuzzyAutomatonModuleDescriptor implements ModuleDescriptor {
 				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState.class,
 				net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition.class);
 
-		WorkspaceInfo storeInfo = new WorkspaceInfo("Automatons", viewOfModuleInfo, pmt);
+		this.workspaceInfo = new WorkspaceInfo(VIEW_NAME, fxModulesViewInfo, persistableModelInfo);
 
-		services.<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton> registerModelTypeInStore(storeInfo);
+		services.<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton> registerModelTypeInStore(workspaceInfo);
+
+		services.registerDefaultModelLoader(new DefaultModelLoaderInfo("Load Automatons", persistableModelInfo));
+	}
+
+	public String getViewName() {
+		return VIEW_NAME;
+	}
+
+	public FxModulesViewInfo getFxModulesViewInfo() {
+		return fxModulesViewInfo;
+	}
+
+	public PersistableModelInfo getPersistableModelInfo() {
+		return persistableModelInfo;
+	}
+
+	public WorkspaceInfo getWorkspaceInfo() {
+		return workspaceInfo;
 	}
 
 }

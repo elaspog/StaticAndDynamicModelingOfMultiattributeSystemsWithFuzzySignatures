@@ -1,8 +1,12 @@
 package net.prokhyon.modularfuzzy.fuzzySignature.model.fx;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
+import net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.AggregationType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,41 +16,34 @@ public class FuzzyNode extends FuzzyFxBase {
     private final StringProperty fuzzyNodeName;
     private final StringProperty fuzzyNodeDescription;
 
-    private String description;
-
     private FuzzyNode parentNode;
-
     private List<FuzzyNode> childNodes;
+    private final ObjectProperty<AggregationType> aggregationType;
+    private final ObjectProperty<FuzzyAutomaton> fuzzyAutomaton;
 
     public FuzzyNode(String name) {
-        this(name, null, null, null);
+        this(name, null, null, null, null, null);
     }
 
     public FuzzyNode(String name, List<FuzzyNode> childNodes) {
-        this(name, null, childNodes, null);
+        this(name, null, childNodes, null, null, null);
     }
 
     public FuzzyNode(String name, FuzzyNode parentNode) {
-        this(name, parentNode, null, null);
+        this(name, parentNode, null, null, null, null);
     }
 
-    public FuzzyNode(String name, FuzzyNode parentNode, List<FuzzyNode> childNodes, String description) {
+    public FuzzyNode(String name, FuzzyNode parentNode, List<FuzzyNode> childNodes, String description, AggregationType aggregationType, FuzzyAutomaton fuzzyAutomaton) {
 
         this.fuzzyNodeName = new SimpleStringProperty(name);
         this.fuzzyNodeDescription = new SimpleStringProperty(description);
+        this.aggregationType = new SimpleObjectProperty<>(aggregationType);
+        this.fuzzyAutomaton = new  SimpleObjectProperty<>(fuzzyAutomaton);
         this.parentNode = parentNode;
         if (childNodes != null)
             this.childNodes = childNodes;
         else
             this.childNodes = new ArrayList<>();
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public FuzzyNode getParentNode() {
@@ -88,5 +85,29 @@ public class FuzzyNode extends FuzzyFxBase {
 
     public void setFuzzyNodeDescription(String fuzzyNodeDescription) {
         this.fuzzyNodeDescription.set(fuzzyNodeDescription);
+    }
+
+    public AggregationType getAggregationType() {
+        return aggregationType.get();
+    }
+
+    public ObjectProperty<AggregationType> aggregationTypeProperty() {
+        return aggregationType;
+    }
+
+    public void setAggregationType(AggregationType aggregationType) {
+        this.aggregationType.set(aggregationType);
+    }
+
+    public FuzzyAutomaton getFuzzyAutomaton() {
+        return fuzzyAutomaton.get();
+    }
+
+    public ObjectProperty<FuzzyAutomaton> fuzzyAutomatonProperty() {
+        return fuzzyAutomaton;
+    }
+
+    public void setFuzzyAutomaton(FuzzyAutomaton fuzzyAutomaton) {
+        this.fuzzyAutomaton.set(fuzzyAutomaton);
     }
 }

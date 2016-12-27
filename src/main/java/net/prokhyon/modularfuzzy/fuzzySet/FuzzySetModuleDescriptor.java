@@ -14,7 +14,7 @@ public class FuzzySetModuleDescriptor implements ModuleDescriptor {
 
 	private CommonServices services;
 
-	private final String VIEW_NAME = "Fuzzy Sets";
+	private final String VIEW_NAME = "Sets";
 	private FxModulesViewInfo fxModulesViewInfo;
 	private PersistableModelInfo persistableModelInfo;
 	private WorkspaceInfo workspaceInfo;

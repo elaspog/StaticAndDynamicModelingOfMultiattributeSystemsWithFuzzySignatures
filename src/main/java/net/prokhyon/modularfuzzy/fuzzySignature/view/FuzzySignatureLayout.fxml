@@ -108,25 +108,9 @@
                               <Label text="Automaton type" />
                               <AnchorPane GridPane.columnIndex="1">
                                  <children>
-                                    <ComboBox fx:id="automatonTypeComboBox" prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <ComboBox fx:id="automatonTypeComboBox" onMouseClicked="#loadActualFuzzyAutomatons" prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
-                           </children>
-                        </GridPane>
-                        <GridPane>
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <children>
-                              <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                                 <children>
-                                    <Button fx:id="saveNodeButton" prefWidth="100.0" text="Save" />
-                                    <Button prefWidth="100.0" text="Cancel" />
-                                 </children>
-                              </HBox>
                            </children>
                         </GridPane>
                      </children>
