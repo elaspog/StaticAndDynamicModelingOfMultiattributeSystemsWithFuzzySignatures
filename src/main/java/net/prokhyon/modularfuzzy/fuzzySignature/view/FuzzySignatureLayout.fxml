@@ -41,8 +41,8 @@
                            <children>
                               <Label text="Signature name" />
                               <Label text="Description" GridPane.rowIndex="1" />
-                              <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2" />
-                              <TextField GridPane.columnIndex="1" />
+                              <TextArea fx:id="signatureDescriptionTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                              <TextField fx:id="signatureNameTextField" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                         <GridPane>
@@ -56,8 +56,8 @@
                               <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                  <children>
                                     <Button fx:id="saveSignatureButton" prefWidth="100.0" text="Save" />
-                                    <Button fx:id="clearSignatureButton" onAction="#clearSignatureButtonClicked" prefWidth="100.0" text="Clear" />
-                                    <Button fx:id="createSignatureButton" onAction="#createSignatureButtonClicked" prefWidth="100.0" text="Create" />
+                                    <Button fx:id="clearSignatureButton" onAction="#clearSignature" prefWidth="100.0" text="Clear" />
+                                    <Button fx:id="createSignatureButton" onAction="#createSignature" prefWidth="100.0" text="Create" />
                                  </children>
                               </HBox>
                            </children>
@@ -75,8 +75,8 @@
                            <children>
                               <Label text="Node name" />
                               <Label text="Description" GridPane.rowIndex="1" />
-                              <TextField GridPane.columnIndex="1" />
-                              <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                              <TextField fx:id="nodeNameTextField" GridPane.columnIndex="1" />
+                              <TextArea fx:id="nodeDescriptionTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2" />
                            </children>
                         </GridPane>
                         <GridPane>
@@ -91,7 +91,7 @@
                               <Label text="Aggregation op." />
                               <AnchorPane GridPane.columnIndex="1">
                                  <children>
-                                    <ComboBox prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <ComboBox fx:id="aggregationOperatorComboBox" prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </children>
@@ -108,7 +108,7 @@
                               <Label text="Automaton type" />
                               <AnchorPane GridPane.columnIndex="1">
                                  <children>
-                                    <ComboBox prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <ComboBox fx:id="automatonTypeComboBox" prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </children>
@@ -123,8 +123,8 @@
                            <children>
                               <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                  <children>
-                                    <Button fx:id="saveSignatureButton1" prefWidth="100.0" text="Save" />
-                                    <Button fx:id="createSignatureButton1" prefWidth="100.0" text="Cancel" />
+                                    <Button fx:id="saveNodeButton" prefWidth="100.0" text="Save" />
+                                    <Button prefWidth="100.0" text="Cancel" />
                                  </children>
                               </HBox>
                            </children>

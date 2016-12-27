@@ -62,9 +62,9 @@ public class FuzzyNodeTreeCell extends TextFieldTreeCell<FuzzyNode> {
 		if (item != null) {
 			String str = null;
 			try {
-				str = item.getName();
+				str = item.getFuzzyNodeName();
 			} catch (Exception e) {}
-			String parentName = (item.getParentNode() != null ? item.getParentNode().getName() : "" );
+			String parentName = (item.getParentNode() != null ? item.getParentNode().getFuzzyNodeName() : "" );
 			setText(str + " : " +"parent=" + parentName);
 		} else
 			setText(null);
