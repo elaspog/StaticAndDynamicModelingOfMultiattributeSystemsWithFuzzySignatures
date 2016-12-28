@@ -269,6 +269,7 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		this.fuzzySignature.set(null);
 		signatureNameTextField.textProperty().set(null);
 		signatureDescriptionTextArea.textProperty().set(null);
+		signatureTreeView.setRoot(null);
 	}
 
 	private void clearNodeViewElements() {
@@ -334,11 +335,8 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 	@FXML
 	public void clearSignature(){
 
-		signatureTreeView.setRoot(null);
-		signatureNameTextField.textProperty().set(null);
-		signatureDescriptionTextArea.textProperty().set(null);
-		fuzzySignature.set(null);
-		fuzzyNodeToEdit.set(null);
+		clearSignatureViewElements();
+		clearNodeViewElements();
 	}
 
 	@FXML
@@ -362,13 +360,6 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		return createdNodeCounter - 1;
 	}
 
-	private TreeItem<FuzzyNode> makeBranch(FuzzyNode fuzzyNode, TreeItem<FuzzyNode> parent) {
-		TreeItem<FuzzyNode> item = new TreeItem<>(fuzzyNode);
-		item.setExpanded(true);
-		parent.getChildren().add(item);
-		return item;
-	}
-
     /*
      * Implemented interfaces
      */
@@ -382,9 +373,9 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		if (modelToLoad == null)
 			return;
 
-		final FuzzySignature signatureToLoad = (FuzzySignature) modelToLoad;
-		final FuzzyNode rootNodeOfTheTree = (signatureToLoad).getRootNodeOfTheTree();
-		TreeItem<FuzzyNode> root = new TreeItem<>(rootNodeOfTheTree);
+		final FuzzySignature signatureToLoad = ((FuzzySignature) modelToLoad).deepCopy();
+		final FuzzyNode rootNodeOfTheTree = signatureToLoad.getRootNodeOfTheTree();
+		TreeItem<FuzzyNode> root = loadTreeRecursively(rootNodeOfTheTree, null);
 		root.setExpanded(true);
 		FuzzySignatureEditorController tmp = this;
 
@@ -400,8 +391,20 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		});
 		signatureTreeView.setRoot(root);
 
-		bindSignatureViewElementsToControllerProperties();
 		setSignatureViewElements(signatureToLoad);
+		bindSignatureViewElementsToControllerProperties();
+	}
+
+	private TreeItem<FuzzyNode> loadTreeRecursively(FuzzyNode node, TreeItem<FuzzyNode> parentItem){
+
+		final TreeItem<FuzzyNode> fuzzyNodeTreeItem = new TreeItem<>(node);
+		for (FuzzyNode fuzzyNode : node.getChildNodes()) {
+			loadTreeRecursively(fuzzyNode, fuzzyNodeTreeItem);
+		}
+		if (parentItem != null)
+			parentItem.getChildren().add(fuzzyNodeTreeItem);
+		fuzzyNodeTreeItem.setExpanded(true);
+		return fuzzyNodeTreeItem;
 	}
 
 }
