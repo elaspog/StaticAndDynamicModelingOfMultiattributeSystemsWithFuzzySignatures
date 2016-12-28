@@ -64,10 +64,18 @@ public class FuzzyNodeTreeCell extends TextFieldTreeCell<FuzzyNode> {
 			try {
 				str = item.getFuzzyNodeName();
 			} catch (Exception e) {}
-			String parentName = (item.getParentNode() != null ? item.getParentNode().getFuzzyNodeName() : "" );
-			setText(str + " : " +"parent=" + parentName);
+			setText(str + getItemDescriptingInformation(item));
 		} else
 			setText(null);
+	}
+
+	private String getItemDescriptingInformation(FuzzyNode item) {
+
+		if (item.getChildNodes().size() > 0) {
+			return (item.getAggregationType() != null ? " : <" + item.getAggregationType().toString() + ">" : "");
+		} else {
+			return (item.getFuzzyAutomaton() != null ? " : [" + item.getFuzzyAutomaton().getFuzzyAutomationName() + "]" : "");
+		}
 	}
 
 }

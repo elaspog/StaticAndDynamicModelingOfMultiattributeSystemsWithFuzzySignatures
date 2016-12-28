@@ -1,5 +1,7 @@
 package net.prokhyon.modularfuzzy.fuzzySignature.view;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -113,8 +115,20 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 			unbindNodeViewElementsFromControllerProperties();
 			clearNodeViewElements();
             if (newValue != null) {
+
+				aggregationOperatorComboBox.disableProperty().unbind();
+				automatonTypeComboBox.disableProperty().unbind();
+
+				BooleanBinding isNotSelectedNodeInTree = Bindings.isEmpty(signatureTreeView.getSelectionModel().getSelectedItems());
+				BooleanBinding isNotLoadedSignature = Bindings.isNull(fuzzySignature);
+
 				setNodeViewElements(newValue.getValue());
 				bindNodeViewElementsToControllerProperties();
+
+				final BooleanBinding aggregationBinding = newValue.leafProperty().or(isNotLoadedSignature).or(isNotSelectedNodeInTree);
+				final BooleanBinding automatonBinding = Bindings.not(newValue.leafProperty()).or(isNotLoadedSignature).or(isNotSelectedNodeInTree);
+
+				setComboBoxBindings(aggregationBinding, automatonBinding);
 			}
         });
 
@@ -151,6 +165,37 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 						}
 					}
 				});
+
+		aggregationOperatorComboBox.valueProperty().addListener((observable, oldValue, newValue) -> signatureTreeView.refresh());
+		automatonTypeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> signatureTreeView.refresh());
+		nodeDescriptionTextArea.textProperty().addListener((observable, oldValue, newValue) -> signatureTreeView.refresh());
+		nodeNameTextField.textProperty().addListener((observable, oldValue, newValue) -> signatureTreeView.refresh());
+
+		bindViewElementsToControllerProperties();
+	}
+
+	private void bindViewElementsToControllerProperties() {
+
+		BooleanBinding isLoadedSignature = Bindings.isNotNull(fuzzySignature);
+		BooleanBinding isNotLoadedSignature = Bindings.isNull(fuzzySignature);
+		BooleanBinding isNotSelectedNodeInTree = Bindings.isEmpty(signatureTreeView.getSelectionModel().getSelectedItems());
+
+		signatureTreeView.disableProperty().bind(isNotLoadedSignature);
+		createSignatureButton.disableProperty().bind(isLoadedSignature);
+		clearSignatureButton.disableProperty().bind(isNotLoadedSignature);
+		saveSignatureButton.disableProperty().bind(isNotLoadedSignature);
+		signatureNameTextField.disableProperty().bind(isNotLoadedSignature);
+		signatureDescriptionTextArea.disableProperty().bind(isNotLoadedSignature);
+		nodeNameTextField.disableProperty().bind(isNotLoadedSignature.or(isNotSelectedNodeInTree));
+		nodeDescriptionTextArea.disableProperty().bind(isNotLoadedSignature.or(isNotSelectedNodeInTree));
+
+		setComboBoxBindings(isNotLoadedSignature.or(isNotSelectedNodeInTree), isNotLoadedSignature.or(isNotSelectedNodeInTree));
+	}
+
+	private void setComboBoxBindings(BooleanBinding aggregationBinding, BooleanBinding automatonBinding){
+
+		aggregationOperatorComboBox.disableProperty().bind(aggregationBinding);
+		automatonTypeComboBox.disableProperty().bind(automatonBinding);
 	}
 
 	private void bindSignatureViewElementsToControllerProperties() {
@@ -241,6 +286,8 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		signatureTreeView.setRoot(null);
 		signatureNameTextField.textProperty().set(null);
 		signatureDescriptionTextArea.textProperty().set(null);
+		fuzzySignature.set(null);
+		fuzzyNodeToEdit.set(null);
 	}
 
 	@FXML
@@ -252,7 +299,6 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 
 		final ObservableList<FuzzyAutomaton> fuzzySetSystems = (ObservableList<FuzzyAutomaton>) workspaceElements;
 		this.automatonTypeComboBox.setItems(FXCollections.observableArrayList(fuzzySetSystems));
-		//this.automatonTypeComboBox.valueProperty().bindBidirectional(fuzzyNodeToEdit.get().fuzzyAutomatonProperty());
 	}
 
 	public int getNextNodeCounterValue(){
