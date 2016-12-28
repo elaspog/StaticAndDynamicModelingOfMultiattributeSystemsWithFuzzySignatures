@@ -303,11 +303,11 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		FuzzySignature fuzzySignature = this.fuzzySignature.get();
 		if (fuzzySignature != null){
 			final FuzzySignature fs = fuzzySignature.deepCopy();
-			String copiedUuid = fs.getUUID();
+			String copiedUuid = fs.getUuid();
 
 			FuzzySignature alreadyLoadedSignature = null;
 			for (FuzzySignature signature : fuzzySignatures) {
-				String checkedUuid = signature.getUUID();
+				String checkedUuid = signature.getUuid();
 				if (checkedUuid.equals(copiedUuid)) {
 					alreadyLoadedSignature = signature;
 				}

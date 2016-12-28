@@ -35,18 +35,13 @@ public class FuzzySignature extends WorkspaceElement
     }
 
     public FuzzySignature(FuzzySignature otherFuzzySignature){
-        this(otherFuzzySignature.getUUID(), otherFuzzySignature.getFuzzySignatureName(),
+        this(otherFuzzySignature.getUuid(), otherFuzzySignature.getFuzzySignatureName(),
                 otherFuzzySignature.getRootNodeOfTheTree(), otherFuzzySignature.getFuzzySignatureDescription());
     }
 
     /*
      * Implemented interfaces
      */
-
-    @Override
-    public String getUUID() {
-        return uuid.get();
-    }
 
     @Override
     public String getListElementIdentifier() {
@@ -71,6 +66,7 @@ public class FuzzySignature extends WorkspaceElement
      * Getters and Setters
      */
 
+    @Override
     public String getUuid() {
         return uuid.get();
     }

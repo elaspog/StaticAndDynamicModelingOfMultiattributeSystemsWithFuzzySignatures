@@ -1,15 +1,11 @@
 package net.prokhyon.modularfuzzy.shell.services;
 
-import java.io.File;
-import java.util.*;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
-
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
-import net.prokhyon.modularfuzzy.common.*;
+import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleDescriptor2FxModel;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.common.errors.NotConvertibleDescriptorException;
@@ -28,6 +24,9 @@ import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureModuleDescriptor;
 import net.prokhyon.modularfuzzy.pathValues.PathValuesModuleDescriptor;
 import net.prokhyon.modularfuzzy.shell.util.FxDialogHelper;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.io.File;
+import java.util.*;
 
 public class CommonServicesImplSingleton implements CommonServices, ShellServices, ShellDialogServices {
 
@@ -309,7 +308,7 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> workspaceInfoObservableListEntry : registeredStores.entrySet()) {
 			final ObservableList<? extends WorkspaceElement> value = workspaceInfoObservableListEntry.getValue();
 			for (WorkspaceElement workspaceElement : value) {
-				final String workspaceElementUUID = workspaceElement.getUUID();
+				final String workspaceElementUUID = workspaceElement.getUuid();
 				if (workspaceElementUUID.equals(uuid))
 					return (T) workspaceElement;
 			}

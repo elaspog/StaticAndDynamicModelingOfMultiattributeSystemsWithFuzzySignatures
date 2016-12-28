@@ -97,6 +97,7 @@ public class FuzzySetSystem extends WorkspaceElement
 		return fuzzySets;
 	}
 
+	@Override
 	public String getUuid() {
 		return uuid.get();
 	}
@@ -126,11 +127,6 @@ public class FuzzySetSystem extends WorkspaceElement
 
 	public FuzzySetSystem deepCopy() {
 		return new FuzzySetSystem(this);
-	}
-
-	@Override
-	public String getUUID() {
-		return uuid.get();
 	}
 
 	@Override

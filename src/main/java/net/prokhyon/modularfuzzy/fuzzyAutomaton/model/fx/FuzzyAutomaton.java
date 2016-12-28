@@ -78,10 +78,11 @@ public class FuzzyAutomaton extends WorkspaceElement
         }
 
         return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton(this.getUuid(),
-                this.getFuzzyAutomationName(), this.getFuzzyAutomatonDescription(), this.fuzzySetSystem.get().getUUID(), descriptorFuzzyStates,
+                this.getFuzzyAutomationName(), this.getFuzzyAutomatonDescription(), this.fuzzySetSystem.get().getUuid(), descriptorFuzzyStates,
                 descriptorFuzzyTransitions, this.getCostVectorDimensionObj());
     }
 
+    @Override
     public String getUuid() {
         return uuid.get();
     }
@@ -176,11 +177,6 @@ public class FuzzyAutomaton extends WorkspaceElement
 
     public void setFuzzySetSystem(FuzzySetSystem fuzzySetSystem) {
         this.fuzzySetSystem.set(fuzzySetSystem);
-    }
-
-    @Override
-    public String getUUID() {
-        return uuid.get();
     }
 
     @Override
