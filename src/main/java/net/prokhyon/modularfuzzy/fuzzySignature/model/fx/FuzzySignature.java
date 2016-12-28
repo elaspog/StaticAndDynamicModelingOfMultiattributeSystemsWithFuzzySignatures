@@ -20,7 +20,6 @@ public class FuzzySignature extends WorkspaceElement
     private final StringProperty fuzzySignatureName;
     private final StringProperty fuzzySignatureDescription;
     private FuzzyNode rootNodeOfTheTree;
-    private List<FuzzyNode> allNodesOfTheTree;
 
     /*
      * Constructors
@@ -28,16 +27,16 @@ public class FuzzySignature extends WorkspaceElement
 
     public FuzzySignature(String uuid, String signatureName, FuzzyNode rootNodeOfTheTree, String fuzzySignatureDescription){
 
+        super();
         this.uuid = CommonUtils.initializeUUIDPropertyFromString(uuid);
         this.fuzzySignatureName = new SimpleStringProperty(signatureName);
         this.fuzzySignatureDescription = new SimpleStringProperty(fuzzySignatureDescription);
-        this.rootNodeOfTheTree = rootNodeOfTheTree;
-        this.allNodesOfTheTree = new ArrayList<>();
-        allNodesOfTheTree.add(rootNodeOfTheTree);
+        this.rootNodeOfTheTree = rootNodeOfTheTree.deepCopy();
     }
 
     public FuzzySignature(FuzzySignature otherFuzzySignature){
-        this(otherFuzzySignature.getUUID(), otherFuzzySignature.getFuzzySignatureName(), otherFuzzySignature.getRootNodeOfTheTree(), otherFuzzySignature.getFuzzySignatureDescription());
+        this(otherFuzzySignature.getUUID(), otherFuzzySignature.getFuzzySignatureName(),
+                otherFuzzySignature.getRootNodeOfTheTree(), otherFuzzySignature.getFuzzySignatureDescription());
     }
 
     /*
@@ -46,17 +45,26 @@ public class FuzzySignature extends WorkspaceElement
 
     @Override
     public String getUUID() {
-        return null;
+        return uuid.get();
     }
 
     @Override
     public String getListElementIdentifier() {
-        return "_";
+
+        return fuzzySignatureName.get() + " : (" + getChildrenRecursivelyDFS(rootNodeOfTheTree).size() + ")";
     }
 
     @Override
     public net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature convert2DescriptorModel() {
         return null;
+    }
+
+    /*
+     * Methods
+     */
+
+    public FuzzySignature deepCopy() {
+        return new FuzzySignature(this);
     }
 
     /*
@@ -95,14 +103,6 @@ public class FuzzySignature extends WorkspaceElement
         this.rootNodeOfTheTree = rootNodeOfTheTree;
     }
 
-    public List<FuzzyNode> getAllNodesOfTheTree() {
-        return allNodesOfTheTree;
-    }
-
-    public void setAllNodesOfTheTree(List<FuzzyNode> allNodesOfTheTree) {
-        this.allNodesOfTheTree = allNodesOfTheTree;
-    }
-
     public String getFuzzySignatureDescription() {
         return fuzzySignatureDescription.get();
     }
@@ -113,6 +113,21 @@ public class FuzzySignature extends WorkspaceElement
 
     public void setFuzzySignatureDescription(String fuzzySignatureDescription) {
         this.fuzzySignatureDescription.set(fuzzySignatureDescription);
+    }
+
+    List<FuzzyNode> getAllNodesOfTree(){
+
+        return getChildrenRecursivelyDFS(rootNodeOfTheTree);
+    }
+
+    private List<FuzzyNode> getChildrenRecursivelyDFS(FuzzyNode rootNodeOfTheTree) {
+
+        List<FuzzyNode> retList = new ArrayList<>();
+        retList.add(rootNodeOfTheTree);
+        for (FuzzyNode childNode : rootNodeOfTheTree.getChildNodes()) {
+            retList.addAll(getChildrenRecursivelyDFS(childNode));
+        }
+        return retList;
     }
 
 }

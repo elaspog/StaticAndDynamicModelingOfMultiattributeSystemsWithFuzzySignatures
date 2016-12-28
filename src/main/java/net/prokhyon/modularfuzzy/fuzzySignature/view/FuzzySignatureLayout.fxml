@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane minWidth="700.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.prokhyon.modularfuzzy.fuzzySignature.view.FuzzySignatureEditorController">
+<AnchorPane minWidth="700.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.prokhyon.modularfuzzy.fuzzySignature.view.FuzzySignatureEditorController">
    <children>
       <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -55,7 +55,7 @@
                            <children>
                               <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                  <children>
-                                    <Button fx:id="saveSignatureButton" prefWidth="100.0" text="Save" />
+                                    <Button fx:id="saveSignatureButton" onAction="#saveSignature" prefWidth="100.0" text="Save" />
                                     <Button fx:id="clearSignatureButton" onAction="#clearSignature" prefWidth="100.0" text="Clear" />
                                     <Button fx:id="createSignatureButton" onAction="#createSignature" prefWidth="100.0" text="Create" />
                                  </children>

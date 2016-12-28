@@ -21,29 +21,32 @@ public class FuzzyNode extends FuzzyFxBase {
     private final ObjectProperty<AggregationType> aggregationType;
     private final ObjectProperty<FuzzyAutomaton> fuzzyAutomaton;
 
-    public FuzzyNode(String name) {
-        this(name, null, null, null, null, null);
-    }
-
-    public FuzzyNode(String name, List<FuzzyNode> childNodes) {
-        this(name, null, childNodes, null, null, null);
-    }
-
-    public FuzzyNode(String name, FuzzyNode parentNode) {
-        this(name, parentNode, null, null, null, null);
-    }
-
     public FuzzyNode(String name, FuzzyNode parentNode, List<FuzzyNode> childNodes, String description, AggregationType aggregationType, FuzzyAutomaton fuzzyAutomaton) {
 
+        super();
         this.fuzzyNodeName = new SimpleStringProperty(name);
         this.fuzzyNodeDescription = new SimpleStringProperty(description);
         this.aggregationType = new SimpleObjectProperty<>(aggregationType);
         this.fuzzyAutomaton = new  SimpleObjectProperty<>(fuzzyAutomaton);
         this.parentNode = parentNode;
-        if (childNodes != null)
-            this.childNodes = childNodes;
-        else
-            this.childNodes = new ArrayList<>();
+
+        this.childNodes = new ArrayList<>();
+        if (childNodes != null) {
+            for (FuzzyNode childNode : childNodes) {
+                this.childNodes.add(childNode.deepCopy());
+            }
+        }
+    }
+
+    public FuzzyNode(FuzzyNode otherFuzzyNode){
+
+        this(otherFuzzyNode.getFuzzyNodeName(), otherFuzzyNode.getParentNode(), otherFuzzyNode.getChildNodes(),
+                otherFuzzyNode.getFuzzyNodeDescription(), otherFuzzyNode.getAggregationType(),
+                otherFuzzyNode.getFuzzyAutomaton());
+    }
+
+    public FuzzyNode deepCopy() {
+        return new FuzzyNode(this);
     }
 
     public FuzzyNode getParentNode() {
@@ -61,7 +64,6 @@ public class FuzzyNode extends FuzzyFxBase {
     public void setChildNodes(List<FuzzyNode> childNodes) {
         this.childNodes = childNodes;
     }
-
 
     public String getFuzzyNodeName() {
         return fuzzyNodeName.get();
@@ -110,4 +112,5 @@ public class FuzzyNode extends FuzzyFxBase {
     public void setFuzzyAutomaton(FuzzyAutomaton fuzzyAutomaton) {
         this.fuzzyAutomaton.set(fuzzyAutomaton);
     }
+
 }

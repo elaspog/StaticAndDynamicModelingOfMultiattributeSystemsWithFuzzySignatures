@@ -13,15 +13,20 @@ public class FuzzySignatureModuleDescriptor implements ModuleDescriptor {
 
 	private CommonServices services;
 
+	private final String VIEW_NAME = "Signatures";
+	private FxModulesViewInfo fxModulesViewInfo;
+	private PersistableModelInfo persistableModelInfo;
+	private WorkspaceInfo workspaceInfo;
+
 	@Override
 	public void initializeModule() {
 		services = new ServiceFactory().getCommonServices();
 
-		FxModulesViewInfo viewOfModuleInfo = new FxModulesViewInfo("Fuzzy Signature Editor",
+		this.fxModulesViewInfo = new FxModulesViewInfo("Fuzzy Signature Editor",
 				"view/FuzzySignatureLayout.fxml", FuzzySignatureModuleDescriptor.class, AnchorPane.class);
-		services.registerView(viewOfModuleInfo);
+		services.registerView(fxModulesViewInfo);
 
-		PersistableModelInfo pmt = new PersistableModelInfo(null,
+		this.persistableModelInfo = new PersistableModelInfo(null,
 				null,
 				null,
 				null,
@@ -29,9 +34,25 @@ public class FuzzySignatureModuleDescriptor implements ModuleDescriptor {
 				net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature.class,
 				net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature.class);
 
-		WorkspaceInfo storeInfo = new WorkspaceInfo("Signatures", viewOfModuleInfo, pmt);
+		this.workspaceInfo = new WorkspaceInfo(VIEW_NAME, fxModulesViewInfo, persistableModelInfo);
 
-		services.<FuzzySignature> registerModelTypeInStore(storeInfo);
+		services.<FuzzySignature> registerModelTypeInStore(workspaceInfo);
+	}
+
+	public String getViewName() {
+		return VIEW_NAME;
+	}
+
+	public FxModulesViewInfo getFxModulesViewInfo() {
+		return fxModulesViewInfo;
+	}
+
+	public PersistableModelInfo getPersistableModelInfo() {
+		return persistableModelInfo;
+	}
+
+	public WorkspaceInfo getWorkspaceInfo() {
+		return workspaceInfo;
 	}
 
 }

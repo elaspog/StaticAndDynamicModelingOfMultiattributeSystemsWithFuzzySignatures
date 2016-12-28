@@ -12,14 +12,17 @@ import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
+import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
+import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.AggregationType;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzyNode;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
+import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
 import java.util.Map;
 
@@ -83,6 +86,8 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 
 	private FuzzyAutomatonModuleDescriptor fuzzyAutomatonModuleDescriptor;
 
+	private FuzzySignatureModuleDescriptor fuzzySignatureModuleDescriptor;
+
     /*
      * Methods
      */
@@ -99,6 +104,12 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 				final FuzzyAutomatonModuleDescriptor famdv = (FuzzyAutomatonModuleDescriptor) value;
 				if(famdv.getViewName().equals("Automatons")){
 					this.fuzzyAutomatonModuleDescriptor = famdv;
+				}
+			}
+			if (key == FuzzySignatureModuleDescriptor.class ) {
+				final FuzzySignatureModuleDescriptor fsmdv = (FuzzySignatureModuleDescriptor) value;
+				if(fsmdv.getViewName().equals("Signatures")){
+					this.fuzzySignatureModuleDescriptor = fsmdv;
 				}
 			}
 		}
@@ -274,10 +285,50 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 
 		createdSignatureCounter++;
 
-		final FuzzyNode rootNode = new FuzzyNode("Node" + getNextNodeCounterValue());
+		final FuzzyNode rootNode = new FuzzyNode("Node" + getNextNodeCounterValue(), null, null, null, null, null);
 		final FuzzySignature fuzzySignature = new FuzzySignature(null, "Signature" + createdSignatureCounter, rootNode, "sample description");
 
 		loadWithData(fuzzySignature);
+	}
+
+	@FXML
+	private void saveSignature(){
+
+		final Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = this.commonServices.getRegisteredStores();
+		final WorkspaceInfo workspaceInfo = fuzzySignatureModuleDescriptor.getWorkspaceInfo();
+		final ObservableList<? extends WorkspaceElement> workspaceElements = registeredStores.get(workspaceInfo);
+		final ObservableList<FuzzySignature> fuzzySignatures = (ObservableList<FuzzySignature>) workspaceElements;
+
+		ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();
+		FuzzySignature fuzzySignature = this.fuzzySignature.get();
+		if (fuzzySignature != null){
+			final FuzzySignature fs = fuzzySignature.deepCopy();
+			String copiedUuid = fs.getUUID();
+
+			FuzzySignature alreadyLoadedSignature = null;
+			for (FuzzySignature signature : fuzzySignatures) {
+				String checkedUuid = signature.getUUID();
+				if (checkedUuid.equals(copiedUuid)) {
+					alreadyLoadedSignature = signature;
+				}
+			}
+
+			if (alreadyLoadedSignature != null ){
+				int choice = shellDialogServices.selectFromOptions(
+						"Model conflict",
+						"This model has an original in model store.",
+						"Would you like to overwrite it, or create a new one instead?",
+						"Overwrite", "Create new");
+				if (choice == 1){
+					commonServices.updateModelInRegisteredStore(alreadyLoadedSignature, fs);
+				} else if (choice == 2){
+					fs.setUuid(CommonUtils.initializeUUIDPropertyFromString(null).get());
+					commonServices.addModelToRegisteredStore(fs);
+				}
+			} else {
+				commonServices.addModelToRegisteredStore(fs);
+			}
+		}
 	}
 
 	@FXML
@@ -297,8 +348,8 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		final WorkspaceInfo workspaceInfo = fuzzyAutomatonModuleDescriptor.getWorkspaceInfo();
 		final ObservableList<? extends WorkspaceElement> workspaceElements = registeredStores.get(workspaceInfo);
 
-		final ObservableList<FuzzyAutomaton> fuzzySetSystems = (ObservableList<FuzzyAutomaton>) workspaceElements;
-		this.automatonTypeComboBox.setItems(FXCollections.observableArrayList(fuzzySetSystems));
+		final ObservableList<FuzzyAutomaton> fuzzyAutomatons = (ObservableList<FuzzyAutomaton>) workspaceElements;
+		this.automatonTypeComboBox.setItems(FXCollections.observableArrayList(fuzzyAutomatons));
 	}
 
 	public int getNextNodeCounterValue(){

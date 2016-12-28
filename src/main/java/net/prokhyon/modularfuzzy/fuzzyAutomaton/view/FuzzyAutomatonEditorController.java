@@ -12,6 +12,7 @@ import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
+import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
@@ -490,6 +491,8 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	@FXML
 	private void saveAutomaton(){
 
+		// TODO Update according to FuzzySignature's solution (delete originallyLoaded state, use common service)
+
 		ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();
 		FuzzyAutomaton fuzzyAutomaton = this.fuzzyAutomaton.get();
 		if (fuzzyAutomaton != null){
@@ -503,6 +506,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 				if (choice == 1){
 					commonServices.updateModelInRegisteredStore(this.originallyLoadedFuzzyAutomaton, fa);
 				} else if (choice == 2){
+					fa.setUuid(CommonUtils.initializeUUIDPropertyFromString(null).get());
 					commonServices.addModelToRegisteredStore(fa);
 				}
 			} else {

@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.common.CommonServices;
+import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetPoint;
@@ -254,6 +255,8 @@ public class FuzzySetEditorController implements LoadableDataController {
 	@FXML
 	private void saveSystem() {
 
+		// TODO Update according to FuzzySignature's solution (delete originallyLoaded state, use common service)
+
 		CommonServices commonServices = new ServiceFactory().getCommonServices();
 		ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();
 		FuzzySetSystem fuzzySetSystem = fuzzySystem.get();
@@ -268,6 +271,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 				if (choice == 1){
 					commonServices.updateModelInRegisteredStore(this.originallyLoadedFuzzySystem, fss);
 				} else if (choice == 2){
+					fss.setUuid(CommonUtils.initializeUUIDPropertyFromString(null).get());
 					commonServices.addModelToRegisteredStore(fss);
 				}
 			} else {

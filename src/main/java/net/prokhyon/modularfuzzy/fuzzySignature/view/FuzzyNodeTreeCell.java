@@ -24,7 +24,7 @@ public class FuzzyNodeTreeCell extends TextFieldTreeCell<FuzzyNode> {
 			final FuzzyNode thisNode = (item != null ? item.getValue() : null);
 
 			// Handling tree in fuzzy model
-			final FuzzyNode fuzzyNode = new FuzzyNode("Node" + fuzzySignatureEditorController.getNextNodeCounterValue(), thisNode);
+			final FuzzyNode fuzzyNode = new FuzzyNode("Node" + fuzzySignatureEditorController.getNextNodeCounterValue(), thisNode, null, null, null, null);
 			thisNode.getChildNodes().add(fuzzyNode);
 
 			// Handling tree in TreeView
