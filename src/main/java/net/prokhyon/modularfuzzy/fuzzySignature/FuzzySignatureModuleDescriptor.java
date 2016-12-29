@@ -7,6 +7,7 @@ import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature;
+import net.prokhyon.modularfuzzy.fuzzySignature.util.ModelDomainIOManager;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 
 public class FuzzySignatureModuleDescriptor implements ModuleDescriptor {
@@ -26,11 +27,11 @@ public class FuzzySignatureModuleDescriptor implements ModuleDescriptor {
 				"view/FuzzySignatureLayout.fxml", FuzzySignatureModuleDescriptor.class, AnchorPane.class);
 		services.registerView(fxModulesViewInfo);
 
-		this.persistableModelInfo = new PersistableModelInfo(null,
+		this.persistableModelInfo = new PersistableModelInfo(new ModelDomainIOManager(),
+				net.prokhyon.modularfuzzy.fuzzySignature.model.ModelConverter.class,
 				null,
 				null,
-				null,
-				null,
+				net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature.class,
 				net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature.class,
 				net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature.class);
 

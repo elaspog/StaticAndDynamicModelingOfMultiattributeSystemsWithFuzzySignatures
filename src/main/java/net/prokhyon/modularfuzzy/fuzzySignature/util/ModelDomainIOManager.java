@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.fuzzyAutomaton.util;
+package net.prokhyon.modularfuzzy.fuzzySignature.util;
 
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
@@ -60,12 +60,12 @@ public class ModelDomainIOManager implements IPersistableModel {
         for (T m : models) {
             try {
 
-                final net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton fxFuzzyAutomaton = (net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton) m;
-                final net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton descriptorFuzzyAutomaton = fxFuzzyAutomaton.convert2DescriptorModel();
-                String newFileName = fxFuzzyAutomaton.getFuzzyAutomationName() + "_" + fxFuzzyAutomaton.getUuid() + ".xml";
+                final net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature fxFuzzySignature = (net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature) m;
+                final net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature descriptorFuzzySignature = fxFuzzySignature.convert2DescriptorModel();
+                String newFileName = fxFuzzySignature.getFuzzySignatureName() + "_" + fxFuzzySignature.getUuid() + ".xml";
 
                 Path path = Paths.get(dirPath, newFileName);
-                descriptorHandler.saveToXmlFile(path.toString(), descriptorHandler.generateXmlStringFromModel(descriptorFuzzyAutomaton));
+                descriptorHandler.saveToXmlFile(path.toString(), descriptorHandler.generateXmlStringFromModel(descriptorFuzzySignature));
 
             } catch (Exception e){
                 shellDialogServices.informErrorWithStacktraceDialog(e,
@@ -80,10 +80,10 @@ public class ModelDomainIOManager implements IPersistableModel {
 
         try {
 
-            final net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton fxFuzzyAutomaton = (net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton) model;
-            final net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton descriptorFuzzyAutomaton = fxFuzzyAutomaton.convert2DescriptorModel();
+            final net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature fxFuzzySignature = (net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature) model;
+            final net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature descriptorFuzzySignature = fxFuzzySignature.convert2DescriptorModel();
 
-            String initialName = fxFuzzyAutomaton.getFuzzyAutomationName() + "_" + fxFuzzyAutomaton.getUuid();
+            String initialName = fxFuzzySignature.getFuzzySignatureName() + "_" + fxFuzzySignature.getUuid();
             File selectedFile = shellDialogServices.saveFileDialog(initialName, "xml", "json");
             if (selectedFile == null)
                 return;
@@ -91,9 +91,9 @@ public class ModelDomainIOManager implements IPersistableModel {
             DescriptorHandler descriptorHandler = new DescriptorHandler();
 
             if (filePath.endsWith("xml")) {
-                descriptorHandler.saveToXmlFile(filePath, descriptorHandler.generateXmlStringFromModel(descriptorFuzzyAutomaton));
+                descriptorHandler.saveToXmlFile(filePath, descriptorHandler.generateXmlStringFromModel(descriptorFuzzySignature));
             } else {
-                descriptorHandler.saveToTextFile(filePath, descriptorHandler.generateJsonStringFromModel(descriptorFuzzyAutomaton));
+                descriptorHandler.saveToTextFile(filePath, descriptorHandler.generateJsonStringFromModel(descriptorFuzzySignature));
             }
 
         } catch (Exception e){
