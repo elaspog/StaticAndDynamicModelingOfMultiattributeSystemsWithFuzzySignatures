@@ -51,7 +51,18 @@ public class FuzzySignature extends WorkspaceElement
 
     @Override
     public net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature convert2DescriptorModel() {
-        return null;
+
+        String uuid = getUuid();
+        String fuzzySignatureName = getFuzzySignatureName();
+        String fuzzySignatureDescription = getFuzzySignatureDescription();
+        FuzzyNode rootNodeOfTheTree = getRootNodeOfTheTree();
+
+        net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzyNode fuzzyNode = rootNodeOfTheTree.convert2DescriptorModel();
+
+        net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature fuzzySignature
+                = new net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature(uuid, fuzzySignatureName, fuzzySignatureDescription, fuzzyNode);
+
+        return fuzzySignature;
     }
 
     /*
@@ -111,7 +122,7 @@ public class FuzzySignature extends WorkspaceElement
         this.fuzzySignatureDescription.set(fuzzySignatureDescription);
     }
 
-    List<FuzzyNode> getAllNodesOfTree(){
+    public List<FuzzyNode> getAllNodesOfTree(){
 
         return getChildrenRecursivelyDFS(rootNodeOfTheTree);
     }

@@ -4,6 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.AggregationType;
@@ -11,7 +12,8 @@ import net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.AggregationType
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuzzyNode extends FuzzyFxBase {
+public class FuzzyNode extends FuzzyFxBase
+        implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzyNode, net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzyNode>{
 
     private final StringProperty fuzzyNodeName;
     private final StringProperty fuzzyNodeDescription;
@@ -111,6 +113,30 @@ public class FuzzyNode extends FuzzyFxBase {
 
     public void setFuzzyAutomaton(FuzzyAutomaton fuzzyAutomaton) {
         this.fuzzyAutomaton.set(fuzzyAutomaton);
+    }
+
+    @Override
+    public net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzyNode convert2DescriptorModel() {
+
+        AggregationType aggregationType = getAggregationType();
+        List<FuzzyNode> childNodes = getChildNodes();
+        FuzzyAutomaton fuzzyAutomaton = getFuzzyAutomaton();
+        String fuzzyNodeDescription = getFuzzyNodeDescription();
+        String fuzzyNodeName = getFuzzyNodeName();
+        //getParentNode();
+        String automatonUuid = null;
+
+        // Inner node
+        List<net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzyNode> convertedChildNodes = new ArrayList<>();
+        for (FuzzyNode childNode : childNodes) {
+            convertedChildNodes.add(childNode.convert2DescriptorModel());
+        }
+
+        // Leaf node
+        if (childNodes.size() == 0)
+            automatonUuid = fuzzyAutomaton.getUuid();
+
+        return new net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzyNode(fuzzyNodeName, fuzzyNodeDescription, convertedChildNodes, aggregationType, automatonUuid);
     }
 
 }
