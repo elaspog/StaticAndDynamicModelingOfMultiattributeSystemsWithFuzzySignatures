@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><FuzzySetSystem uuid="5a0df023-742e-41b4-bb80-591f8acb70da" typename="set_3-quality-trapezoids-equidist" FuzzySetType="CUSTOM">
+    <description>Expresses quality: [bad, medium, good]</description>
+    <FuzzySet id="bad" type="TRAPEZOID">
+        <BelowPoint X="0.0"/>
+        <AbovePoint X="0.0"/>
+        <AbovePoint X="0.2"/>
+        <BelowPoint X="0.4"/>
+    </FuzzySet>
+    <FuzzySet id="medium" type="TRAPEZOID">
+        <BelowPoint X="0.2"/>
+        <AbovePoint X="0.4"/>
+        <AbovePoint X="0.6"/>
+        <BelowPoint X="0.8"/>
+    </FuzzySet>
+    <FuzzySet id="good" type="TRAPEZOID">
+        <BelowPoint X="0.6"/>
+        <AbovePoint X="0.8"/>
+        <AbovePoint X="1.0"/>
+        <BelowPoint X="1.0"/>
+    </FuzzySet>
+</FuzzySetSystem>

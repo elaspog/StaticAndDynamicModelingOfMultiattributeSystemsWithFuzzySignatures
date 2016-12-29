@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><FuzzySetSystem uuid="06a1936a-6290-45dc-a67c-6632d8661cf8" typename="set_5-quantity-triangles-equidist" FuzzySetType="CUSTOM">
+    <description>Expresses quality: [very_few, less, medium, more, many]</description>
+    <FuzzySet id="very_few" type="TRIANGULAR">
+        <BelowPoint X="0.0"/>
+        <AbovePoint X="0.0"/>
+        <BelowPoint X="0.25"/>
+    </FuzzySet>
+    <FuzzySet id="less" type="TRIANGULAR">
+        <BelowPoint X="0.0"/>
+        <AbovePoint X="0.25"/>
+        <BelowPoint X="0.5"/>
+    </FuzzySet>
+    <FuzzySet id="medium" type="TRIANGULAR">
+        <BelowPoint X="0.25"/>
+        <AbovePoint X="0.5"/>
+        <BelowPoint X="0.75"/>
+    </FuzzySet>
+    <FuzzySet id="more" type="TRIANGULAR">
+        <BelowPoint X="0.5"/>
+        <AbovePoint X="0.75"/>
+        <BelowPoint X="1.0"/>
+    </FuzzySet>
+    <FuzzySet id="many" type="TRIANGULAR">
+        <BelowPoint X="0.75"/>
+        <AbovePoint X="1.0"/>
+        <BelowPoint X="1.0"/>
+    </FuzzySet>
+</FuzzySetSystem>
