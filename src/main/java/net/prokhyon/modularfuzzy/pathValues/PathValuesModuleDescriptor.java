@@ -1,6 +1,6 @@
 package net.prokhyon.modularfuzzy.pathValues;
 
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
@@ -15,7 +15,7 @@ public class PathValuesModuleDescriptor implements ModuleDescriptor {
 		services = new ServiceFactory().getCommonServices();
 
 		FxModulesViewInfo moduleInfo = new FxModulesViewInfo("Path Values Editor",
-				"view/PathValuesLayout.fxml", PathValuesModuleDescriptor.class, StackPane.class);
+				"view/PathValuesLayout.fxml", PathValuesModuleDescriptor.class, AnchorPane.class);
 		services.registerView(moduleInfo);
 	}
 
