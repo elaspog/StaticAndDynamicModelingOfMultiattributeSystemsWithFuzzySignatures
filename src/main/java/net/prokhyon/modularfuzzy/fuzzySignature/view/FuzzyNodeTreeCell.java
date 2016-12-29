@@ -74,7 +74,7 @@ public class FuzzyNodeTreeCell extends TextFieldTreeCell<FuzzyNode> {
 		if (item.getChildNodes().size() > 0) {
 			return (item.getAggregationType() != null ? " : <" + item.getAggregationType().toString() + ">" : "");
 		} else {
-			return (item.getFuzzyAutomaton() != null ? " : [" + item.getFuzzyAutomaton().getFuzzyAutomationName() + "]" : "");
+			return (item.getFuzzyAutomaton() != null ? " : [" + item.getFuzzyAutomaton().getFuzzyAutomatonName() + "]" : "");
 		}
 	}
 

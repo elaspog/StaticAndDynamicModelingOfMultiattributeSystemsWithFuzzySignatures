@@ -15,6 +15,7 @@ import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState;
@@ -31,17 +32,9 @@ import java.util.stream.Collectors;
 
 public class FuzzyAutomatonEditorController implements LoadableDataController {
 
-	private CommonServices commonServices;
-
-	private FuzzySetModuleDescriptor fuzzySetModuleDescriptor;
-
-	private ObjectProperty<FuzzyAutomaton> fuzzyAutomaton;
-
-	private ObjectProperty<FuzzyState> fuzzyStateToEdit;
-
-	private ObjectProperty<FuzzyTransition> fuzzyTransitionToEdit;
-
-	private FuzzyAutomaton originallyLoadedFuzzyAutomaton;
+    /*
+     * UI elements
+     */
 
 	@FXML
 	private TextField automatonNameTextField;
@@ -127,10 +120,37 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	@FXML
 	private Button saveButton;
 
+	/*
+     * Services
+     */
+
+	private CommonServices commonServices;
+
+	private FuzzyAutomatonModuleDescriptor fuzzyAutomatonModuleDescriptor;
+
+	private FuzzySetModuleDescriptor fuzzySetModuleDescriptor;
+
+    /*
+     * Properties
+     */
+
+	private ObjectProperty<FuzzyAutomaton> fuzzyAutomaton;
+
+	private ObjectProperty<FuzzyState> fuzzyStateToEdit;
+
+	private ObjectProperty<FuzzyTransition> fuzzyTransitionToEdit;
+
+	/*
+     * Variables
+     */
+
 	private int createdAutomatonCounter;
 	private int createdStateCounter;
 	private int createdTransitionCounter;
 
+    /*
+     * Methods
+     */
 
 	@FXML
 	private void initialize() {
@@ -144,6 +164,12 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 				final FuzzySetModuleDescriptor fsmdv = (FuzzySetModuleDescriptor) value;
 				if(fsmdv.getViewName().equals("Sets")){
 					this.fuzzySetModuleDescriptor = fsmdv;
+				}
+			}
+			if (key == FuzzyAutomatonModuleDescriptor.class ) {
+				final FuzzyAutomatonModuleDescriptor famdv = (FuzzyAutomatonModuleDescriptor) value;
+				if(famdv.getViewName().equals("Automatons")){
+					this.fuzzyAutomatonModuleDescriptor = famdv;
 				}
 			}
 		}
@@ -397,7 +423,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	void unbindAutomatonViewElementsFromControllerProperties(){
 
 		if (fuzzyAutomaton.getValue() != null){
-			automatonNameTextField.textProperty().unbindBidirectional(fuzzyAutomaton.getValue().fuzzyAutomationNameProperty());
+			automatonNameTextField.textProperty().unbindBidirectional(fuzzyAutomaton.getValue().fuzzyAutomatonNameProperty());
 			automatonDescriptionTextArea.textProperty().unbindBidirectional(fuzzyAutomaton.getValue().fuzzyAutomatonDescriptionProperty());
 			costVectorDimensionSpinner.getValueFactory().valueProperty().unbindBidirectional(fuzzyAutomaton.get().costVectorDimensionObjProperty());
 
@@ -443,11 +469,10 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		if (modelToLoad == null)
 			return;
 
-		this.originallyLoadedFuzzyAutomaton = (FuzzyAutomaton) modelToLoad;
 		FuzzyAutomaton fa = ((FuzzyAutomaton)modelToLoad).deepCopy();
 		this.fuzzyAutomaton.set(fa);
 
-		automatonNameTextField.textProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyAutomationNameProperty());
+		automatonNameTextField.textProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyAutomatonNameProperty());
 		automatonDescriptionTextArea.textProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyAutomatonDescriptionProperty());
 		statesListView.itemsProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyStatesProperty());
 		transitionsListView.itemsProperty().bindBidirectional(fuzzyAutomaton.get().fuzzyTransitionsProperty());
@@ -461,7 +486,6 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		createdAutomatonCounter++;
 		loadWithData(new FuzzyAutomaton(null, "automaton" + Integer.toString(createdAutomatonCounter),
 				"That's a custom fuzzy automaton", null, null, null, 0));
-		this.originallyLoadedFuzzyAutomaton = null;
 	}
 
 	@FXML
@@ -474,7 +498,6 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 		this.fuzzyAutomaton.setValue(null);
 		this.fuzzyStateToEdit.setValue(null);
 		this.fuzzyTransitionToEdit.setValue(null);
-		this.originallyLoadedFuzzyAutomaton = null;
 
 		automatonNameTextField.textProperty().set(null);
 		automatonDescriptionTextArea.textProperty().set(null);
@@ -491,27 +514,39 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	@FXML
 	private void saveAutomaton(){
 
-		// TODO Update according to FuzzySignature's solution (delete originallyLoaded state, use common service)
+		final Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = this.commonServices.getRegisteredStores();
+		final WorkspaceInfo workspaceInfo = fuzzyAutomatonModuleDescriptor.getWorkspaceInfo();
+		final ObservableList<? extends WorkspaceElement> workspaceElements = registeredStores.get(workspaceInfo);
+		final ObservableList<FuzzyAutomaton> fuzzyAutomatons = (ObservableList<FuzzyAutomaton>) workspaceElements;
 
 		ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();
 		FuzzyAutomaton fuzzyAutomaton = this.fuzzyAutomaton.get();
 		if (fuzzyAutomaton != null){
 			final FuzzyAutomaton fa = fuzzyAutomaton.deepCopy();
-			if (this.originallyLoadedFuzzyAutomaton != null ){
+			String copiedUuid = fa.getUuid();
+
+			FuzzyAutomaton alreadyLoadedAutomaton = null;
+			for (FuzzyAutomaton automaton : fuzzyAutomatons) {
+				String checkedUuid = automaton.getUuid();
+				if (checkedUuid.equals(copiedUuid)) {
+					alreadyLoadedAutomaton = automaton;
+				}
+			}
+
+			if (alreadyLoadedAutomaton != null ){
 				int choice = shellDialogServices.selectFromOptions(
 						"Model conflict",
 						"This model has an original in model store.",
 						"Would you like to overwrite it, or create a new one instead?",
 						"Overwrite", "Create new");
 				if (choice == 1){
-					commonServices.updateModelInRegisteredStore(this.originallyLoadedFuzzyAutomaton, fa);
+					commonServices.updateModelInRegisteredStore(alreadyLoadedAutomaton, fa);
 				} else if (choice == 2){
 					fa.setUuid(CommonUtils.initializeUUIDPropertyFromString(null).get());
 					commonServices.addModelToRegisteredStore(fa);
 				}
 			} else {
 				commonServices.addModelToRegisteredStore(fa);
-				this.originallyLoadedFuzzyAutomaton = fa;
 			}
 		}
 	}

@@ -62,7 +62,7 @@ public class ModelDomainIOManager implements IPersistableModel {
 
                 final net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton fxFuzzyAutomaton = (net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton) m;
                 final net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton descriptorFuzzyAutomaton = fxFuzzyAutomaton.convert2DescriptorModel();
-                String newFileName = fxFuzzyAutomaton.getFuzzyAutomationName() + "_" + fxFuzzyAutomaton.getUuid() + ".xml";
+                String newFileName = fxFuzzyAutomaton.getFuzzyAutomatonName() + "_" + fxFuzzyAutomaton.getUuid() + ".xml";
 
                 Path path = Paths.get(dirPath, newFileName);
                 descriptorHandler.saveToXmlFile(path.toString(), descriptorHandler.generateXmlStringFromModel(descriptorFuzzyAutomaton));
@@ -83,7 +83,7 @@ public class ModelDomainIOManager implements IPersistableModel {
             final net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton fxFuzzyAutomaton = (net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton) model;
             final net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton descriptorFuzzyAutomaton = fxFuzzyAutomaton.convert2DescriptorModel();
 
-            String initialName = fxFuzzyAutomaton.getFuzzyAutomationName() + "_" + fxFuzzyAutomaton.getUuid();
+            String initialName = fxFuzzyAutomaton.getFuzzyAutomatonName() + "_" + fxFuzzyAutomaton.getUuid();
             File selectedFile = shellDialogServices.saveFileDialog(initialName, "xml", "json");
             if (selectedFile == null)
                 return;

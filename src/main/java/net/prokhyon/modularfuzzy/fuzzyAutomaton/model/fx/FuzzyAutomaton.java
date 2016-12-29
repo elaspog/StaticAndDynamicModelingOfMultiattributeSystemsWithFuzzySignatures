@@ -16,7 +16,7 @@ public class FuzzyAutomaton extends WorkspaceElement
         implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton, net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton> {
 
     private final StringProperty uuid;
-    private final StringProperty fuzzyAutomationName;
+    private final StringProperty fuzzyAutomatonName;
     private final StringProperty fuzzyAutomatonDescription;
     private final ObjectProperty<Integer> costVectorDimensionObj;
     private final IntegerProperty costVectorDimensionInt;
@@ -30,7 +30,7 @@ public class FuzzyAutomaton extends WorkspaceElement
                           FuzzySetSystem fuzzySetSystem, Integer costVectorDimension){
         super();
         this.uuid = CommonUtils.initializeUUIDPropertyFromString(uuid);
-        this.fuzzyAutomationName = new SimpleStringProperty(fuzzyAutomatonName);
+        this.fuzzyAutomatonName = new SimpleStringProperty(fuzzyAutomatonName);
         this.fuzzyAutomatonDescription = new SimpleStringProperty(fuzzyAutomatonDescription);
         this.fuzzySetSystem = new SimpleObjectProperty<>(fuzzySetSystem);
         this.costVectorDimensionObj = new SimpleObjectProperty(costVectorDimension);
@@ -53,7 +53,7 @@ public class FuzzyAutomaton extends WorkspaceElement
     }
 
     public FuzzyAutomaton(FuzzyAutomaton otherFuzzyAutomaton){
-        this(otherFuzzyAutomaton.getUuid(), otherFuzzyAutomaton.getFuzzyAutomationName(),
+        this(otherFuzzyAutomaton.getUuid(), otherFuzzyAutomaton.getFuzzyAutomatonName(),
                 otherFuzzyAutomaton.getFuzzyAutomatonDescription(), otherFuzzyAutomaton.getFuzzyStates(),
                 otherFuzzyAutomaton.getFuzzyTransitions(), otherFuzzyAutomaton.getFuzzySetSystem(),
                 otherFuzzyAutomaton.getCostVectorDimensionObj());
@@ -78,7 +78,7 @@ public class FuzzyAutomaton extends WorkspaceElement
         }
 
         return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton(this.getUuid(),
-                this.getFuzzyAutomationName(), this.getFuzzyAutomatonDescription(), this.fuzzySetSystem.get().getUuid(), descriptorFuzzyStates,
+                this.getFuzzyAutomatonName(), this.getFuzzyAutomatonDescription(), this.fuzzySetSystem.get().getUuid(), descriptorFuzzyStates,
                 descriptorFuzzyTransitions, this.getCostVectorDimensionObj());
     }
 
@@ -95,16 +95,16 @@ public class FuzzyAutomaton extends WorkspaceElement
         this.uuid.set(uuid);
     }
 
-    public String getFuzzyAutomationName() {
-        return fuzzyAutomationName.get();
+    public String getFuzzyAutomatonName() {
+        return fuzzyAutomatonName.get();
     }
 
-    public StringProperty fuzzyAutomationNameProperty() {
-        return fuzzyAutomationName;
+    public StringProperty fuzzyAutomatonNameProperty() {
+        return fuzzyAutomatonName;
     }
 
-    public void setFuzzyAutomationName(String fuzzyAutomationName) {
-        this.fuzzyAutomationName.set(fuzzyAutomationName);
+    public void setFuzzyAutomatonName(String fuzzyAutomatonName) {
+        this.fuzzyAutomatonName.set(fuzzyAutomatonName);
     }
 
     public String getFuzzyAutomatonDescription() {
@@ -181,7 +181,7 @@ public class FuzzyAutomaton extends WorkspaceElement
 
     @Override
     public String getListElementIdentifier() {
-        String str = fuzzyAutomationName.get();
+        String str = fuzzyAutomatonName.get();
         str += " (" + fuzzyStates.size() + ", " + fuzzyTransitions.size() + ")";
         // TODO temporary soulution, in future the value is always present
         str += " [";

@@ -155,7 +155,7 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 					protected void updateItem(FuzzyAutomaton t, boolean bln) {
 						super.updateItem(t, bln);
 						if (t != null)
-							setText(t.getFuzzyAutomationName() + " : " + t.getUuid());
+							setText(t.getFuzzyAutomatonName() + " : " + t.getUuid());
 						else
 							setText(null);
 					}
@@ -172,7 +172,7 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 						if (bln) {
 							setText("");
 						} else {
-							setText(t.getFuzzyAutomationName());
+							setText(t.getFuzzyAutomatonName());
 						}
 					}
 				});
