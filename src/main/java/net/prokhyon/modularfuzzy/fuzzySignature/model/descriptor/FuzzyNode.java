@@ -13,11 +13,11 @@ public class FuzzyNode extends FuzzyDescriptorModelBase {
     @XStreamImplicit
     private List<FuzzyNode> childNodes;
 
-    @XStreamAlias("AggregatorOperator")
+    @XStreamAlias("AggregationOperator")
     @XStreamAsAttribute
     private AggregationType aggregationType;
 
-    @XStreamAlias("ReferencedAutomatonUUID")
+    @XStreamAlias("ReferencedFuzzyAutomatonUUID")
     @XStreamAsAttribute
     private String fuzzyAutomatonUUID;
 

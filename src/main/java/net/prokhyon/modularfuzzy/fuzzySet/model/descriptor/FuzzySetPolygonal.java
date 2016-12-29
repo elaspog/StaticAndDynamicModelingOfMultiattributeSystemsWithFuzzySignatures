@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-@XStreamAlias("fuzzyset")
+@XStreamAlias("FuzzySet")
 public class FuzzySetPolygonal extends FuzzySetBase {
 
 	public FuzzySetPolygonal(String label, String description, List<FuzzyPointBase> points) {

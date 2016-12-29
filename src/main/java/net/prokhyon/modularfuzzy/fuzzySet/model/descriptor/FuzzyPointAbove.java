@@ -3,10 +3,10 @@ package net.prokhyon.modularfuzzy.fuzzySet.model.descriptor;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
-@XStreamAlias("above")
+@XStreamAlias("AbovePoint")
 public class FuzzyPointAbove extends FuzzyPointBase {
 
-	@XStreamAlias("x")
+	@XStreamAlias("X")
 	@XStreamAsAttribute
 	private double xCoordinate;
 

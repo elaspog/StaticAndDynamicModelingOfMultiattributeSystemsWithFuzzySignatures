@@ -2,8 +2,6 @@ package net.prokhyon.modularfuzzy.fuzzyAutomaton.model;
 
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleDescriptor2FxModel;
-import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition;
@@ -35,7 +33,7 @@ public class ModelConverter
 
         List<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState> fxStates = new ArrayList<>();
         for (FuzzyState state : states) {
-            final String stateLabel = state.getLabel();
+            final String stateLabel = state.getId();
             final String stateDescription = state.getDescription();
             final FuzzyStateTypeEnum stateType = state.getType();
 
@@ -56,7 +54,7 @@ public class ModelConverter
 
         List<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyTransition> fxTransitions = new ArrayList<>();
         for (FuzzyTransition transition : transitions) {
-            final String transitionLabel = transition.getLabel();
+            final String transitionLabel = transition.getId();
             final String transitionDescription = transition.getDescription();
             final String transitionFromStateLabel = transition.getFromState();
             final String transitionToStateLabel = transition.getToState();

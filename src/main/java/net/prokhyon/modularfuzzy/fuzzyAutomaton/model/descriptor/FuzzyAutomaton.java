@@ -7,13 +7,14 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
 
-@XStreamAlias("fuzzyautomaton")
+@XStreamAlias("FuzzyAutomaton")
 public class FuzzyAutomaton extends FuzzyDescriptorRootBase {
 
-	@XStreamAlias("referencedFuzzySetSystemUUID")
+	@XStreamAlias("ReferencedFuzzySetSystemUUID")
 	@XStreamAsAttribute
 	private String referencedFuzzySetSystemUUID;
 
+	@XStreamAlias("CostVectorDimension")
 	@XStreamAsAttribute
 	private Integer costVectorDimension;
 

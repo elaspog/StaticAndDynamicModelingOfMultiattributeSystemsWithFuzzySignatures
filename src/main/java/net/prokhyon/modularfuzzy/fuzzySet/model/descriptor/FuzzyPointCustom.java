@@ -3,14 +3,14 @@ package net.prokhyon.modularfuzzy.fuzzySet.model.descriptor;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
-@XStreamAlias("custom")
+@XStreamAlias("CustomPoint")
 public class FuzzyPointCustom extends FuzzyPointBase {
 
-	@XStreamAlias("x")
+	@XStreamAlias("X")
 	@XStreamAsAttribute
 	private double xCoordinate;
 
-	@XStreamAlias("y")
+	@XStreamAlias("Y")
 	@XStreamAsAttribute
 	private double yCoordinate;
 

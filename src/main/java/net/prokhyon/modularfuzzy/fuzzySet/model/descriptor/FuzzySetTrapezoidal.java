@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-@XStreamAlias("fuzzyset")
+@XStreamAlias("FuzzySet")
 public class FuzzySetTrapezoidal extends FuzzySetBase {
 
 	public FuzzySetTrapezoidal(String label, String description, List<FuzzyPointBase> points) {

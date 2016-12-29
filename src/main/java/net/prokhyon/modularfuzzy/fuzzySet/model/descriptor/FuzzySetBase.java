@@ -31,7 +31,7 @@ public abstract class FuzzySetBase extends FuzzyDescriptorModelBase {
 
 	@Override
 	public String toString() {
-		return "FuzzySetBase [type=" + type + ", points=" + points + ", label=" + label
+		return "FuzzySetBase [type=" + type + ", points=" + points + ", id=" + id
 				+ ", description=" + description + "]";
 	}
 

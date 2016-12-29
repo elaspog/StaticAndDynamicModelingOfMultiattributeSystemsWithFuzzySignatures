@@ -7,19 +7,19 @@ import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorModelBase
 
 import java.util.List;
 
-@XStreamAlias("transition")
+@XStreamAlias("FuzyTransition")
 public class FuzzyTransition extends FuzzyDescriptorModelBase {
 
-	@XStreamAlias("fromState")
+	@XStreamAlias("FromState")
 	@XStreamAsAttribute
 	private String fromState;
 
-	@XStreamAlias("toState")
+	@XStreamAlias("ToState")
 	@XStreamAsAttribute
 	private String toState;
 
-	@XStreamImplicit
-	@XStreamAlias("costs")
+	@XStreamImplicit(itemFieldName="Value")
+	@XStreamAlias("CostVector")
 	private List<Double> costs;
 
 	public FuzzyTransition(String label, String description, String fromState, String toState,

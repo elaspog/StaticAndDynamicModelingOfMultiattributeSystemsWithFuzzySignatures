@@ -8,15 +8,15 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
 
-@XStreamAlias("fuzzysetsystem")
+@XStreamAlias("FuzzySetSystem")
 public class FuzzySetSystem extends FuzzyDescriptorRootBase {
 
-	@XStreamAlias("type")
+	@XStreamAlias("FuzzySetType")
 	@XStreamAsAttribute
 	private FuzzySetSystemTypeEnum type;
 
 	@XStreamImplicit
-	@XStreamAlias("fuzzysets")
+	@XStreamAlias("FuzzySets")
 	private List<FuzzySetBase> sets;
 
 	public FuzzySetSystem(String uuid, String typeName, String typeDescription, FuzzySetSystemTypeEnum type, List<FuzzySetBase> sets) {

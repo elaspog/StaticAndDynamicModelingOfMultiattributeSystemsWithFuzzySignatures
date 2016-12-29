@@ -4,14 +4,14 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorModelBase;
 
-@XStreamAlias("state")
+@XStreamAlias("FuzzyState")
 public class FuzzyState extends FuzzyDescriptorModelBase {
 
-	@XStreamAlias("type")
+	@XStreamAlias("StateType")
 	@XStreamAsAttribute
 	private FuzzyStateTypeEnum type;
 
-	@XStreamAlias("fuzzySetName")
+	@XStreamAlias("FuzzySetName")
 	@XStreamAsAttribute
 	private String fuzzySetName;
 

@@ -68,7 +68,7 @@ public class FuzzyNode_Old extends FuzzyDescriptorModelBase {
 	@Override
 	public String toString() {
 		return "FuzzyNode [children=" + children + ", aggregatorOperator=" + aggregatorOperator + ", fuzzySetTypeId="
-				+ fuzzySetTypeId + ", label=" + label + ", description=" + description + "]";
+				+ fuzzySetTypeId + ", id=" + id + ", description=" + description + "]";
 	}
 
 }
