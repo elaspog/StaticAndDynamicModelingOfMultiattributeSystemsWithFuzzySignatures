@@ -13,9 +13,12 @@ import javafx.scene.layout.Pane;
 
 import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
+import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
+import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetPoint;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
@@ -26,13 +29,21 @@ import net.prokhyon.modularfuzzy.fuzzySet.view.drawing.DrawHelper;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
+import java.util.Map;
+
 public class FuzzySetEditorController implements LoadableDataController {
+
+	/*
+     * Properties
+     */
 
 	private ObjectProperty<FuzzySetSystem> fuzzySystem;
 
 	private ObjectProperty<FuzzySet> fuzzySetToEdit;
 
-	private FuzzySetSystem originallyLoadedFuzzySystem;
+    /*
+     * UI elements
+     */
 
 	@FXML
 	private Pane fuzzySetSystemPane;
@@ -100,11 +111,39 @@ public class FuzzySetEditorController implements LoadableDataController {
 	@FXML
 	private Button deletePointButton;
 
+	/*
+     * Variables
+     */
+
 	private int createdSetSystemCounter;
 	private int createdSetCounter;
 
+	/*
+     * Services
+     */
+
+	private CommonServices commonServices;
+	private FuzzySetModuleDescriptor fuzzySetModuleDescriptor;
+
+	/*
+     * Methods
+     */
+
 	@FXML
 	private void initialize() {
+
+		this.commonServices = new ServiceFactory().getCommonServices();
+		final Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = this.commonServices.getPseudoModules();
+		for (Map.Entry<Class<? extends ModuleDescriptor>, ModuleDescriptor> classModuleDescriptorEntry : pseudoModules.entrySet()) {
+			final Class<? extends ModuleDescriptor> key = classModuleDescriptorEntry.getKey();
+			final ModuleDescriptor value = classModuleDescriptorEntry.getValue();
+			if (key == FuzzySetModuleDescriptor.class ) {
+				final FuzzySetModuleDescriptor fsmdv = (FuzzySetModuleDescriptor) value;
+				if(fsmdv.getViewName().equals("Sets")){
+					this.fuzzySetModuleDescriptor = fsmdv;
+				}
+			}
+		}
 
 		this.fuzzySystem = new SimpleObjectProperty<>();
 		this.fuzzySetToEdit = new SimpleObjectProperty<>();
@@ -216,7 +255,6 @@ public class FuzzySetEditorController implements LoadableDataController {
 		createdSetSystemCounter++;
 		loadWithData(new FuzzySetSystem(null, "fuzzySystem" + Integer.toString(createdSetSystemCounter),
 				"That's a custom fuzzy system", FuzzySetSystemTypeEnum.CUSTOM, null));
-		this.originallyLoadedFuzzySystem = null;
 	}
 
 	@Override
@@ -226,7 +264,6 @@ public class FuzzySetEditorController implements LoadableDataController {
 		if (modelToLoad == null)
 			return;
 
-		this.originallyLoadedFuzzySystem = (FuzzySetSystem) modelToLoad;
 		FuzzySetSystem fss = ((FuzzySetSystem)modelToLoad).deepCopy();
 		this.fuzzySystem.set(fss);
 
@@ -249,34 +286,44 @@ public class FuzzySetEditorController implements LoadableDataController {
 		systemDescriptionTextArea.textProperty().set(null);
 		fuzzySetListView.itemsProperty().setValue(null);
 		DrawHelper.clearPane();
-		this.originallyLoadedFuzzySystem = null;
 	}
 
 	@FXML
 	private void saveSystem() {
 
-		// TODO Update according to FuzzySignature's solution (delete originallyLoaded state, use common service)
+		final Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = this.commonServices.getRegisteredStores();
+		final WorkspaceInfo workspaceInfo = fuzzySetModuleDescriptor.getWorkspaceInfo();
+		final ObservableList<? extends WorkspaceElement> workspaceElements = registeredStores.get(workspaceInfo);
+		final ObservableList<FuzzySetSystem> fuzzySetSystems = (ObservableList<FuzzySetSystem>) workspaceElements;
 
-		CommonServices commonServices = new ServiceFactory().getCommonServices();
 		ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();
 		FuzzySetSystem fuzzySetSystem = fuzzySystem.get();
 		if (fuzzySetSystem != null) {
 			final FuzzySetSystem fss = fuzzySetSystem.deepCopy();
-			if (this.originallyLoadedFuzzySystem != null ) {
+			String copiedUuid = fss.getUuid();
+
+			FuzzySetSystem alreadyLoadedSetSystem = null;
+			for (FuzzySetSystem setSystem : fuzzySetSystems) {
+				String checkedUuid = setSystem.getUuid();
+				if (checkedUuid.equals(copiedUuid)) {
+					alreadyLoadedSetSystem = setSystem;
+				}
+			}
+
+			if (alreadyLoadedSetSystem != null ) {
 				int choice = shellDialogServices.selectFromOptions(
 						"Model conflict",
 						"This model has an original in model store.",
 						"Would you like to overwrite it, or create a new one instead?",
 						"Overwrite", "Create new");
 				if (choice == 1){
-					commonServices.updateModelInRegisteredStore(this.originallyLoadedFuzzySystem, fss);
+					commonServices.updateModelInRegisteredStore(alreadyLoadedSetSystem, fss);
 				} else if (choice == 2){
 					fss.setUuid(CommonUtils.initializeUUIDPropertyFromString(null).get());
 					commonServices.addModelToRegisteredStore(fss);
 				}
 			} else {
 				commonServices.addModelToRegisteredStore(fss);
-				this.originallyLoadedFuzzySystem = fss;
 			}
 		}
 	}
