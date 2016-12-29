@@ -3,6 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -27,7 +29,10 @@
                      <children>
                         <HBox fillHeight="false" nodeOrientation="LEFT_TO_RIGHT" spacing="10.0">
                            <children>
+                              <Label text="Signature type:" />
                               <ComboBox fx:id="signatureTypeComboBox" onMouseClicked="#loadActualFuzzySignatures" prefWidth="150.0" />
+                              <Label text="Cost vector constraint:" />
+                              <Spinner fx:id="costVectorConstraintSpinner" />
                               <Button prefWidth="100.0" text="Create" />
                               <Button prefWidth="100.0" text="Clear" />
                               <Button prefWidth="100.0" text="Save" />

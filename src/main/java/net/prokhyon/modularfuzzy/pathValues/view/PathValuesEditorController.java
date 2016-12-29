@@ -3,10 +3,7 @@ package net.prokhyon.modularfuzzy.pathValues.view;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
@@ -30,6 +27,10 @@ public class PathValuesEditorController implements LoadableDataController {
 
     @FXML
     private ComboBox signatureTypeComboBox;
+
+    @FXML
+    private Spinner<Integer> costVectorConstraintSpinner;
+
 
 	/*
      * Services
@@ -100,6 +101,10 @@ public class PathValuesEditorController implements LoadableDataController {
                         }
                     }
                 });
+
+
+        costVectorConstraintSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
+        costVectorConstraintSpinner.setEditable(true);
 
     }
 
