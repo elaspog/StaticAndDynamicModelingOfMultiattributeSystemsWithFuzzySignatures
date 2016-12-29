@@ -6,7 +6,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem;
-import net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature;
+import fuzzySignature.FuzzySignature_Old;
 import net.prokhyon.modularfuzzy.pathValues.model.descriptor.FuzzyModelValues;
 
 @XStreamAlias("BuildingConditionExaminerProject")
@@ -19,12 +19,12 @@ public class Project {
 	private List<FuzzyAutomaton> automatons;
 
 	@XStreamImplicit
-	private List<FuzzySignature> signatures;
+	private List<FuzzySignature_Old> signatures;
 
 	@XStreamImplicit
 	private List<FuzzyModelValues> models;
 
-	public Project(List<FuzzySetSystem> sets, List<FuzzyAutomaton> automatons, List<FuzzySignature> signatures,
+	public Project(List<FuzzySetSystem> sets, List<FuzzyAutomaton> automatons, List<FuzzySignature_Old> signatures,
 			List<FuzzyModelValues> models) {
 		super();
 		this.sets = sets;
@@ -49,11 +49,11 @@ public class Project {
 		this.automatons = automatons;
 	}
 
-	public List<FuzzySignature> getSignatures() {
+	public List<FuzzySignature_Old> getSignatures() {
 		return signatures;
 	}
 
-	public void setSignatures(List<FuzzySignature> signatures) {
+	public void setSignatures(List<FuzzySignature_Old> signatures) {
 		this.signatures = signatures;
 	}
 

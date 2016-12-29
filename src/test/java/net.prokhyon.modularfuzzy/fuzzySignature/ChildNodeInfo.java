@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor;
+package fuzzySignature;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
