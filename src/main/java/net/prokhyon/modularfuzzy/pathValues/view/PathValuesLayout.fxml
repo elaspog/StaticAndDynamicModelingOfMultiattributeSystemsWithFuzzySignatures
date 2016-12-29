@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.prokhyon.modularfuzzy.pathValues.view.PathValuesEditorController" >
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.prokhyon.modularfuzzy.pathValues.view.PathValuesEditorController">
    <children>
-      <SplitPane dividerPositions="0.05" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" >
+      <SplitPane fx:id="verticalSplitPane" dividerPositions="0.05" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0">
                <children>
@@ -27,7 +27,7 @@
                      <children>
                         <HBox fillHeight="false" nodeOrientation="LEFT_TO_RIGHT" spacing="10.0">
                            <children>
-                              <ComboBox prefWidth="150.0" />
+                              <ComboBox fx:id="signatureTypeComboBox" onMouseClicked="#loadActualFuzzySignatures" prefWidth="150.0" />
                               <Button prefWidth="100.0" text="Create" />
                               <Button prefWidth="100.0" text="Clear" />
                               <Button prefWidth="100.0" text="Save" />
