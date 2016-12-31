@@ -133,7 +133,7 @@ public class FuzzyNode extends FuzzyFxBase
         }
 
         // Leaf node
-        if (childNodes.size() == 0)
+        if (childNodes.size() == 0 && fuzzyAutomaton != null)
             automatonUuid = fuzzyAutomaton.getUuid();
 
         return new net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzyNode(fuzzyNodeName, fuzzyNodeDescription, convertedChildNodes, aggregationType, automatonUuid);

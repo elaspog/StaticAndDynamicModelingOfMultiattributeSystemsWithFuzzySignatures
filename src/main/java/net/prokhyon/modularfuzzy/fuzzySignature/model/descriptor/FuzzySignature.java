@@ -1,6 +1,7 @@
 package net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
 
@@ -10,9 +11,14 @@ public class FuzzySignature extends FuzzyDescriptorRootBase {
     @XStreamAlias("FuzzyNode")
     private FuzzyNode rootNode;
 
-    public FuzzySignature(String uuid, String fuzzySignatureName, String fuzzySignatureDescription, FuzzyNode fuzzyRootNode) {
+    @XStreamAlias("CostVectorDimension")
+    @XStreamAsAttribute
+    private Integer costVectorDimension;
+
+    public FuzzySignature(String uuid, String fuzzySignatureName, String fuzzySignatureDescription, FuzzyNode fuzzyRootNode, Integer costVectorDimension) {
         super(uuid, fuzzySignatureName, fuzzySignatureDescription);
         this.rootNode = fuzzyRootNode;
+        this.costVectorDimension = costVectorDimension;
     }
 
     public FuzzyNode getRootNode() {
@@ -21,6 +27,14 @@ public class FuzzySignature extends FuzzyDescriptorRootBase {
 
     public void setRootNode(FuzzyNode rootNode) {
         this.rootNode = rootNode;
+    }
+
+    public Integer getCostVectorDimension() {
+        return costVectorDimension;
+    }
+
+    public void setCostVectorDimension(Integer costVectorDimension) {
+        this.costVectorDimension = costVectorDimension;
     }
 
     @Override

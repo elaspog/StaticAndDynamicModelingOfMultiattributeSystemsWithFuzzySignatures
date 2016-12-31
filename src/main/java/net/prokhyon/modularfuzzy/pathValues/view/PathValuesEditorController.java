@@ -28,11 +28,7 @@ public class PathValuesEditorController implements LoadableDataController {
     @FXML
     private ComboBox signatureTypeComboBox;
 
-    @FXML
-    private Spinner<Integer> costVectorConstraintSpinner;
-
-
-	/*
+    /*
      * Services
      */
 
@@ -101,10 +97,6 @@ public class PathValuesEditorController implements LoadableDataController {
                         }
                     }
                 });
-
-
-        costVectorConstraintSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
-        costVectorConstraintSpinner.setEditable(true);
 
     }
 

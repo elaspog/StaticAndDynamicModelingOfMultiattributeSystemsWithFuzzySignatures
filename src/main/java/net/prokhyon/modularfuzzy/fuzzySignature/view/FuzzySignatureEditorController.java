@@ -56,6 +56,9 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 	private TextArea nodeDescriptionTextArea;
 
 	@FXML
+	private Spinner<Integer> costVectorConstraintSpinner;
+
+	@FXML
 	private ComboBox<AggregationType> aggregationOperatorComboBox;
 
 	@FXML
@@ -117,6 +120,9 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		createdSignatureCounter = 0;
 		latestCreatedSignatureCounterValue = 0;
 		createdNodeCounter = 0;
+
+		costVectorConstraintSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
+		costVectorConstraintSpinner.setEditable(true);
 
 		this.fuzzySignature = new SimpleObjectProperty<>();
 		this.fuzzyNodeToEdit = new SimpleObjectProperty<>();
@@ -195,6 +201,7 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		createSignatureButton.disableProperty().bind(isLoadedSignature);
 		clearSignatureButton.disableProperty().bind(isNotLoadedSignature);
 		saveSignatureButton.disableProperty().bind(isNotLoadedSignature);
+		costVectorConstraintSpinner.disableProperty().bind(isNotLoadedSignature);
 		signatureNameTextField.disableProperty().bind(isNotLoadedSignature);
 		signatureDescriptionTextArea.disableProperty().bind(isNotLoadedSignature);
 		nodeNameTextField.disableProperty().bind(isNotLoadedSignature.or(isNotSelectedNodeInTree));
@@ -214,6 +221,7 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		if(fuzzySignature.getValue() != null){
 			signatureNameTextField.textProperty().bindBidirectional(fuzzySignature.getValue().fuzzySignatureNameProperty());
 			signatureDescriptionTextArea.textProperty().bindBidirectional(fuzzySignature.getValue().fuzzySignatureDescriptionProperty());
+			costVectorConstraintSpinner.getValueFactory().valueProperty().bindBidirectional(fuzzySignature.get().costVectorDimensionObjProperty());
 		}
 	}
 
@@ -234,6 +242,7 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		if(fuzzySignature.getValue() != null){
 			signatureNameTextField.textProperty().unbindBidirectional(fuzzySignature.getValue().fuzzySignatureNameProperty());
 			signatureDescriptionTextArea.textProperty().unbindBidirectional(fuzzySignature.getValue().fuzzySignatureDescriptionProperty());
+			costVectorConstraintSpinner.getValueFactory().valueProperty().unbindBidirectional(fuzzySignature.get().costVectorDimensionObjProperty());
 		}
 	}
 
@@ -287,7 +296,7 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		createdSignatureCounter++;
 
 		final FuzzyNode rootNode = new FuzzyNode("Node" + getNextNodeCounterValue(), null, null, null, null, null);
-		final FuzzySignature fuzzySignature = new FuzzySignature(null, "Signature" + createdSignatureCounter, rootNode, "sample description");
+		final FuzzySignature fuzzySignature = new FuzzySignature(null, "Signature" + createdSignatureCounter, rootNode, "sample description", 0);
 
 		loadWithData(fuzzySignature);
 	}

@@ -41,9 +41,10 @@ public class ModelConverter
         final String uuid = fuzzySignature.getUUID();
         final String typeName = fuzzySignature.getTypeName();
         final String description = fuzzySignature.getDescription();
+        final Integer costVectorDimension = fuzzySignature.getCostVectorDimension();
         final net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzyNode rootNodeDescriptor = fuzzySignature.getRootNode();
 
-        return new net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature(uuid, typeName, convertToFx(rootNodeDescriptor, null), description);
+        return new net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature(uuid, typeName, convertToFx(rootNodeDescriptor, null), description, costVectorDimension);
     }
 
     private net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzyNode convertToFx(

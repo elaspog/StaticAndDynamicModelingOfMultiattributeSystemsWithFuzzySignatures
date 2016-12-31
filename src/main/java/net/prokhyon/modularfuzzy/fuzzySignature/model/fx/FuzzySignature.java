@@ -1,7 +1,6 @@
 package net.prokhyon.modularfuzzy.fuzzySignature.model.fx;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
@@ -19,24 +18,29 @@ public class FuzzySignature extends WorkspaceElement
     private final StringProperty uuid;
     private final StringProperty fuzzySignatureName;
     private final StringProperty fuzzySignatureDescription;
+    private final ObjectProperty<Integer> costVectorDimensionObj;
+    private final IntegerProperty costVectorDimensionInt;
     private FuzzyNode rootNodeOfTheTree;
 
     /*
      * Constructors
      */
 
-    public FuzzySignature(String uuid, String signatureName, FuzzyNode rootNodeOfTheTree, String fuzzySignatureDescription){
+    public FuzzySignature(String uuid, String signatureName, FuzzyNode rootNodeOfTheTree, String fuzzySignatureDescription, Integer costVectorDimension){
 
         super();
         this.uuid = CommonUtils.initializeUUIDPropertyFromString(uuid);
         this.fuzzySignatureName = new SimpleStringProperty(signatureName);
         this.fuzzySignatureDescription = new SimpleStringProperty(fuzzySignatureDescription);
+        this.costVectorDimensionObj = new SimpleObjectProperty(costVectorDimension);
+        this.costVectorDimensionInt = IntegerProperty.integerProperty(costVectorDimensionObj);
         this.rootNodeOfTheTree = rootNodeOfTheTree.deepCopy();
     }
 
     public FuzzySignature(FuzzySignature otherFuzzySignature){
         this(otherFuzzySignature.getUuid(), otherFuzzySignature.getFuzzySignatureName(),
-                otherFuzzySignature.getRootNodeOfTheTree(), otherFuzzySignature.getFuzzySignatureDescription());
+                otherFuzzySignature.getRootNodeOfTheTree(), otherFuzzySignature.getFuzzySignatureDescription(),
+                otherFuzzySignature.getCostVectorDimensionObj());
     }
 
     /*
@@ -60,7 +64,7 @@ public class FuzzySignature extends WorkspaceElement
         net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzyNode fuzzyNode = rootNodeOfTheTree.convert2DescriptorModel();
 
         net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature fuzzySignature
-                = new net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature(uuid, fuzzySignatureName, fuzzySignatureDescription, fuzzyNode);
+                = new net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature(uuid, fuzzySignatureName, fuzzySignatureDescription, fuzzyNode, this.getCostVectorDimensionObj());
 
         return fuzzySignature;
     }
@@ -120,6 +124,18 @@ public class FuzzySignature extends WorkspaceElement
 
     public void setFuzzySignatureDescription(String fuzzySignatureDescription) {
         this.fuzzySignatureDescription.set(fuzzySignatureDescription);
+    }
+
+    public Integer getCostVectorDimensionObj() {
+        return costVectorDimensionObj.get();
+    }
+
+    public ObjectProperty<Integer> costVectorDimensionObjProperty() {
+        return costVectorDimensionObj;
+    }
+
+    public void setCostVectorDimensionObj(Integer costVectorDimensionObj) {
+        this.costVectorDimensionObj.set(costVectorDimensionObj);
     }
 
     public List<FuzzyNode> getAllNodesOfTree(){
