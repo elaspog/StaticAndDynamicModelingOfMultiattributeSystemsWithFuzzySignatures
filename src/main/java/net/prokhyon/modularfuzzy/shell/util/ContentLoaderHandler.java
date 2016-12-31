@@ -41,6 +41,10 @@ public class ContentLoaderHandler {
 			} catch (Exception e) {
 			}
 		}
+		AnchorPane.setTopAnchor(p.pane, 0.0);
+		AnchorPane.setLeftAnchor(p.pane, 0.0);
+		AnchorPane.setRightAnchor(p.pane, 0.0);
+		AnchorPane.setBottomAnchor(p.pane, 0.0);
 	}
 
 }
