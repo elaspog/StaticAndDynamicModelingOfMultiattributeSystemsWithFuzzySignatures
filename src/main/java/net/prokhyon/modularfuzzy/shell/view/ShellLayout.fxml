@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.prokhyon.modularfuzzy.shell.view.ShellLayoutController">
+<BorderPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.prokhyon.modularfuzzy.shell.view.ShellLayoutController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -29,6 +29,7 @@
                   </Menu>
                   <MenuItem mnemonicParsing="false" onAction="#loadModels" text="Load model" />
                   <MenuItem mnemonicParsing="false" onAction="#saveSelectedModelsFromWorkspace" text="Save selected models" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveSelectedModelsFromWorkspace" text="Save with dependencies" />
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
