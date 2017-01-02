@@ -15,7 +15,8 @@ public class PathValuesModuleDescriptor implements ModuleDescriptor {
 	private CommonServices services;
 
 	private final String VIEW_NAME = "Models";
-	private FxModulesViewInfo fxModulesViewInfo;
+	private FxModulesViewInfo fxModulesViewInfo1;
+	private FxModulesViewInfo fxModulesViewInfo2;
 	private PersistableModelInfo persistableModelInfo;
 	private WorkspaceInfo workspaceInfo;
 
@@ -23,9 +24,12 @@ public class PathValuesModuleDescriptor implements ModuleDescriptor {
 	public void initializeModule() {
 		services = new ServiceFactory().getCommonServices();
 
-		FxModulesViewInfo moduleInfo = new FxModulesViewInfo("Model Editor",
+		fxModulesViewInfo1 = new FxModulesViewInfo("Model Editor",
 				"view/PathValuesLayout.fxml", PathValuesModuleDescriptor.class, AnchorPane.class);
-		services.registerView(moduleInfo);
+		fxModulesViewInfo2 = new FxModulesViewInfo("Model Evaluator",
+				"view/ModelEvaluatorLayout.fxml", PathValuesModuleDescriptor.class, AnchorPane.class);
+		services.registerView(fxModulesViewInfo1);
+		services.registerView(fxModulesViewInfo2);
 
 		this.persistableModelInfo = new PersistableModelInfo(new ModelDomainIOManager(),
 				null,
@@ -35,7 +39,8 @@ public class PathValuesModuleDescriptor implements ModuleDescriptor {
 				net.prokhyon.modularfuzzy.pathValues.model.fx.FuzzyModelValues.class,
 				net.prokhyon.modularfuzzy.pathValues.model.descriptor.FuzzyModelValues.class);
 
-		this.workspaceInfo = new WorkspaceInfo(VIEW_NAME, fxModulesViewInfo, persistableModelInfo);
+		// TODO refactor WorkspaceInfo, using FxModulesViewInfo has no real meaning in this case
+		this.workspaceInfo = new WorkspaceInfo(VIEW_NAME, fxModulesViewInfo1, persistableModelInfo);
 
 		services.<FuzzyModelValues> registerModelTypeInStore(workspaceInfo);
 
@@ -45,8 +50,12 @@ public class PathValuesModuleDescriptor implements ModuleDescriptor {
 		return VIEW_NAME;
 	}
 
-	public FxModulesViewInfo getFxModulesViewInfo() {
-		return fxModulesViewInfo;
+	public FxModulesViewInfo getFxModulesViewInfo1() {
+		return fxModulesViewInfo1;
+	}
+
+	public FxModulesViewInfo getFxModulesViewInfo2() {
+		return fxModulesViewInfo2;
 	}
 
 	public PersistableModelInfo getPersistableModelInfo() {
