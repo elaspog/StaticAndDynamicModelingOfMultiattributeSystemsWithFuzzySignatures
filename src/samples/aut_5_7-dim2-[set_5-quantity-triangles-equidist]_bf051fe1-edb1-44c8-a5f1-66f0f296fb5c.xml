@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><FuzzyAutomaton uuid="bf051fe1-edb1-44c8-a5f1-66f0f296fb5c" typename="aut_5_7-dim2-[set_5-quantity-triangles-equidist]" ReferencedFuzzySetSystemUUID="06a1936a-6290-45dc-a67c-6632d8661cf8" CostVectorDimension="2">
+    <description>That's a custom fuzzy automaton</description>
+    <FuzzyState id="q_1" StateType="INITIAL" FuzzySetName="very_few"/>
+    <FuzzyState id="q_2" StateType="NORMAL" FuzzySetName="less"/>
+    <FuzzyState id="q_3" StateType="NORMAL" FuzzySetName="medium"/>
+    <FuzzyState id="q_4" StateType="NORMAL" FuzzySetName="more"/>
+    <FuzzyState id="q_5" StateType="TERMINAL" FuzzySetName="many"/>
+    <FuzyTransition id="t_1_2" FromState="q_1" ToState="q_2">
+        <Value>0.1</Value>
+        <Value>0.2</Value>
+    </FuzyTransition>
+    <FuzyTransition id="t_2_3" FromState="q_2" ToState="q_3">
+        <Value>0.3</Value>
+        <Value>0.1</Value>
+    </FuzyTransition>
+    <FuzyTransition id="t_3_4" FromState="q_3" ToState="q_4">
+        <Value>0.1</Value>
+        <Value>0.1</Value>
+    </FuzyTransition>
+    <FuzyTransition id="t_4_5" FromState="q_4" ToState="q_5">
+        <Value>0.3</Value>
+        <Value>0.2</Value>
+    </FuzyTransition>
+    <FuzyTransition id="t_1_5" FromState="q_1" ToState="q_5">
+        <Value>0.9</Value>
+        <Value>0.8</Value>
+    </FuzyTransition>
+    <FuzyTransition id="t_1_4" FromState="q_1" ToState="q_4">
+        <Value>0.4</Value>
+        <Value>0.6</Value>
+    </FuzyTransition>
+    <FuzyTransition id="t_2_5" FromState="q_2" ToState="q_5">
+        <Value>0.4</Value>
+        <Value>0.7</Value>
+    </FuzyTransition>
+</FuzzyAutomaton>

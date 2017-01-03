@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><FuzzyAutomaton uuid="2a5800c0-090c-4e5e-96f3-8d18d01d7328" typename="aut_3_3-dim_2-[set_3-quality-trapezoids-equidist]" ReferencedFuzzySetSystemUUID="5a0df023-742e-41b4-bb80-591f8acb70da" CostVectorDimension="2">
+    <description>That's a custom fuzzy automaton</description>
+    <FuzzyState id="q_1" StateType="INITIAL" FuzzySetName="bad"/>
+    <FuzzyState id="q_2" StateType="NORMAL" FuzzySetName="medium"/>
+    <FuzzyState id="q_3" StateType="INITIAL" FuzzySetName="good"/>
+    <FuzyTransition id="t_1_2" FromState="q_1" ToState="q_2">
+        <Value>0.2</Value>
+        <Value>0.4</Value>
+    </FuzyTransition>
+    <FuzyTransition id="t_1_3" FromState="q_1" ToState="q_3">
+        <Value>0.6</Value>
+        <Value>0.5</Value>
+    </FuzyTransition>
+    <FuzyTransition id="t_2_3" FromState="q_2" ToState="q_3">
+        <Value>0.3</Value>
+        <Value>0.1</Value>
+    </FuzyTransition>
+</FuzzyAutomaton>
