@@ -106,6 +106,21 @@ public class PathValuesEditorController implements LoadableDataController {
     }
 
     @FXML
+    private void createModel(){
+
+    }
+
+    @FXML
+    private void clearModel(){
+
+    }
+
+    @FXML
+    private void saveModel(){
+
+    }
+
+    @FXML
     private void loadActualFuzzySignatures(){
 
         final Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = this.commonServices.getRegisteredStores();
