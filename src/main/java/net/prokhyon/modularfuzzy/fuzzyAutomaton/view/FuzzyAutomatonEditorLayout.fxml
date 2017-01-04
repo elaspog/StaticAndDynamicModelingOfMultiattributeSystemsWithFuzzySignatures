@@ -180,7 +180,7 @@
                         <Button fx:id="moveSelectedCostValueDown" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveCostValueDown" text="D" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
-                  <Button fx:id="saveButton" onAction="#saveButtonPressed" prefWidth="100.0" text="Save" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                  <Button fx:id="saveStateOrTransition" onAction="#saveStateOrTransition" prefWidth="100.0" text="Save" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                   <Label text="Costs" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                   <Button fx:id="addCostValueButton" onAction="#addCostValue" prefWidth="100.0" text="Add Value" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                   <Spinner fx:id="costValueSpinner" prefWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
