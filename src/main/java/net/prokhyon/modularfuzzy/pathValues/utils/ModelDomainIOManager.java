@@ -12,7 +12,12 @@ import java.util.List;
 public class ModelDomainIOManager implements IPersistableModel {
 
     @Override
-    public <T extends FuzzyDescriptorRootBase> T importModel(File file, Class<? extends FuzzyDescriptorRootBase> descriptorRootModel, List<Class<? extends FuzzyDescriptorBase>> descriptorModels) throws NotParsableDescriptorException {
+    public <T extends FuzzyDescriptorRootBase>
+    T importModel(File file,
+                  Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
+                  List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
+            throws NotParsableDescriptorException {
+
         return null;
     }
 

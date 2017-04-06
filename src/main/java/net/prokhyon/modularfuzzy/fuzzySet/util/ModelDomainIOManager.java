@@ -34,7 +34,7 @@ public class ModelDomainIOManager implements IPersistableModel {
         try {
             return descriptorHandler.readFromJsonFile(file, descriptorRootModel, descriptorModels);
         } catch (NotParsableDescriptorException nce){}
-        throw new NotParsableDescriptorException();
+        throw new NotParsableDescriptorException("Error has occurred while importing a FuzzySet file: " + file.getAbsolutePath());
     }
 
     @Override

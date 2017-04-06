@@ -22,6 +22,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import net.prokhyon.modularfuzzy.common.CommonServices;
+import net.prokhyon.modularfuzzy.common.errors.NotConvertibleDescriptorException;
+import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
 import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
 import net.prokhyon.modularfuzzy.common.modules.DefaultModelLoaderInfo;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
@@ -32,6 +34,7 @@ import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 import net.prokhyon.modularfuzzy.shell.util.ContentLoaderHandler;
+import net.prokhyon.modularfuzzy.shell.util.FxDialogHelper;
 import net.prokhyon.modularfuzzy.shell.util.PaneAndControllerPair;
 
 public class ShellLayoutController {
@@ -143,9 +146,13 @@ public class ShellLayoutController {
 				public void handle(ActionEvent event) {
 
 					List<File> defaultModelFiles = listDefaultModelFiles();
-					final List<FuzzyDescriptorBase> fuzzyDescriptorBases
-							= commonServices.loadFilesIntoDescriptorsAndFilterByPersistableModel(defaultModelFiles, persistableModelInfo);
-					commonServices.loadDescriptorsIntoWorkspaceElementsByPersistableModel(fuzzyDescriptorBases, persistableModelInfo);
+					final List<FuzzyDescriptorBase> fuzzyDescriptorBases;
+					try {
+						fuzzyDescriptorBases = commonServices.loadFilesIntoDescriptorsAndFilterByPersistableModel(defaultModelFiles, persistableModelInfo);
+						commonServices.loadDescriptorsIntoWorkspaceElementsByPersistableModel(fuzzyDescriptorBases, persistableModelInfo);
+					} catch (NotParsableDescriptorException | NotConvertibleDescriptorException e) {
+						FxDialogHelper.informErrorWithStacktraceDialog(e, "Error", "Error while loading", "Error while loading files or workspace elements");
+					}
 				}
 			});
 			defaultModelLoaderMenu.getItems().add(menuItem);
@@ -156,7 +163,11 @@ public class ShellLayoutController {
 	private void loadAllDefaultModels() {
 
 		List<File> defaultModelFiles = listDefaultModelFiles();
-		commonServices.loadFiles(defaultModelFiles);
+		try {
+			commonServices.loadFiles(defaultModelFiles);
+		} catch (NotParsableDescriptorException | NotConvertibleDescriptorException e) {
+			FxDialogHelper.informErrorWithStacktraceDialog(e, "Error", "Error while loading default models", "Error while loading default models");
+		}
 	}
 
 	@FXML
@@ -164,7 +175,11 @@ public class ShellLayoutController {
 
 		List<File> filesToLoad = shellDialogServices.openFilesDialog();
 		if (filesToLoad != null)
-			commonServices.loadFiles(filesToLoad);
+			try {
+				commonServices.loadFiles(filesToLoad);
+			} catch (NotParsableDescriptorException | NotConvertibleDescriptorException e) {
+				FxDialogHelper.informErrorWithStacktraceDialog(e, "Error", "Error while loading models", "Error while loading models");
+			}
 		// TODO commonServices.validateLoadedFiles();
 	}
 
@@ -190,7 +205,7 @@ public class ShellLayoutController {
 		}
 	}
 
-	public List<File> listDefaultModelFiles() {
+	private List<File> listDefaultModelFiles() {
 
 		List<File> filesToLoad = new ArrayList<>();
 		try(Stream<Path> paths = Files.walk(Paths.get("./coremodels/"))) {
@@ -201,6 +216,11 @@ public class ShellLayoutController {
 			});
 		} catch (Exception e){ }
 		return filesToLoad;
+	}
+
+	public SharedWorkspaceControlAndController getSharedWorkspaceControlAndControllerOfActiveTab(){
+
+		return (SharedWorkspaceControlAndController) workspaceTabPane.getSelectionModel().getSelectedItem().getContent();
 	}
 
 }

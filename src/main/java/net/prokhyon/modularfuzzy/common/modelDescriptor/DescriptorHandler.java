@@ -115,7 +115,7 @@ public class DescriptorHandler {
 			throw new ModuleImplementationException();
 
 		} catch (Exception e){
-			throw new NotParsableDescriptorException();
+			throw new NotParsableDescriptorException("Error has occurred while importing XML file: " + file.getAbsolutePath());
 		}
 	}
 
@@ -145,7 +145,7 @@ public class DescriptorHandler {
 			throw new ModuleImplementationException();
 
 		} catch (Exception e){
-			throw new NotParsableDescriptorException();
+			throw new NotParsableDescriptorException("Error has occurred while importing JSON file: " + file.getAbsolutePath());
 		}
 	}
 

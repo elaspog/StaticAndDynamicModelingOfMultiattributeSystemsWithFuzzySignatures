@@ -40,11 +40,15 @@ public class ModelConverter
             final String fuzzySetNameLabel = state.getFuzzySetName();
 
             FuzzySet fs = null;
-            for (FuzzySet fuzzySet : fuzzySetSystem.getFuzzySets()) {
-                if (fuzzySet.getFuzzySetName().equals(fuzzySetNameLabel)) {
-                    fs = fuzzySet;
-                    break;
-                }
+            if (fuzzySetSystem != null) {
+                List<FuzzySet> fuzzySets = fuzzySetSystem.getFuzzySets();
+                if (fuzzySets != null)
+                    for (FuzzySet fuzzySet : fuzzySets) {
+                        if (fuzzySet.getFuzzySetName().equals(fuzzySetNameLabel)) {
+                            fs = fuzzySet;
+                            break;
+                        }
+                    }
             }
 
             net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState fxState

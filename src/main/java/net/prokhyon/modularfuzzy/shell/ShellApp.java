@@ -16,7 +16,7 @@ public class ShellApp extends Application {
 
 	private Stage primaryStage;
 	private BorderPane shellLayout;
-	private ShellLayoutController shellLayoutController;
+	private static ShellLayoutController shellLayoutController;
 	private ShellServices services;
 
 	public static void main(String[] args) {
@@ -53,5 +53,10 @@ public class ShellApp extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static ShellLayoutController getShellLayoutController(){
+
+		return shellLayoutController;
 	}
 }
