@@ -8,6 +8,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
@@ -24,6 +26,7 @@ import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
+import java.net.URL;
 import java.util.Map;
 
 public class FuzzySignatureEditorController implements LoadableDataController {
@@ -72,6 +75,15 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 
 	@FXML
 	private Button saveSignatureButton;
+
+	@FXML
+	private WebView signatureViewer;
+
+	@FXML
+	private TabPane tabPane;
+
+	@FXML
+	private AnchorPane signatureViewerAnchorPane;
 
     /*
      * Variables
@@ -189,6 +201,12 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		nodeNameTextField.textProperty().addListener((observable, oldValue, newValue) -> signatureTreeView.refresh());
 
 		bindViewElementsToControllerProperties();
+
+		initGraphVisualization();
+
+		tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showGraphVisualization());
+		signatureViewerAnchorPane.widthProperty().addListener((observable, oldValue, newValue) -> showGraphVisualization());
+		signatureViewerAnchorPane.heightProperty().addListener((observable, oldValue, newValue) -> showGraphVisualization());
 	}
 
 	private void bindViewElementsToControllerProperties() {
@@ -221,7 +239,7 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		if(fuzzySignature.getValue() != null){
 			signatureNameTextField.textProperty().bindBidirectional(fuzzySignature.getValue().fuzzySignatureNameProperty());
 			signatureDescriptionTextArea.textProperty().bindBidirectional(fuzzySignature.getValue().fuzzySignatureDescriptionProperty());
-			costVectorConstraintSpinner.getValueFactory().valueProperty().bindBidirectional(fuzzySignature.get().costVectorDimensionObjProperty());
+			costVectorConstraintSpinner.getValueFactory().valueProperty().bindBidirectional(fuzzySignature.getValue().costVectorDimensionObjProperty());
 		}
 	}
 
@@ -369,6 +387,36 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		return createdNodeCounter - 1;
 	}
 
+	private void initGraphVisualization() {
+
+		final URL uri = getClass().getResource("SignatureVisualizer.html");
+		signatureViewer.getEngine().load(uri.toString());
+		//automaton_viewer.setZoom(javafx.stage.Screen.getPrimary().getDpi() / 96);
+	}
+
+	private int jsGuiWebViewWidth = 0;
+	private int jsGuiWebViewHeight = 0;
+	private int jsGuiWebViewPadding = 0;
+
+	private void updateJsGuiWebViewSizes(){
+
+		jsGuiWebViewWidth = (int) signatureViewer.getWidth() - 20;
+		jsGuiWebViewHeight = (int) signatureViewer.getHeight() - 20;
+		jsGuiWebViewPadding = 20;
+	}
+
+	private void showGraphVisualization() {
+
+		if (fuzzySignature != null && fuzzySignature.getValue() != null) {
+
+			updateJsGuiWebViewSizes();
+			String jsonData = GraphVisualizationsHelperUtil.generateSignatureJsonForJavascriptGui(fuzzySignature.getValue());
+
+			signatureViewer.getEngine().executeScript("initialize('" + jsonData + "', " + jsGuiWebViewWidth + ", " + jsGuiWebViewHeight + ", " + jsGuiWebViewPadding + ");");
+			signatureViewer.getEngine().executeScript("visualize();");
+		}
+	}
+
     /*
      * Implemented interfaces
      */
@@ -402,6 +450,8 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 
 		setSignatureViewElements(signatureToLoad);
 		bindSignatureViewElementsToControllerProperties();
+
+		showGraphVisualization();
 	}
 
 	private TreeItem<FuzzyNode> loadTreeRecursively(FuzzyNode node, TreeItem<FuzzyNode> parentItem){

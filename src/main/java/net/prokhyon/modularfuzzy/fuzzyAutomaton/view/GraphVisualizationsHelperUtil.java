@@ -8,7 +8,6 @@ public class GraphVisualizationsHelperUtil {
 
     public static String generateTransitionsJsonForJavascriptGui(FuzzyAutomaton fuzzyAutomatonToLoad) {
 
-        System.out.println("_t");
         String transitionsNewJson = "";
         for (FuzzyTransition fuzzyTransition : fuzzyAutomatonToLoad.getFuzzyTransitions()) {
             if (! transitionsNewJson.equals("")){

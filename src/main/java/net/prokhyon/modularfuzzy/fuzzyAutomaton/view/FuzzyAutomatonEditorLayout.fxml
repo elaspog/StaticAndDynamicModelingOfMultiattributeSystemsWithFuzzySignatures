@@ -199,7 +199,7 @@
       </Group>
       <BorderPane fx:id="graphPane" minHeight="300" minWidth="300" >
          <center>
-            <WebView fx:id="automaton_viewer" minHeight="250" minWidth="250" prefHeight="-1.0" prefWidth="-1.0" />
+            <WebView fx:id="automatonViewer" minHeight="250" minWidth="250" prefHeight="-1.0" prefWidth="-1.0" />
          </center>
          <padding>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />

@@ -125,7 +125,7 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	private Button saveStateOrTransition;
 
 	@FXML
-	private WebView automaton_viewer;
+	private WebView automatonViewer;
 
 	@FXML
 	private BorderPane graphPane;
@@ -698,17 +698,17 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	private void initGraphVisualization() {
 
 		final URL uri = getClass().getResource("AutomatonVisualizer.html");
-		automaton_viewer.getEngine().load(uri.toString());
-		//automaton_viewer.setZoom(javafx.stage.Screen.getPrimary().getDpi() / 96);
+		automatonViewer.getEngine().load(uri.toString());
+		//automatonViewer.setZoom(javafx.stage.Screen.getPrimary().getDpi() / 96);
 	}
 
 	private void showGraphVisualization() {
 
-		final int width = (int) automaton_viewer.getWidth() - 20;
-		final int height = (int) automaton_viewer.getHeight() - 20;
+		final int width = (int) automatonViewer.getWidth() - 20;
+		final int height = (int) automatonViewer.getHeight() - 20;
 
-		automaton_viewer.getEngine().executeScript("initialize('" + jsonStatesVisualization + "','" + jsonTransitionsVisualization + "', " + width + ", " + height + ");");
-		automaton_viewer.getEngine().executeScript("visualize();");
+		automatonViewer.getEngine().executeScript("initialize('" + jsonStatesVisualization + "','" + jsonTransitionsVisualization + "', " + width + ", " + height + ");");
+		automatonViewer.getEngine().executeScript("visualize();");
 	}
 
 	@FXML
