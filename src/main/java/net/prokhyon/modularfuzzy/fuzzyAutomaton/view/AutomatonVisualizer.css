@@ -1,0 +1,48 @@
+
+.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+#directed_green {
+  fill: green;
+}
+
+.link.directed_green {
+  stroke: green;
+}
+
+.link.directed_dotted {
+  stroke-dasharray: 0,2 1;
+}
+
+circle {
+  fill: #ccc;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+circle.initial {
+  fill: #6c6;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+circle.normal {
+  fill: #66c;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+circle.terminal {
+  fill: #c66;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}

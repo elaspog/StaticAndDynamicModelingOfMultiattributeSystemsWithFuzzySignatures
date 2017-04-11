@@ -8,6 +8,8 @@ import javafx.scene.layout.Pane;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
+import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
 public class ContentLoaderHandler {
 
@@ -39,6 +41,12 @@ public class ContentLoaderHandler {
 			try {
 				p.controller.loadWithData(selectedItem);
 			} catch (Exception e) {
+
+				ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();
+				shellDialogServices.informErrorWithStacktraceDialog(e,
+						"Model loading error",
+						"Error occurred while loading the model",
+						"Something went wrong while loading");
 			}
 		}
 		AnchorPane.setTopAnchor(p.pane, 0.0);

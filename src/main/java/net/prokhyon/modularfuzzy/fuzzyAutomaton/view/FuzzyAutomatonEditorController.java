@@ -8,6 +8,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
@@ -15,6 +17,7 @@ import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
+import net.prokhyon.modularfuzzy.common.views.DragResizerXY;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
@@ -26,6 +29,7 @@ import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
+import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -120,6 +124,12 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	@FXML
 	private Button saveStateOrTransition;
 
+	@FXML
+	private WebView automaton_viewer;
+
+	@FXML
+	private BorderPane graphPane;
+
 	/*
      * Services
      */
@@ -147,6 +157,8 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 	private int createdAutomatonCounter;
 	private int createdStateCounter;
 	private int createdTransitionCounter;
+	private String jsonStatesVisualization;
+	private String jsonTransitionsVisualization;
 
     /*
      * Methods
@@ -342,6 +354,8 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 					}
 				});
 
+		initGraphVisualization();
+		DragResizerXY.makeResizable(graphPane);
 	}
 
 	private ListCell<FuzzyState> getListCell() {
@@ -674,6 +688,27 @@ public class FuzzyAutomatonEditorController implements LoadableDataController {
 
 		setAutomatonViewElements(fuzzyAutomatonToLoad);
 		bindAutomatonViewElementsToControllerProperties();
+
+		jsonStatesVisualization = GraphVisualizationsHelperUtil.generateStatesJsonForJavascriptGui(fuzzyAutomatonToLoad);
+		jsonTransitionsVisualization = GraphVisualizationsHelperUtil.generateTransitionsJsonForJavascriptGui(fuzzyAutomatonToLoad);
+		showGraphVisualization();
+
+	}
+
+	private void initGraphVisualization() {
+
+		final URL uri = getClass().getResource("AutomatonVisualizer.html");
+		automaton_viewer.getEngine().load(uri.toString());
+		//automaton_viewer.setZoom(javafx.stage.Screen.getPrimary().getDpi() / 96);
+	}
+
+	private void showGraphVisualization() {
+
+		final int width = (int) automaton_viewer.getWidth() - 20;
+		final int height = (int) automaton_viewer.getHeight() - 20;
+
+		automaton_viewer.getEngine().executeScript("initialize('" + jsonStatesVisualization + "','" + jsonTransitionsVisualization + "', " + width + ", " + height + ");");
+		automaton_viewer.getEngine().executeScript("visualize();");
 	}
 
 	@FXML
