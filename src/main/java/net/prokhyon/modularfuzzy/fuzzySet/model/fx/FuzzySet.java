@@ -42,19 +42,29 @@ public class FuzzySet extends FuzzyFxBase
 		this.fuzzySetName = new SimpleStringProperty(fuzzySetName);
 		this.fuzzySetDescription = new SimpleStringProperty(fuzzySetDescription);
 		this.fuzzySetType = new SimpleObjectProperty<>(fuzzySetType);
-
-		List<FuzzySetPoint> copiedFuzzySetPoints = new ArrayList<>();
-		if (fuzzySetPoints != null) {
-			for (FuzzySetPoint fs : fuzzySetPoints) {
-				copiedFuzzySetPoints.add(fs.deepCopy());
-			}
-		}
-		this.fuzzySetPoints = new SimpleListProperty<>(FXCollections.observableArrayList(copiedFuzzySetPoints));
+		this.fuzzySetPoints = new SimpleListProperty<>(FXCollections.observableArrayList(fuzzySetPoints != null ? fuzzySetPoints : new ArrayList<>()));
 	}
 
 	public FuzzySet(FuzzySet otherFuzzySet) {
 		this(otherFuzzySet.fuzzySetName.get(), otherFuzzySet.fuzzySetDescription.get(),
 				otherFuzzySet.fuzzySetType.get(), otherFuzzySet.fuzzySetPoints.get());
+	}
+
+	public FuzzySet deepCopy() {
+		return new FuzzySet(this.fuzzySetName.get(), this.fuzzySetDescription.get(),
+				this.fuzzySetType.get(), deepCopyFuzzySetPoints(this.fuzzySetPoints.get()));
+	}
+
+	private List<FuzzySetPoint> deepCopyFuzzySetPoints(List<FuzzySetPoint> fuzzySetPoints){
+
+		if (fuzzySetPoints != null) {
+			List<FuzzySetPoint> copiedFuzzySetPoints = new ArrayList<>();
+			for (FuzzySetPoint fs : fuzzySetPoints) {
+				copiedFuzzySetPoints.add(fs.deepCopy());
+			}
+			return copiedFuzzySetPoints;
+		}
+		return fuzzySetPoints;
 	}
 
 	public String getFuzzySetName() {
@@ -124,7 +134,4 @@ public class FuzzySet extends FuzzyFxBase
 		throw new ModuleImplementationException("Unknown FuzzySetTypeEnum while converting to FuzzySetBase descriptor model.");
 	}
 
-	public FuzzySet deepCopy() {
-		return new FuzzySet(this);
-	}
 }

@@ -22,9 +22,11 @@ public class FuzzySetPoint extends FuzzyFxBase
 	}
 
 	public FuzzySetPoint(FuzzySetPoint otherFuzzySetPoint) {
-		super();
-		this.xPoint = new SimpleFloatProperty(otherFuzzySetPoint.xPoint.get());
-		this.yPoint = new SimpleFloatProperty(otherFuzzySetPoint.yPoint.get());
+		this(otherFuzzySetPoint.xPoint.get(), otherFuzzySetPoint.yPoint.get());
+	}
+
+	public FuzzySetPoint deepCopy() {
+		return new FuzzySetPoint(this.xPoint.get(), this.yPoint.get());
 	}
 
 	public float getXPoint() {
@@ -71,7 +73,4 @@ public class FuzzySetPoint extends FuzzyFxBase
 		}
 	}
 
-	public FuzzySetPoint deepCopy() {
-		return new FuzzySetPoint(this);
-	}
 }

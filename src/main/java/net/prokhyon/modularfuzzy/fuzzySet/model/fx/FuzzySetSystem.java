@@ -24,7 +24,6 @@ public class FuzzySetSystem extends WorkspaceElement
 	private final ObjectProperty<FuzzySetSystemTypeEnum> fuzzySystemType;
 	private final ListProperty<FuzzySet> fuzzySets;
 
-
 	public FuzzySetSystem(String uuid, String fuzzySystemName, String fuzzySystemDescription, FuzzySetSystemTypeEnum fuzzySystemType,
 						  List<FuzzySet> fuzzySets) {
 		super();
@@ -32,21 +31,29 @@ public class FuzzySetSystem extends WorkspaceElement
 		this.fuzzySystemName = new SimpleStringProperty(fuzzySystemName);
 		this.fuzzySystemDescription = new SimpleStringProperty(fuzzySystemDescription);
 		this.fuzzySystemType = new SimpleObjectProperty<>(fuzzySystemType);
-		//this.fuzzySets = new SimpleListProperty<>(FXCollections.observableArrayList(FuzzySet.extractor()));
-
-		List<FuzzySet> copiedFuzzySets = new ArrayList<>();
-		if (fuzzySets != null) {
-			for (FuzzySet fs : fuzzySets) {
-				copiedFuzzySets.add(fs.deepCopy());
-			}
-		}
-		this.fuzzySets = new SimpleListProperty<>(FXCollections.observableArrayList(copiedFuzzySets));
+		this.fuzzySets = new SimpleListProperty<>(FXCollections.observableArrayList(fuzzySets != null ? fuzzySets : new ArrayList<>()));
 	}
 
 	public FuzzySetSystem(FuzzySetSystem otherFuzzySetSystem){
 		this(otherFuzzySetSystem.uuid.get(), otherFuzzySetSystem.fuzzySystemName.get(),
 				otherFuzzySetSystem.fuzzySystemDescription.get(), otherFuzzySetSystem.fuzzySystemType.get(),
 				otherFuzzySetSystem.fuzzySets.get());
+	}
+
+	public FuzzySetSystem deepCopy() {
+		return new FuzzySetSystem( this.uuid.get(), this.fuzzySystemName.get(), this.fuzzySystemDescription.get(), this.fuzzySystemType.get(), deepCopyFuzzySets(this.fuzzySets.get()));
+	}
+
+	private List<FuzzySet> deepCopyFuzzySets(List<FuzzySet> fuzzySets){
+
+		if (fuzzySets != null) {
+			List<FuzzySet> copiedFuzzySets = new ArrayList<>();
+			for (FuzzySet fs : fuzzySets) {
+				copiedFuzzySets.add(fs.deepCopy());
+			}
+			return copiedFuzzySets;
+		}
+		return fuzzySets;
 	}
 
 	public String getFuzzySystemName() {
@@ -110,7 +117,6 @@ public class FuzzySetSystem extends WorkspaceElement
 		this.uuid.set(uuid);
 	}
 
-
 	@Override
 	public net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem convert2DescriptorModel() {
 
@@ -123,10 +129,6 @@ public class FuzzySetSystem extends WorkspaceElement
 		return new net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem(this.getUuid(),
 				this.getFuzzySystemName(), this.getFuzzySystemDescription(), this.getFuzzySystemType(),
 				descriptorFuzzySets);
-	}
-
-	public FuzzySetSystem deepCopy() {
-		return new FuzzySetSystem(this);
 	}
 
 	@Override
