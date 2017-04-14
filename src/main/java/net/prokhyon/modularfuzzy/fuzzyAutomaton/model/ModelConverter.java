@@ -85,7 +85,8 @@ public class ModelConverter
             fxTransitions.add(fxTransition);
         }
 
-        return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton(uuid, typeName, description, fxStates, fxTransitions, fuzzySetSystem, costVectorDimension);
+        final FuzzyAutomaton fa = new FuzzyAutomaton(uuid, typeName, description, fxStates, fxTransitions, fuzzySetSystem, costVectorDimension);
+        return fa;
     }
 
 }

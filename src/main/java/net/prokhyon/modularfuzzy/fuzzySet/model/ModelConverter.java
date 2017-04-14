@@ -2,6 +2,7 @@ package net.prokhyon.modularfuzzy.fuzzySet.model;
 
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleDescriptor2FxModel;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase;
+import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,8 @@ public class ModelConverter
             fuzzySets.add(fuzzySet);
         }
 
-        return new net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem(fuzzySystemUUID, fuzzySystemName, fuzzySystemDescription, fuzzySystemType, fuzzySets);
+        final FuzzySetSystem fss = new FuzzySetSystem(fuzzySystemUUID, fuzzySystemName, fuzzySystemDescription, fuzzySystemType, fuzzySets);
+        return fss;
     }
 
 }

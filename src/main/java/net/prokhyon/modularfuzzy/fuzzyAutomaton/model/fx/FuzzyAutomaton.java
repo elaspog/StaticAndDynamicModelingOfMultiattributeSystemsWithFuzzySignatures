@@ -7,10 +7,14 @@ import javafx.collections.ObservableList;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.utils.Tuple2;
+import net.prokhyon.modularfuzzy.common.utils.Tuple3;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySetSystem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FuzzyAutomaton extends WorkspaceElement
         implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyAutomaton, net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton> {
@@ -35,21 +39,8 @@ public class FuzzyAutomaton extends WorkspaceElement
         this.fuzzySetSystem = new SimpleObjectProperty<>(fuzzySetSystem);
         this.costVectorDimensionObj = new SimpleObjectProperty(costVectorDimension);
         this.costVectorDimensionInt = IntegerProperty.integerProperty(costVectorDimensionObj);
-
-        List<FuzzyState> copiedFuzzyStates = new ArrayList<>();
-        List<FuzzyTransition> copiedFuzzyTransitions = new ArrayList<>();
-        if (fuzzyStates != null) {
-            for (FuzzyState fs : fuzzyStates) {
-                copiedFuzzyStates.add(fs.deepCopy());
-            }
-        }
-        if (fuzzyTransitions != null) {
-            for (FuzzyTransition ft : fuzzyTransitions) {
-                copiedFuzzyTransitions.add(ft.deepCopy());
-            }
-        }
-        this.fuzzyTransitions = new SimpleListProperty<>(FXCollections.observableArrayList(copiedFuzzyTransitions));
-        this.fuzzyStates = new SimpleListProperty<>(FXCollections.observableArrayList(copiedFuzzyStates));
+        this.fuzzyStates = new SimpleListProperty<>(FXCollections.observableArrayList(fuzzyStates != null ? fuzzyStates : new ArrayList<>()));
+        this.fuzzyTransitions = new SimpleListProperty<>(FXCollections.observableArrayList(fuzzyTransitions != null ? fuzzyTransitions : new ArrayList<>()));
     }
 
     public FuzzyAutomaton(FuzzyAutomaton otherFuzzyAutomaton){
@@ -60,7 +51,46 @@ public class FuzzyAutomaton extends WorkspaceElement
     }
 
     public FuzzyAutomaton deepCopy() {
-        return new FuzzyAutomaton(this);
+
+        final Tuple2<Map<FuzzyState, FuzzyState>, List<FuzzyState>> tuple2 = cleverCopyFuzzyStates(this.getFuzzyStates());
+
+        final Map<FuzzyState, FuzzyState> pairsOfOldAndCopiedStates = tuple2._1;
+        final List<FuzzyState> copiedStates = tuple2._2;
+
+        final FuzzySetSystem fuzzySetSystem = this.getFuzzySetSystem() != null ? this.getFuzzySetSystem().deepCopy() : null;
+
+        return new FuzzyAutomaton(this.getUuid(), this.getFuzzyAutomatonName(),
+                this.getFuzzyAutomatonDescription(), copiedStates,
+                deepCopyFuzzyTransitions(this.getFuzzyTransitions(), pairsOfOldAndCopiedStates),
+                fuzzySetSystem,
+                this.getCostVectorDimensionObj());
+    }
+
+    private Tuple2<Map<FuzzyState, FuzzyState>, List<FuzzyState>> cleverCopyFuzzyStates(List<FuzzyState> fuzzyStates){
+
+        Map<FuzzyState, FuzzyState> retMap = new HashMap<>();
+        List<FuzzyState> copiedFuzzyStates = new ArrayList<>();
+
+        if (fuzzyStates != null) {
+            for (FuzzyState fuzzyState : fuzzyStates) {
+                final FuzzyState clonedFuzzyState = fuzzyState.deepCopy();
+                copiedFuzzyStates.add(clonedFuzzyState);
+                retMap.put(fuzzyState, clonedFuzzyState);
+            }
+        }
+        return new Tuple2<>(retMap, copiedFuzzyStates);
+    }
+
+    private List<FuzzyTransition> deepCopyFuzzyTransitions(List<FuzzyTransition> fuzzyTransitions, Map<FuzzyState, FuzzyState> pairsOfOldAndCopiedStates){
+
+        if (fuzzyTransitions != null) {
+            List<FuzzyTransition> copiedFuzzyTransitions = new ArrayList<>();
+            for (FuzzyTransition ft : fuzzyTransitions) {
+                copiedFuzzyTransitions.add(ft.deepCopy(pairsOfOldAndCopiedStates));
+            }
+            return copiedFuzzyTransitions;
+        }
+        return fuzzyTransitions;
     }
 
     @Override

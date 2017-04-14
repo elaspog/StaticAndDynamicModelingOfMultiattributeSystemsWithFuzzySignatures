@@ -8,6 +8,7 @@ import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class FuzzyTransition extends FuzzyFxBase
         implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition, net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyTransition> {
@@ -25,16 +26,31 @@ public class FuzzyTransition extends FuzzyFxBase
         this.fuzzyTransitionDescription = new SimpleStringProperty(fuzzyTransitionDescription);
         this.fromState = new SimpleObjectProperty<>(fromState);
         this.toState = new SimpleObjectProperty<>(toState);
-        if (costVector != null)
-            this.costVector = new SimpleListProperty<>(FXCollections.observableArrayList(costVector));
-        else
-            this.costVector = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<Double>()));
+        this.costVector = new SimpleListProperty<>(FXCollections.observableArrayList(costVector != null ? costVector : new ArrayList<Double>()));
     }
 
     public FuzzyTransition(FuzzyTransition otherFuzzyTransition) {
         this(otherFuzzyTransition.getFuzzyTransitionName(), otherFuzzyTransition.getFuzzyTransitionDescription(),
                 otherFuzzyTransition.getCostVector(), otherFuzzyTransition.getFromState(),
                 otherFuzzyTransition.getToState());
+    }
+
+    public FuzzyTransition deepCopy(Map<FuzzyState, FuzzyState> pairsOfOldAndCopiedStates) {
+        return new FuzzyTransition(this.getFuzzyTransitionName(), this.getFuzzyTransitionDescription(),
+                copyCostVector(this.getCostVector()), pairsOfOldAndCopiedStates.get(this.getFromState()),
+                pairsOfOldAndCopiedStates.get(this.getToState()));
+    }
+
+    private List<Double> copyCostVector(List<Double> costVector){
+
+        if (costVector != null) {
+            List<Double> copiedCostVector = new ArrayList<>();
+            for (Double d : costVector) {
+                copiedCostVector.add(d);
+            }
+            return copiedCostVector;
+        }
+        return costVector;
     }
 
     @Override
@@ -46,10 +62,6 @@ public class FuzzyTransition extends FuzzyFxBase
         return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition(
                 getFuzzyTransitionName(), getFuzzyTransitionDescription(), fromStateName, toStateName,
                 costVector.get());
-    }
-
-    public FuzzyTransition deepCopy() {
-        return new FuzzyTransition(this);
     }
 
     public String getFuzzyTransitionName() {

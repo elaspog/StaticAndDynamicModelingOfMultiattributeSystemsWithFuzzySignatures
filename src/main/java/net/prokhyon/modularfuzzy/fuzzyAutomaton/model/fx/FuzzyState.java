@@ -30,16 +30,18 @@ public class FuzzyState extends FuzzyFxBase
                 otherFuzzyState.getFuzzySet(), otherFuzzyState.getFuzzyStateType());
     }
 
+    public FuzzyState deepCopy() {
+
+        final FuzzySet fuzzySet = this.getFuzzySet() != null ? this.getFuzzySet().deepCopy() : null;
+        return new FuzzyState( this.getFuzzyStateName(), this.getFuzzyStateDescription(), fuzzySet, this.getFuzzyStateType());
+    }
+
     @Override
     public net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState convert2DescriptorModel() {
 
         // TODO Handle reference to FuzzySetSystem's set (fuzzyValue)
         return new net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState(getFuzzyStateName(),
                 getFuzzyStateDescription(),  getFuzzyStateType(), getFuzzySet().getFuzzySetName());
-    }
-
-    public FuzzyState deepCopy() {
-        return new FuzzyState(this);
     }
 
     public String getFuzzyStateName() {
