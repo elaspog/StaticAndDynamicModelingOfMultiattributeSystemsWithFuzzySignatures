@@ -14,6 +14,8 @@ public class FuzzyNodeTreeCell extends TextFieldTreeCell<FuzzyNode> {
 		rootContextMenu = new ContextMenu();
 		MenuItem addMenuItem = new MenuItem("Add child node");
 		MenuItem removeMenuItem = new MenuItem("Remove subtree");
+		MenuItem loadSubtreeMenuItem = new MenuItem("Load existing subtree");
+		MenuItem viewAutomatonMenuItem = new MenuItem("View ");
 
 		rootContextMenu.getItems().add(addMenuItem);
 		rootContextMenu.getItems().add(removeMenuItem);
