@@ -1,5 +1,6 @@
 package net.prokhyon.modularfuzzy.fuzzySignature.model.fx;
 
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,4 +76,14 @@ public class CompoundFuzzyState {
                 .collect(Collectors.joining(" × ")) + ")";
     }
 
+    public FuzzyStateTypeEnum getAggregatedStateType() {
+
+        if (fuzzyStateTuple.stream().allMatch(x -> x.getFuzzyStateType().equals(FuzzyStateTypeEnum.INITIAL)))
+            return FuzzyStateTypeEnum.INITIAL;
+
+        if (fuzzyStateTuple.stream().allMatch(x -> x.getFuzzyStateType().equals(FuzzyStateTypeEnum.TERMINAL)))
+            return FuzzyStateTypeEnum.TERMINAL;
+
+        return FuzzyStateTypeEnum.NORMAL;
+    }
 }

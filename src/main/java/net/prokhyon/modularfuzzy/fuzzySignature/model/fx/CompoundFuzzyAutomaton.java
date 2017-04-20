@@ -15,9 +15,12 @@ public class CompoundFuzzyAutomaton {
     private List<CompoundFuzzyState> compoundFuzzyStates;
     private List<CompoundFuzzyTransition> compoundFuzzyTransitions;
 
-    public CompoundFuzzyAutomaton(FuzzyAutomaton automaton){
-
+    public CompoundFuzzyAutomaton(){
         reset();
+    }
+
+    public CompoundFuzzyAutomaton(FuzzyAutomaton automaton){
+        this();
         extendExistingCompoundWith(automaton);
     }
 

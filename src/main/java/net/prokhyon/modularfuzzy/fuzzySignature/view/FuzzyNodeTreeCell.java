@@ -2,7 +2,10 @@ package net.prokhyon.modularfuzzy.fuzzySignature.view;
 
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
+import net.prokhyon.modularfuzzy.common.errors.ModelError;
+import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.CompoundFuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzyNode;
+import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 
 
 public class FuzzyNodeTreeCell extends TextFieldTreeCell<FuzzyNode> {
@@ -15,10 +18,12 @@ public class FuzzyNodeTreeCell extends TextFieldTreeCell<FuzzyNode> {
 		MenuItem addMenuItem = new MenuItem("Add child node");
 		MenuItem removeMenuItem = new MenuItem("Remove subtree");
 		MenuItem loadSubtreeMenuItem = new MenuItem("Load existing subtree");
-		MenuItem viewAutomatonMenuItem = new MenuItem("View ");
+		MenuItem viewAutomatonMenuItem = new MenuItem("View automaton");
 
 		rootContextMenu.getItems().add(addMenuItem);
 		rootContextMenu.getItems().add(removeMenuItem);
+		rootContextMenu.getItems().add(loadSubtreeMenuItem);
+		rootContextMenu.getItems().add(viewAutomatonMenuItem);
 
 		addMenuItem.setOnAction(t -> {
 
@@ -49,6 +54,14 @@ public class FuzzyNodeTreeCell extends TextFieldTreeCell<FuzzyNode> {
 			final FuzzyNode parentNode = (parent != null ? parent.getValue() : null);
 			if (parentNode != null)
 				parentNode.getChildNodes().remove(thisNode);
+		});
+
+		viewAutomatonMenuItem.setOnAction(t -> {
+
+			final TreeItem<FuzzyNode> item = getTreeItem();
+			final FuzzyNode thisNode = (item != null ? item.getValue() : null);
+
+			fuzzySignatureEditorController.showCompoundAutomaton(thisNode);
 		});
 
 	}

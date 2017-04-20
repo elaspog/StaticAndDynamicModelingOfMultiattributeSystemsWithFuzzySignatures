@@ -5,12 +5,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
+import net.prokhyon.modularfuzzy.common.errors.ModelError;
 import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.AggregationType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FuzzyNode extends FuzzyFxBase
         implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzyNode, net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzyNode>{
@@ -137,6 +139,41 @@ public class FuzzyNode extends FuzzyFxBase
             automatonUuid = fuzzyAutomaton.getUuid();
 
         return new net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzyNode(fuzzyNodeName, fuzzyNodeDescription, convertedChildNodes, aggregationType, automatonUuid);
+    }
+
+    public CompoundFuzzyAutomaton generateRecursivelyCartesianProductOfAutomatons()
+            throws ModelError {
+
+        final List<FuzzyNode> fuzzyNodes = recursivelyGetLeafNodesFromMostLeft(this);
+
+        if (fuzzyNodes.stream().anyMatch(node -> node == null || node.getFuzzyAutomaton() == null)){
+            throw new ModelError("Automatons on leafs are missing.");
+        }
+
+        CompoundFuzzyAutomaton cfa = new CompoundFuzzyAutomaton();
+        List<FuzzyAutomaton> fuzzyAutomatons = fuzzyNodes.stream().map(node -> node.getFuzzyAutomaton()).collect(Collectors.toList());
+        fuzzyAutomatons.stream().forEach(automaton -> cfa.extendExistingCompoundWith(automaton));
+
+        return cfa;
+    }
+
+    private List<FuzzyNode> recursivelyGetLeafNodesFromMostLeft(FuzzyNode fuzzyNode) {
+
+        if (fuzzyNode == null)
+            throw new RuntimeException("Algorithm error");
+
+        List<FuzzyNode> retList = new ArrayList<>();
+
+        final List<FuzzyNode> childNodes = fuzzyNode.getChildNodes();
+        if (childNodes != null && ! childNodes.isEmpty()){
+            for (FuzzyNode childNode : childNodes) {
+                final List<FuzzyNode> fuzzyNodes = childNode.recursivelyGetLeafNodesFromMostLeft(childNode);
+                retList.addAll(fuzzyNodes);
+            }
+        } else {
+            retList.add(fuzzyNode);
+        }
+        return retList;
     }
 
 }

@@ -1,0 +1,76 @@
+
+.link {
+  fill: none;
+  stroke: #aaa;
+  stroke-width: 1.5px;
+}
+
+circle.initial {
+  fill: #afa;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+circle.initial.fixed {
+  fill: #6c6;
+}
+
+circle.normal {
+  fill: #aaf;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+circle.normal.fixed {
+  fill: #66c;
+}
+
+circle.terminal {
+  fill: #faa;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+circle.terminal.fixed {
+  fill: #c66;
+}
+
+#directed_green {
+  fill: green;
+}
+
+.link.directed_green {
+  stroke: green;
+}
+
+.link.directed_dotted {
+  stroke-dasharray: 0,2 1;
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+#toolbox{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 0.5em;
+    margin-left: 1em;
+    border: 2px solid #EEEEEE;
+    border-radius: 5px;
+    padding: 1em;
+    z-index: 5;
+}
+
+#toolbox input{
+    width: 30px;
+    opacity: 0.4;
+}
+
+#toolbox input:hover{
+    opacity: 1;
+    cursor: pointer;
+}

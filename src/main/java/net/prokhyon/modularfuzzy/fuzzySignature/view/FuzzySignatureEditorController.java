@@ -15,12 +15,14 @@ import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
+import net.prokhyon.modularfuzzy.common.errors.ModelError;
 import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.AggregationType;
+import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.CompoundFuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzyNode;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
@@ -80,10 +82,16 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 	private WebView signatureViewer;
 
 	@FXML
+	private WebView compoundAutomatonViewer;
+
+	@FXML
 	private TabPane tabPane;
 
 	@FXML
 	private AnchorPane signatureViewerAnchorPane;
+
+	@FXML
+	private AnchorPane compoundAutomatonViewerAnchorPane;
 
     /*
      * Variables
@@ -204,9 +212,14 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 
 		initGraphVisualization();
 
-		tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showGraphVisualization());
-		signatureViewerAnchorPane.widthProperty().addListener((observable, oldValue, newValue) -> showGraphVisualization());
-		signatureViewerAnchorPane.heightProperty().addListener((observable, oldValue, newValue) -> showGraphVisualization());
+		tabPane.getSelectionModel().selectedItemProperty().addListener(
+				(observable, oldValue, newValue) -> { showSignatureGraphVisualization(); showCompoundAutomatonGraphVisualization(); });
+
+		signatureViewerAnchorPane.widthProperty().addListener((observable, oldValue, newValue) -> showSignatureGraphVisualization());
+		signatureViewerAnchorPane.heightProperty().addListener((observable, oldValue, newValue) -> showSignatureGraphVisualization());
+
+		compoundAutomatonViewerAnchorPane.widthProperty().addListener((observable, oldValue, newValue) -> showCompoundAutomatonGraphVisualization());
+		compoundAutomatonViewerAnchorPane.heightProperty().addListener((observable, oldValue, newValue) -> showCompoundAutomatonGraphVisualization());
 	}
 
 	private void bindViewElementsToControllerProperties() {
@@ -389,31 +402,56 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 
 	private void initGraphVisualization() {
 
-		final URL uri = getClass().getResource("SignatureVisualizer.html");
-		signatureViewer.getEngine().load(uri.toString());
+		final URL uri1 = getClass().getResource("SignatureVisualizer.html");
+		final URL uri2 = getClass().getResource("CompoundAutomatonVisualizer.html");
+		signatureViewer.getEngine().load(uri1.toString());
+		compoundAutomatonViewer.getEngine().load(uri2.toString());
 		//automaton_viewer.setZoom(javafx.stage.Screen.getPrimary().getDpi() / 96);
 	}
 
-	private int jsGuiWebViewWidth = 0;
-	private int jsGuiWebViewHeight = 0;
-	private int jsGuiWebViewPadding = 0;
+	private int signatureJsGuiWebViewWidth = 0;
+	private int signatureJsGuiWebViewHeight = 0;
+	private int signatureJsGuiWebViewPadding = 0;
+	private int automatonJsGuiWebViewWidth = 0;
+	private int automatonJsGuiWebViewHeight = 0;
+	private int automatonJsGuiWebViewPadding = 0;
 
-	private void updateJsGuiWebViewSizes(){
+	private void updateSignatureJsGuiWebViewSizes(){
 
-		jsGuiWebViewWidth = (int) signatureViewer.getWidth() - 20;
-		jsGuiWebViewHeight = (int) signatureViewer.getHeight() - 20;
-		jsGuiWebViewPadding = 20;
+		signatureJsGuiWebViewWidth = (int) signatureViewer.getWidth() - 20;
+		signatureJsGuiWebViewHeight = (int) signatureViewer.getHeight() - 20;
+		signatureJsGuiWebViewPadding = 20;
 	}
 
-	private void showGraphVisualization() {
+	private void updateAutomatonJsGuiWebViewSizes(){
+
+		automatonJsGuiWebViewWidth = (int) compoundAutomatonViewer.getWidth() - 20;
+		automatonJsGuiWebViewHeight = (int) compoundAutomatonViewer.getHeight() - 20;
+		automatonJsGuiWebViewPadding = 20;
+	}
+
+	private void showSignatureGraphVisualization() {
 
 		if (fuzzySignature != null && fuzzySignature.getValue() != null) {
 
-			updateJsGuiWebViewSizes();
+			updateSignatureJsGuiWebViewSizes();
 			String jsonData = GraphVisualizationsHelperUtil.generateSignatureJsonForJavascriptGui(fuzzySignature.getValue());
 
-			signatureViewer.getEngine().executeScript("initialize('" + jsonData + "', " + jsGuiWebViewWidth + ", " + jsGuiWebViewHeight + ", " + jsGuiWebViewPadding + ");");
+			signatureViewer.getEngine().executeScript("initialize('" + jsonData + "', " + signatureJsGuiWebViewWidth + ", " + signatureJsGuiWebViewHeight + ", " + signatureJsGuiWebViewPadding + ");");
 			signatureViewer.getEngine().executeScript("visualize();");
+		}
+	}
+
+	private void showCompoundAutomatonGraphVisualization() {
+
+		if (selectedCompoundNode != null){
+			updateAutomatonJsGuiWebViewSizes();
+
+			String jsonStatesVisualization = GraphVisualizationsHelperUtil.generateStatesJsonForJavascriptGui(selectedCompoundNode);
+			String jsonTransitionsVisualization = GraphVisualizationsHelperUtil.generateTransitionsJsonForJavascriptGui(selectedCompoundNode);
+
+			compoundAutomatonViewer.getEngine().executeScript("initialize('" + jsonStatesVisualization + "','" + jsonTransitionsVisualization + "', " + automatonJsGuiWebViewWidth + ", " + automatonJsGuiWebViewHeight + ", " + automatonJsGuiWebViewPadding + ");");
+			compoundAutomatonViewer.getEngine().executeScript("visualize();");
 		}
 	}
 
@@ -451,7 +489,7 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 		setSignatureViewElements(signatureToLoad);
 		bindSignatureViewElementsToControllerProperties();
 
-		showGraphVisualization();
+		showSignatureGraphVisualization();
 	}
 
 	private TreeItem<FuzzyNode> loadTreeRecursively(FuzzyNode node, TreeItem<FuzzyNode> parentItem){
@@ -464,6 +502,29 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 			parentItem.getChildren().add(fuzzyNodeTreeItem);
 		fuzzyNodeTreeItem.setExpanded(true);
 		return fuzzyNodeTreeItem;
+	}
+
+	private CompoundFuzzyAutomaton selectedCompoundNode = null;
+
+	public void showCompoundAutomaton(FuzzyNode thisNode) {
+
+		if (thisNode == null)
+			throw new RuntimeException("Error in Signature's UI logic.");
+
+		CompoundFuzzyAutomaton cartesianProduct = null;
+		try {
+			cartesianProduct = thisNode.generateRecursivelyCartesianProductOfAutomatons();
+
+		} catch (ModelError modelError) {
+
+			new ServiceFactory().getShellDialogServices()
+					.informWarningDialog("ModelError", "Error while generating cartesian product", modelError.getMessage());
+		}
+		if (cartesianProduct != null){
+
+			selectedCompoundNode = cartesianProduct;
+			tabPane.getSelectionModel().select(2);
+		}
 	}
 
 }
