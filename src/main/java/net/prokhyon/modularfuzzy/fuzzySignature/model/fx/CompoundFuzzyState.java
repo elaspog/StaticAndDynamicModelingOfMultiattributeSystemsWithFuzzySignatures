@@ -2,11 +2,14 @@ package net.prokhyon.modularfuzzy.fuzzySignature.model.fx;
 
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState;
+import net.prokhyon.modularfuzzy.optimalization.ChromosomeElement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CompoundFuzzyState {
+public class CompoundFuzzyState
+        implements ChromosomeElement {
 
     private List<FuzzyState> fuzzyStateTuple = new ArrayList<>();
     private List<CompoundFuzzyTransition> incomingEdges = new ArrayList<>();
@@ -86,4 +89,5 @@ public class CompoundFuzzyState {
 
         return FuzzyStateTypeEnum.NORMAL;
     }
+
 }

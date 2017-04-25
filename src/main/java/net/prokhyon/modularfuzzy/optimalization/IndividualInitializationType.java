@@ -1,0 +1,12 @@
+package net.prokhyon.modularfuzzy.optimalization;
+
+public enum IndividualInitializationType {
+
+    RANDOM,
+    NEAREST_NEIGHBOUR,
+    SECONDARY_NEAREST_NEIGHBOUR,
+    ALTERNATING_NEAREST_NEIGHBOUR_NN_START,
+    ALTERNATING_NEAREST_NEIGHBOUR_SNN_START,
+    DOMAIN_SPECIFIC_CONSTRAINT_BASED;
+
+}

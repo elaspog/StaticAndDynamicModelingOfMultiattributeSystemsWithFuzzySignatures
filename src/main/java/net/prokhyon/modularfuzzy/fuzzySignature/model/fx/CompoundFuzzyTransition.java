@@ -44,4 +44,12 @@ public class CompoundFuzzyTransition {
                 .collect(Collectors.joining(" × ")) + ")";
         return ret;
     }
+
+    public List<List<Double>> getCostVector(){
+
+        return transitions.stream()
+                .map(x -> x == null ? null : x.getCostVector())
+                .collect(Collectors.toList());
+    }
+
 }
