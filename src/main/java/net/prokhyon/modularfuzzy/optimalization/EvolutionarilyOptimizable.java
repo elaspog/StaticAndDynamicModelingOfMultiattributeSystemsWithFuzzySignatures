@@ -14,6 +14,7 @@ public interface EvolutionarilyOptimizable <T extends ChromosomeElement> {
     List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> initializePopulationGetWithFitness(Map<IndividualInitializationType, Integer> populationInitializationPlan,
                                                                                                   ChromosomeElementCostFunction chromosomeElementCostFunction,
                                                                                                   FitnessFunction fitnessFunction,
-                                                                                                  FitnessEvaluationStrategy fitnessEvaluationStrategy);
+                                                                                                  FitnessEvaluationStrategy fitnessEvaluationStrategy,
+                                                                                                  Object ... domainDependentConfiguration);
 
 }

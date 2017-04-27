@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.optimalization;
+package net.prokhyon.modularfuzzy;
 
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class OptimizationTestBase {
+public class TestBaseForCompoundAutomatonAndOptimization {
 
     protected static FuzzyAutomaton testFuzzyAutomaton_2node;
     protected static FuzzyAutomaton testFuzzyAutomaton_3node;
@@ -116,53 +116,53 @@ public class OptimizationTestBase {
 
         FuzzyState s00 = new FuzzyState("s00", "", null, FuzzyStateTypeEnum.INITIAL);
         FuzzyState s11 = new FuzzyState("s11", "", null, FuzzyStateTypeEnum.NORMAL);
+        FuzzyState s12 = new FuzzyState("s12", "", null, FuzzyStateTypeEnum.NORMAL);
+        FuzzyState s13 = new FuzzyState("s13", "", null, FuzzyStateTypeEnum.NORMAL);
         FuzzyState s21 = new FuzzyState("s21", "", null, FuzzyStateTypeEnum.NORMAL);
-        FuzzyState s31 = new FuzzyState("s31", "", null, FuzzyStateTypeEnum.NORMAL);
-        FuzzyState s12 = new FuzzyState("s21", "", null, FuzzyStateTypeEnum.NORMAL);
         FuzzyState s22 = new FuzzyState("s22", "", null, FuzzyStateTypeEnum.NORMAL);
-        FuzzyState s32 = new FuzzyState("s32", "", null, FuzzyStateTypeEnum.NORMAL);
+        FuzzyState s23 = new FuzzyState("s23", "", null, FuzzyStateTypeEnum.NORMAL);
         FuzzyState s40 = new FuzzyState("s40", "", null, FuzzyStateTypeEnum.TERMINAL);
 
         fuzzyStates.add(s00);
         fuzzyStates.add(s11);
-        fuzzyStates.add(s21);
-        fuzzyStates.add(s31);
         fuzzyStates.add(s12);
+        fuzzyStates.add(s13);
+        fuzzyStates.add(s21);
         fuzzyStates.add(s22);
-        fuzzyStates.add(s32);
+        fuzzyStates.add(s23);
         fuzzyStates.add(s40);
 
         Double[] costVec_00_11 = {1.0};
-        Double[] costVec_00_21 = {2.0};
-        Double[] costVec_00_31 = {3.0};
-        Double[] costVec_11_12 = {1.0};
+        Double[] costVec_00_12 = {2.0};
+        Double[] costVec_00_13 = {3.0};
+        Double[] costVec_11_21 = {1.0};
         Double[] costVec_11_22 = {2.0};
-        Double[] costVec_11_32 = {3.0};
-        Double[] costVec_21_12 = {1.0};
-        Double[] costVec_21_22 = {2.0};
-        Double[] costVec_21_32 = {3.0};
-        Double[] costVec_31_12 = {1.0};
-        Double[] costVec_31_22 = {2.0};
-        Double[] costVec_31_32 = {3.0};
-        Double[] costVec_12_40 = {1.0};
+        Double[] costVec_11_23 = {3.0};
+        Double[] costVec_12_21 = {1.0};
+        Double[] costVec_12_22 = {2.0};
+        Double[] costVec_12_23 = {3.0};
+        Double[] costVec_13_21 = {1.0};
+        Double[] costVec_13_22 = {2.0};
+        Double[] costVec_13_23 = {3.0};
+        Double[] costVec_21_40 = {1.0};
         Double[] costVec_22_40 = {2.0};
-        Double[] costVec_32_40 = {3.0};
+        Double[] costVec_23_40 = {3.0};
 
         fuzzyTransitions.add(new FuzzyTransition("t_00_11", "", Arrays.asList(costVec_00_11), s00, s11));
-        fuzzyTransitions.add(new FuzzyTransition("t_00_21", "", Arrays.asList(costVec_00_21), s00, s21));
-        fuzzyTransitions.add(new FuzzyTransition("t_00_31", "", Arrays.asList(costVec_00_31), s00, s31));
-        fuzzyTransitions.add(new FuzzyTransition("t_11_12", "", Arrays.asList(costVec_11_12), s11, s12));
+        fuzzyTransitions.add(new FuzzyTransition("t_00_12", "", Arrays.asList(costVec_00_12), s00, s12));
+        fuzzyTransitions.add(new FuzzyTransition("t_00_13", "", Arrays.asList(costVec_00_13), s00, s13));
+        fuzzyTransitions.add(new FuzzyTransition("t_11_21", "", Arrays.asList(costVec_11_21), s11, s21));
         fuzzyTransitions.add(new FuzzyTransition("t_11_22", "", Arrays.asList(costVec_11_22), s11, s22));
-        fuzzyTransitions.add(new FuzzyTransition("t_11_32", "", Arrays.asList(costVec_11_32), s11, s32));
-        fuzzyTransitions.add(new FuzzyTransition("t_21_12", "", Arrays.asList(costVec_21_12), s21, s12));
-        fuzzyTransitions.add(new FuzzyTransition("t_21_22", "", Arrays.asList(costVec_21_22), s21, s22));
-        fuzzyTransitions.add(new FuzzyTransition("t_21_32", "", Arrays.asList(costVec_21_32), s21, s32));
-        fuzzyTransitions.add(new FuzzyTransition("t_31_12", "", Arrays.asList(costVec_31_12), s31, s12));
-        fuzzyTransitions.add(new FuzzyTransition("t_31_22", "", Arrays.asList(costVec_31_22), s31, s22));
-        fuzzyTransitions.add(new FuzzyTransition("t_31_32", "", Arrays.asList(costVec_31_32), s31, s32));
-        fuzzyTransitions.add(new FuzzyTransition("t_12_40", "", Arrays.asList(costVec_12_40), s12, s40));
+        fuzzyTransitions.add(new FuzzyTransition("t_11_23", "", Arrays.asList(costVec_11_23), s11, s23));
+        fuzzyTransitions.add(new FuzzyTransition("t_12_21", "", Arrays.asList(costVec_12_21), s12, s21));
+        fuzzyTransitions.add(new FuzzyTransition("t_12_22", "", Arrays.asList(costVec_12_22), s12, s22));
+        fuzzyTransitions.add(new FuzzyTransition("t_12_23", "", Arrays.asList(costVec_12_23), s12, s23));
+        fuzzyTransitions.add(new FuzzyTransition("t_13_21", "", Arrays.asList(costVec_13_21), s13, s21));
+        fuzzyTransitions.add(new FuzzyTransition("t_13_22", "", Arrays.asList(costVec_13_22), s13, s22));
+        fuzzyTransitions.add(new FuzzyTransition("t_13_23", "", Arrays.asList(costVec_13_23), s13, s23));
+        fuzzyTransitions.add(new FuzzyTransition("t_21_40", "", Arrays.asList(costVec_21_40), s21, s40));
         fuzzyTransitions.add(new FuzzyTransition("t_22_40", "", Arrays.asList(costVec_22_40), s22, s40));
-        fuzzyTransitions.add(new FuzzyTransition("t_32_40", "", Arrays.asList(costVec_32_40), s32, s40));
+        fuzzyTransitions.add(new FuzzyTransition("t_23_40", "", Arrays.asList(costVec_23_40), s23, s40));
 
         FuzzySetSystem fuzzySetSystem = new FuzzySetSystem("", "test_fuzzyset_name_optimization", "test_fuzzyset_descritption_optimization", FuzzySetSystemTypeEnum.CUSTOM, fuzzySets);
         return new FuzzyAutomaton("", "test_automaton_name_optimization", "test_automaton_description_optimization", fuzzyStates, fuzzyTransitions, fuzzySetSystem, costVectorDimension);

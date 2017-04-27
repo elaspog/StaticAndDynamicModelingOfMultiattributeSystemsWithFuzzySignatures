@@ -105,7 +105,8 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <T1 extends Evolution
         generateInitialPopulationSubProcess(populationInitializationPlan);
     }
 
-    public void generateInitialPopulationSubProcess(Map<IndividualInitializationType, Integer> populationInitializationPlan){
+    public void generateInitialPopulationSubProcess(Map<IndividualInitializationType, Integer> populationInitializationPlan,
+                                                    Object ... domainDependentConfiguration){
 
         if (this.evolutionarilyOptimalizable == null)
             throw new IllegalArgumentException("Unknown parameter: " + evolutionarilyOptimalizable);
@@ -113,7 +114,8 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <T1 extends Evolution
         if (this.criterionFunctionStrategy == null)
             throw new IllegalArgumentException("Unknown parameter: " + criterionFunctionStrategy);
 
-        initialPopulationPairedWithFitnessList = evolutionarilyOptimalizable.initializePopulationGetWithFitness(populationInitializationPlan, chromosomeElementCostFunction, fitnessFunction, fitnessEvaluationStrategy);
+        initialPopulationPairedWithFitnessList = evolutionarilyOptimalizable
+                .initializePopulationGetWithFitness(populationInitializationPlan, chromosomeElementCostFunction, fitnessFunction, fitnessEvaluationStrategy, domainDependentConfiguration);
         dbmeaState = DBMEA_State.INITIALIZED;
     }
 

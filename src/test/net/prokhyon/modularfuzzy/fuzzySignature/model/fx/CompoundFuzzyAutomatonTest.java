@@ -1,5 +1,6 @@
 package net.prokhyon.modularfuzzy.fuzzySignature.model.fx;
 
+import net.prokhyon.modularfuzzy.TestBaseForCompoundAutomatonAndOptimization;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyTransition;
@@ -7,7 +8,7 @@ import org.junit.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CompoundFuzzyAutomatonTest extends AutomatonTestBase {
+public class CompoundFuzzyAutomatonTest extends TestBaseForCompoundAutomatonAndOptimization {
 
     @BeforeClass
     public static void runOnceBeforeClass() {

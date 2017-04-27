@@ -10,8 +10,9 @@ public class PopulationGenerator {
 
     public static <T> T selectRandomElementFromList(List<T> list){
 
-        if(list == null)
+        if(list == null) {
             throw new IllegalArgumentException("List parameter is not initialized.");
+        }
 
         Random randomizer = new Random();
         final int randomInt = randomizer.nextInt(list.size());
@@ -47,13 +48,22 @@ public class PopulationGenerator {
             }
         }
 
-        Double resultFitness = null;
+        return selectFromMultilistByPosition(i, order, resultMap);
+    }
+
+    public static <T1, COST_TYPE> Tuple2<T1, COST_TYPE> selectFromMultilistByPosition(int i, Order order, Map<COST_TYPE, List<T1>> resultMap) {
+
+        final int size = resultMap.size();
+        if (i < 0 || i > size)
+            throw new IllegalArgumentException("Value of i is does not fit to given data: " + i + " of " + size + ".");
+
+        COST_TYPE resultFitness = null;
         List<T1> resultElementChoseList = null;
 
         if (order.equals(Order.ASCENDING)){
             /// Selection for ascending order
             int accum = 0;
-            for (Map.Entry<Double, List<T1>> resultPair : resultMap.entrySet()) {
+            for (Map.Entry<COST_TYPE, List<T1>> resultPair : resultMap.entrySet()) {
                 accum = accum + resultPair.getValue().size();
                 resultElementChoseList = resultPair.getValue();
                 resultFitness = resultPair.getKey();
@@ -66,7 +76,7 @@ public class PopulationGenerator {
         } else if (order.equals(Order.DESCENDING)){
             /// Selection for descending order
             int accum = resultMap.size() - 1;
-            for (Map.Entry<Double, List<T1>> resultPair : resultMap.entrySet()) {
+            for (Map.Entry<COST_TYPE, List<T1>> resultPair : resultMap.entrySet()) {
                 accum = accum - resultPair.getValue().size();
                 resultElementChoseList = resultPair.getValue();
                 resultFitness = resultPair.getKey();
@@ -78,8 +88,7 @@ public class PopulationGenerator {
             }
         }
 
-        final Tuple2<T1, Double> retTuple = new Tuple2<>(selectRandomElementFromList(resultElementChoseList), resultFitness);
-        return retTuple;
+        return new Tuple2<>(selectRandomElementFromList(resultElementChoseList), resultFitness);
     }
 
 }

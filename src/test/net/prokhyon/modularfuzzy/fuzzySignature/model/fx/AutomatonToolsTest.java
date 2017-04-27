@@ -1,5 +1,6 @@
 package net.prokhyon.modularfuzzy.fuzzySignature.model.fx;
 
+import net.prokhyon.modularfuzzy.TestBaseForCompoundAutomatonAndOptimization;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState;
 import org.junit.Assert;
@@ -9,7 +10,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutomatonToolsTest extends AutomatonTestBase {
+public class AutomatonToolsTest extends TestBaseForCompoundAutomatonAndOptimization {
 
     static FuzzyState fs1 = new FuzzyState("fs1", "fs1descr", null, FuzzyStateTypeEnum.INITIAL);
     static FuzzyState fs2 = new FuzzyState("fs2", "fs2descr", null, FuzzyStateTypeEnum.NORMAL);
