@@ -15,7 +15,7 @@ import net.prokhyon.modularfuzzy.optimalization.fitness.ChromosomeElementCostFun
 import net.prokhyon.modularfuzzy.optimalization.fitness.FitnessEvaluationStrategy;
 import net.prokhyon.modularfuzzy.optimalization.fitness.FitnessFunction;
 import net.prokhyon.modularfuzzy.optimalization.utils.Order;
-import net.prokhyon.modularfuzzy.optimalization.utils.PopulationGenerator;
+import net.prokhyon.modularfuzzy.optimalization.utils.DbmeaHelperUtils;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
@@ -303,6 +303,12 @@ public class CompoundFuzzyAutomaton
         return initialPopulationWithFitness;
     }
 
+    @Override
+    public Integer getCountOfPossibleChromosomeElements() {
+
+        return compoundFuzzyStates.size();
+    }
+
     private Tuple2<Individual<CompoundFuzzyState>, List<Double>> generateChromosome(IndividualInitializationType individualType,
                                                                                     ChromosomeElementCostFunction chromosomeElementCostFunction,
                                                                                     List<CompoundFuzzyState> initialFuzzyStates,
@@ -319,7 +325,7 @@ public class CompoundFuzzyAutomaton
         switch (individualType){
 
             case NEAREST_NEIGHBOUR:
-                randomlySelectedInitState = PopulationGenerator.selectRandomElementFromList(initialFuzzyStates);
+                randomlySelectedInitState = DbmeaHelperUtils.selectRandomElementFromList(initialFuzzyStates);
                 stateAndFitnessSequence = getNthNearestNeighbourRecursively(0, chromosomeElementCostFunction, randomlySelectedInitState, terminalFuzzyStates, order);
                 stateSequence = stateAndFitnessSequence.stream().map(x -> x._1).collect(Collectors.toList());
                 costSequence = stateAndFitnessSequence.stream().map(x -> x._2).collect(Collectors.toList());
@@ -330,7 +336,7 @@ public class CompoundFuzzyAutomaton
                 break;
 
             case SECONDARY_NEAREST_NEIGHBOUR:
-                randomlySelectedInitState = PopulationGenerator.selectRandomElementFromList(initialFuzzyStates);
+                randomlySelectedInitState = DbmeaHelperUtils.selectRandomElementFromList(initialFuzzyStates);
                 stateAndFitnessSequence = getNthNearestNeighbourRecursively(1, chromosomeElementCostFunction, randomlySelectedInitState, terminalFuzzyStates, order);
                 stateSequence = stateAndFitnessSequence.stream().map(x -> x._1).collect(Collectors.toList());
                 costSequence = stateAndFitnessSequence.stream().map(x -> x._2).collect(Collectors.toList());
@@ -341,7 +347,7 @@ public class CompoundFuzzyAutomaton
                 break;
 
             case ALTERNATING_NEAREST_NEIGHBOUR_NN_START:
-                randomlySelectedInitState = PopulationGenerator.selectRandomElementFromList(initialFuzzyStates);
+                randomlySelectedInitState = DbmeaHelperUtils.selectRandomElementFromList(initialFuzzyStates);
                 stateAndFitnessSequence = getAlternatingNearestNeighbourRecursively(0, chromosomeElementCostFunction, randomlySelectedInitState, terminalFuzzyStates, order);
                 stateSequence = stateAndFitnessSequence.stream().map(x -> x._1).collect(Collectors.toList());
                 costSequence = stateAndFitnessSequence.stream().map(x -> x._2).collect(Collectors.toList());
@@ -352,7 +358,7 @@ public class CompoundFuzzyAutomaton
                 break;
 
             case ALTERNATING_NEAREST_NEIGHBOUR_SNN_START:
-                randomlySelectedInitState = PopulationGenerator.selectRandomElementFromList(initialFuzzyStates);
+                randomlySelectedInitState = DbmeaHelperUtils.selectRandomElementFromList(initialFuzzyStates);
                 stateAndFitnessSequence = getAlternatingNearestNeighbourRecursively(1, chromosomeElementCostFunction, randomlySelectedInitState, terminalFuzzyStates, order);
                 stateSequence = stateAndFitnessSequence.stream().map(x -> x._1).collect(Collectors.toList());
                 costSequence = stateAndFitnessSequence.stream().map(x -> x._2).collect(Collectors.toList());
@@ -431,7 +437,7 @@ public class CompoundFuzzyAutomaton
             /// get a random element from previously not chosen states
             CompoundFuzzyState selectedCompoundFuzzyState = null;
             if (remainderStates.size() > 0) {
-                selectedCompoundFuzzyState = PopulationGenerator.selectRandomElementFromList(remainderStates);
+                selectedCompoundFuzzyState = DbmeaHelperUtils.selectRandomElementFromList(remainderStates);
             } else {
                 throw new RuntimeException("Error in algorithm");
             }
@@ -608,7 +614,7 @@ public class CompoundFuzzyAutomaton
             }
 
             /// selecting minimal element
-            Tuple2<CompoundFuzzyState, Integer> minimalElementPairInArrayD = PopulationGenerator.selectFromMultilistByPosition(0, Order.ASCENDING, toMinimalizeFromList);
+            Tuple2<CompoundFuzzyState, Integer> minimalElementPairInArrayD = DbmeaHelperUtils.selectFromMultilistByPosition(0, Order.ASCENDING, toMinimalizeFromList);
             CompoundFuzzyState minimalElementInArrayD = minimalElementPairInArrayD._1;
             array_Ready.add(minimalElementInArrayD);
 
@@ -653,7 +659,7 @@ public class CompoundFuzzyAutomaton
         }
 
         List<Tuple2<CompoundFuzzyState, Double>> retList = new ArrayList<>();
-        final Tuple2<CompoundFuzzyState, Double> tuple2 = PopulationGenerator.selectByEvaluatedFitnessPosition(chromosomeElementCostFunction, candidates, position, order);
+        final Tuple2<CompoundFuzzyState, Double> tuple2 = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(chromosomeElementCostFunction, candidates, position, order);
         retList.add(tuple2);
 
         final CompoundFuzzyState selectedTargetState = tuple2._1;
@@ -683,7 +689,7 @@ public class CompoundFuzzyAutomaton
         }
 
         List<Tuple2<CompoundFuzzyState, Double>> retList = new ArrayList<>();
-        final Tuple2<CompoundFuzzyState, Double> tuple2 = PopulationGenerator.selectByEvaluatedFitnessPosition(chromosomeElementCostFunction, candidates, position, order);
+        final Tuple2<CompoundFuzzyState, Double> tuple2 = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(chromosomeElementCostFunction, candidates, position, order);
         retList.add(tuple2);
 
         final CompoundFuzzyState selectedTargetState = tuple2._1;

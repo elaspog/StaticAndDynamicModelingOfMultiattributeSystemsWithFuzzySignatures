@@ -8,9 +8,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
-
-public class PopulationGeneratorTest {
+public class DbmeaHelperUtilsTest {
 
     static List<Tuple2<TestChromosomeElement, List<Double>>> candidates = new ArrayList<>();
     static TestChromosomeElement testChromosomeElement1;
@@ -85,19 +83,19 @@ public class PopulationGeneratorTest {
         // ascending order: 1,3,2,5,4
 
         final Tuple2<TestChromosomeElement, Double> testChromosomeElementDoubleTuple1
-                = PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 0, Order.ASCENDING);
+                = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 0, Order.ASCENDING);
 
         final Tuple2<TestChromosomeElement, Double> testChromosomeElementDoubleTuple2
-                = PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 1, Order.ASCENDING);
+                = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 1, Order.ASCENDING);
 
         final Tuple2<TestChromosomeElement, Double> testChromosomeElementDoubleTuple3
-                = PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 2, Order.ASCENDING);
+                = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 2, Order.ASCENDING);
 
         final Tuple2<TestChromosomeElement, Double> testChromosomeElementDoubleTuple4
-                = PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 3, Order.ASCENDING);
+                = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 3, Order.ASCENDING);
 
         final Tuple2<TestChromosomeElement, Double> testChromosomeElementDoubleTuple5
-                = PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 4, Order.ASCENDING);
+                = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 4, Order.ASCENDING);
 
         final TestChromosomeElement queriedChromosome1 = testChromosomeElementDoubleTuple1._1;
         final TestChromosomeElement queriedChromosome2 = testChromosomeElementDoubleTuple2._1;
@@ -111,11 +109,11 @@ public class PopulationGeneratorTest {
         Assert.assertEquals(simpleCostcalculator(testChromosomeElement5.getCosts()), simpleCostcalculator(queriedChromosome4.getCosts()), Double.MIN_VALUE);
         Assert.assertEquals(simpleCostcalculator(testChromosomeElement4.getCosts()), simpleCostcalculator(queriedChromosome5.getCosts()), Double.MIN_VALUE);
 
-        Assert.assertEquals(testChromosomeElement1, PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 0, Order.ASCENDING)._1);
-        Assert.assertEquals(testChromosomeElement3, PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 1, Order.ASCENDING)._1);
-        Assert.assertEquals(testChromosomeElement2, PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 2, Order.ASCENDING)._1);
-        Assert.assertEquals(testChromosomeElement5, PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 3, Order.ASCENDING)._1);
-        Assert.assertEquals(testChromosomeElement4, PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 4, Order.ASCENDING)._1);
+        Assert.assertEquals(testChromosomeElement1, DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 0, Order.ASCENDING)._1);
+        Assert.assertEquals(testChromosomeElement3, DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 1, Order.ASCENDING)._1);
+        Assert.assertEquals(testChromosomeElement2, DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 2, Order.ASCENDING)._1);
+        Assert.assertEquals(testChromosomeElement5, DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 3, Order.ASCENDING)._1);
+        Assert.assertEquals(testChromosomeElement4, DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 4, Order.ASCENDING)._1);
 
     }
 
@@ -125,19 +123,19 @@ public class PopulationGeneratorTest {
         // ascending order: 4,5,2,3,1
 
         final Tuple2<TestChromosomeElement, Double> testChromosomeElementDoubleTuple1
-                = PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 0, Order.DESCENDING);
+                = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 0, Order.DESCENDING);
 
         final Tuple2<TestChromosomeElement, Double> testChromosomeElementDoubleTuple2
-                = PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 1, Order.DESCENDING);
+                = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 1, Order.DESCENDING);
 
         final Tuple2<TestChromosomeElement, Double> testChromosomeElementDoubleTuple3
-                = PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 2, Order.DESCENDING);
+                = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 2, Order.DESCENDING);
 
         final Tuple2<TestChromosomeElement, Double> testChromosomeElementDoubleTuple4
-                = PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 3, Order.DESCENDING);
+                = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 3, Order.DESCENDING);
 
         final Tuple2<TestChromosomeElement, Double> testChromosomeElementDoubleTuple5
-                = PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 4, Order.DESCENDING);
+                = DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 4, Order.DESCENDING);
 
         final TestChromosomeElement queriedChromosome1 = testChromosomeElementDoubleTuple1._1;
         final TestChromosomeElement queriedChromosome2 = testChromosomeElementDoubleTuple2._1;
@@ -151,12 +149,41 @@ public class PopulationGeneratorTest {
         Assert.assertEquals(simpleCostcalculator(testChromosomeElement3.getCosts()), simpleCostcalculator(queriedChromosome4.getCosts()), Double.MIN_VALUE);
         Assert.assertEquals(simpleCostcalculator(testChromosomeElement1.getCosts()), simpleCostcalculator(queriedChromosome5.getCosts()), Double.MIN_VALUE);
 
-        Assert.assertEquals(testChromosomeElement4, PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 0, Order.DESCENDING)._1);
-        Assert.assertEquals(testChromosomeElement5, PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 1, Order.DESCENDING)._1);
-        Assert.assertEquals(testChromosomeElement2, PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 2, Order.DESCENDING)._1);
-        Assert.assertEquals(testChromosomeElement3, PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 3, Order.DESCENDING)._1);
-        Assert.assertEquals(testChromosomeElement1, PopulationGenerator.selectByEvaluatedFitnessPosition(PopulationGeneratorTest::simpleCostcalculator, candidates, 4, Order.DESCENDING)._1);
+        Assert.assertEquals(testChromosomeElement4, DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 0, Order.DESCENDING)._1);
+        Assert.assertEquals(testChromosomeElement5, DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 1, Order.DESCENDING)._1);
+        Assert.assertEquals(testChromosomeElement2, DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 2, Order.DESCENDING)._1);
+        Assert.assertEquals(testChromosomeElement3, DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 3, Order.DESCENDING)._1);
+        Assert.assertEquals(testChromosomeElement1, DbmeaHelperUtils.selectByEvaluatedFitnessPosition(DbmeaHelperUtilsTest::simpleCostcalculator, candidates, 4, Order.DESCENDING)._1);
 
+    }
+
+    @Test
+    public void test_getDivisorsForNaturalNumber() throws Exception {
+
+        List<Integer> divisorsForNaturalNumber = DbmeaHelperUtils.getDivisorsForNaturalNumber(24);
+
+        Assert.assertEquals(6, divisorsForNaturalNumber.size());
+
+        Assert.assertEquals(2, (int)divisorsForNaturalNumber.get(0));
+        Assert.assertEquals(3, (int)divisorsForNaturalNumber.get(1));
+        Assert.assertEquals(4, (int)divisorsForNaturalNumber.get(2));
+        Assert.assertEquals(6, (int)divisorsForNaturalNumber.get(3));
+        Assert.assertEquals(8, (int)divisorsForNaturalNumber.get(4));
+        Assert.assertEquals(12, (int)divisorsForNaturalNumber.get(5));
+    }
+
+    @Test
+    public void test_getPossiblePermutationCountForNumber1() throws Exception {
+
+        Integer possiblePermutationCountForNumber = DbmeaHelperUtils.getPossiblePermutationCountForNumber(3);
+        Assert.assertEquals(6, (int)possiblePermutationCountForNumber);
+    }
+
+    @Test
+    public void test_getPossiblePermutationCountForNumber2() throws Exception {
+
+        Integer possiblePermutationCountForNumber = DbmeaHelperUtils.getPossiblePermutationCountForNumber(5);
+        Assert.assertEquals(120, (int)possiblePermutationCountForNumber);
     }
 
 }

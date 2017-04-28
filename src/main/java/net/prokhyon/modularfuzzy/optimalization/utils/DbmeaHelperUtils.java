@@ -6,7 +6,7 @@ import net.prokhyon.modularfuzzy.optimalization.fitness.ChromosomeElementCostFun
 
 import java.util.*;
 
-public class PopulationGenerator {
+public class DbmeaHelperUtils {
 
     public static <T> T selectRandomElementFromList(List<T> list){
 
@@ -89,6 +89,33 @@ public class PopulationGenerator {
         }
 
         return new Tuple2<>(selectRandomElementFromList(resultElementChoseList), resultFitness);
+    }
+
+    public static List<Integer> getDivisorsForNaturalNumber(Integer num){
+
+        List<Integer> possibleDivisors = new ArrayList<>();
+        for (int i = 2; i <= num / 2; i++) {
+            if (num % i == 0) {
+                possibleDivisors.add(i);
+            }
+        }
+        return possibleDivisors;
+    }
+
+    public static Integer getPossiblePermutationCountForNumber(Integer num){
+
+        if (num < 1)
+            throw new RuntimeException("Error in determining the count of permutations for zero or less number: " + num);
+
+        int retVal = 1;
+        if (num == 1) {
+            return retVal;
+        } else {
+            for (int i = num; i > 1; i--){
+                retVal = retVal * i;
+            }
+        }
+        return retVal;
     }
 
 }

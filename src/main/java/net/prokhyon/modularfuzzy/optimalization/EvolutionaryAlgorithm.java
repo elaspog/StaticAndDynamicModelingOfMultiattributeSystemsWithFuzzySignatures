@@ -11,4 +11,6 @@ public interface EvolutionaryAlgorithm {
     List<Double> getFitnessResultsByIteration();
 
     CriterionFunctionStrategy getCriterionFunctionStrategy();
+
+    List<Integer> getPossibleSegmentSizes();
 }

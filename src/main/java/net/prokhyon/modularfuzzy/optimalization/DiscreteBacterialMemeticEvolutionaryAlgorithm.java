@@ -7,11 +7,13 @@ import net.prokhyon.modularfuzzy.optimalization.fitness.FitnessEvaluationStrateg
 import net.prokhyon.modularfuzzy.optimalization.fitness.FitnessFunction;
 import net.prokhyon.modularfuzzy.optimalization.stopingCriterion.CriterionFunctionStrategy;
 import net.prokhyon.modularfuzzy.optimalization.stopingCriterion.MaximalIterationCountCriterionStrategy;
+import net.prokhyon.modularfuzzy.optimalization.utils.DbmeaHelperUtils;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DiscreteBacterialMemeticEvolutionaryAlgorithm <T1 extends EvolutionarilyOptimizable, T2 extends ChromosomeElement, COST_TYPE>
         implements EvolutionaryAlgorithm {
@@ -19,17 +21,6 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <T1 extends Evolution
 
     public static final int DEFAULT_POPULATION_SIZE = 100;
     public static final int DEFAULT_STRATEGY_ITERATION_COUNT = 1000;
-
-    public enum DBMEA_State {
-
-        UNINITIALIZED,
-        INITIALIZED,
-        BACTERIAL_MUTATION_FINISHED,
-        GENE_TRANSFER_FINISHED,
-        EVALUATED,
-        ITERATION_FINISHED,
-        STOPPED;
-    }
 
     private T1 evolutionarilyOptimalizable;
     private CriterionFunctionStrategy criterionFunctionStrategy;
@@ -80,6 +71,12 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <T1 extends Evolution
 
     public void runOptimizationProcess(){
 
+        if (criterionFunctionStrategy == null)
+            throw new RuntimeException("No criterion function for automatic optimization.");
+
+        if (dbmeaState.equals(DBMEA_State.UNINITIALIZED))
+            throw new RuntimeException("No population was generated for automatic optimization.");
+
         while (true) {
 
             //bacterialMutation();
@@ -93,6 +90,35 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <T1 extends Evolution
 
     }
 
+    private void bacterialMutation(MutationType mutationType, Integer I_segment, Integer N_clones) {
+
+        Integer countOfPossibleChromosomeElements = evolutionarilyOptimalizable.getCountOfPossibleChromosomeElements();
+        List<Integer> possibleSegmentSizes = getPossibleSegmentSizes();
+        if (! possibleSegmentSizes.contains(I_segment))
+            throw new RuntimeException("Segment size is not the divisor of count of possible chromosome elements." +
+                    " Count of possible chromosomes = " + countOfPossibleChromosomeElements +
+                    ", possible divisors = <" + possibleSegmentSizes.stream().map(x -> x.toString()).collect(Collectors.joining(", ")) + ">" +
+                    ", I_segment parameter = " + I_segment);
+
+        Integer possiblePermutationCountForSegment = DbmeaHelperUtils.getPossiblePermutationCountForNumber(I_segment);
+        if (N_clones > possiblePermutationCountForSegment)
+            throw new RuntimeException("The number of possible clones for a chromosome is less than the possible maximum." +
+                    " possible maximum = " + possiblePermutationCountForSegment +
+                    ", N_clones parameter = " + N_clones);
+
+        switch(mutationType){
+
+            case COHERENT:
+                break;
+
+            case LOOSE:
+                break;
+
+            default:
+                break;
+        }
+    }
+
     public void generateInitialPopulationSubProcess(){
 
         Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
@@ -100,7 +126,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <T1 extends Evolution
         populationInitializationPlan.put(IndividualInitializationType.SECONDARY_NEAREST_NEIGHBOUR, 1);
         populationInitializationPlan.put(IndividualInitializationType.ALTERNATING_NEAREST_NEIGHBOUR_NN_START, 1);
         populationInitializationPlan.put(IndividualInitializationType.ALTERNATING_NEAREST_NEIGHBOUR_SNN_START, 1);
-        //populationInitializationPlan.put(IndividualInitializationType.RANDOM, DEFAULT_POPULATION_SIZE - 4);
+        populationInitializationPlan.put(IndividualInitializationType.RANDOM, DEFAULT_POPULATION_SIZE - 4);
 
         generateInitialPopulationSubProcess(populationInitializationPlan);
     }
@@ -132,6 +158,16 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <T1 extends Evolution
     @Override
     public CriterionFunctionStrategy getCriterionFunctionStrategy() {
         return criterionFunctionStrategy;
+    }
+
+    @Override
+    public List<Integer> getPossibleSegmentSizes() {
+
+        if (this.evolutionarilyOptimalizable == null)
+            throw new IllegalArgumentException("The evolutionarily optimizable domain is missing.");
+
+        Integer countOfPossibleChromosomeElements = evolutionarilyOptimalizable.getCountOfPossibleChromosomeElements();
+        return DbmeaHelperUtils.getDivisorsForNaturalNumber(countOfPossibleChromosomeElements);
     }
 
 }

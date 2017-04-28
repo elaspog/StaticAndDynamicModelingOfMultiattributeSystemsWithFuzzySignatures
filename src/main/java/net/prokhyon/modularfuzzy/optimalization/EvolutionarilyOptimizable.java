@@ -17,4 +17,6 @@ public interface EvolutionarilyOptimizable <T extends ChromosomeElement> {
                                                                                                   FitnessEvaluationStrategy fitnessEvaluationStrategy,
                                                                                                   Object ... domainDependentConfiguration);
 
+    Integer getCountOfPossibleChromosomeElements();
+
 }

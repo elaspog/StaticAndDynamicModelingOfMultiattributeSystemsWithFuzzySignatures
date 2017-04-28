@@ -75,7 +75,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
     }
 
     @Test
-    public void testGenerateInitialPopulationSubProcess1() throws Exception {
+    public void testGenerateInitialPopulationSubProcessOnCompoundAutomaton1() throws Exception {
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
@@ -98,7 +98,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
     }
 
     @Test
-    public void testGenerateInitialPopulationSubProcess2() throws Exception {
+    public void testGenerateInitialPopulationSubProcessOnCompoundAutomaton2() throws Exception {
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
@@ -109,6 +109,52 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
 
         Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
         populationInitializationPlan.put(IndividualInitializationType.SECONDARY_NEAREST_NEIGHBOUR, 1);
+        dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        final List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> initialPopulationPairedWithFitnessList = dbmea.getInitialPopulationPairedWithFitnessList();
+
+        //PrintHelpers.printIndividualAndFitnessPairs(initialPopulationPairedWithFitnessList);
+
+        final List<CompoundFuzzyState> chromosomeSequence = initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence();
+        Assert.assertEquals(chromosomeSequence.get(0).getAggregatedStateType(), FuzzyStateTypeEnum.INITIAL);
+        Assert.assertEquals(chromosomeSequence.get(chromosomeSequence.size()-1).getAggregatedStateType(), FuzzyStateTypeEnum.TERMINAL);
+    }
+
+    @Test
+    public void testGenerateInitialPopulationSubProcessOnCompoundAutomaton3() throws Exception {
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomaton234,
+                null,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCost,
+                FitnessEvaluationStrategy.MAXIMIZE_FITNESS);
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        populationInitializationPlan.put(IndividualInitializationType.ALTERNATING_NEAREST_NEIGHBOUR_NN_START, 1);
+        dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        final List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> initialPopulationPairedWithFitnessList = dbmea.getInitialPopulationPairedWithFitnessList();
+
+        //PrintHelpers.printIndividualAndFitnessPairs(initialPopulationPairedWithFitnessList);
+
+        final List<CompoundFuzzyState> chromosomeSequence = initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence();
+        Assert.assertEquals(chromosomeSequence.get(0).getAggregatedStateType(), FuzzyStateTypeEnum.INITIAL);
+        Assert.assertEquals(chromosomeSequence.get(chromosomeSequence.size()-1).getAggregatedStateType(), FuzzyStateTypeEnum.TERMINAL);
+    }
+
+    @Test
+    public void testGenerateInitialPopulationSubProcessOnCompoundAutomaton4() throws Exception {
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomaton234,
+                null,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCost,
+                FitnessEvaluationStrategy.MAXIMIZE_FITNESS);
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        populationInitializationPlan.put(IndividualInitializationType.ALTERNATING_NEAREST_NEIGHBOUR_SNN_START, 1);
         dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
 
         final List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> initialPopulationPairedWithFitnessList = dbmea.getInitialPopulationPairedWithFitnessList();
