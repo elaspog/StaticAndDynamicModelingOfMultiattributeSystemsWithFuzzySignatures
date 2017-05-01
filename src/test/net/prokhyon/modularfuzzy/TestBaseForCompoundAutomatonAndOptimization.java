@@ -66,7 +66,11 @@ public class TestBaseForCompoundAutomatonAndOptimization {
 
     public static Double calculateCostSimple(List<List<Double>> costData) {
 
-        return costData.stream()
+        if (costData == null)
+            return 0.0;
+        else
+            return costData.stream()
+                .filter(Objects::nonNull)
                 .flatMap(x -> x.stream())
                 .filter(Objects::nonNull)
                 .mapToDouble(Double::doubleValue)
@@ -81,11 +85,16 @@ public class TestBaseForCompoundAutomatonAndOptimization {
     }
 
     public static <T extends ChromosomeElement> Double fitnessFunction(Individual<T> individual,
-                                                                       ChromosomeElementCostFunction<List<List<Double>>> chromosomeElementCostFunction) {
+                                                                       ChromosomeElementCostFunction<List<List<Double>>> chromosomeElementCostFunction,
+                                                                       EvolutionarilyOptimizable<T, List<List<Double>>> evolutionarilyOptimizable) {
 
+        List<List<List<Double>>> costSequence = evolutionarilyOptimizable.getCostSequence(individual);
 
-        //chromosomeElementCostFunction.calculateCost()
-        return 0.0;
+        return costSequence.stream()
+                .map(costHyperVector -> chromosomeElementCostFunction.calculateCost(costHyperVector))
+                .filter(Objects::nonNull)
+                .mapToDouble(Double::doubleValue)
+                .sum();
     }
 
     protected static FuzzyAutomaton initializeTestFuzzyAutomaton_2_node(){

@@ -26,7 +26,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
 
     private EVOLUTIONARILY_OPTIMIZABLE_TYPE evolutionarilyOptimalizable;
     private CriterionFunctionStrategy criterionFunctionStrategy;
-    private FitnessFunction<COST_TYPE> fitnessFunction;
+    private FitnessFunction<COST_TYPE, CHROMOSOME_TYPE> fitnessFunction;
     private ChromosomeElementCostFunction<COST_TYPE> chromosomeElementCostFunction;
     private FitnessEvaluationStrategy fitnessEvaluationStrategy;
     private DBMEA_State dbmeaState = DBMEA_State.UNINITIALIZED;
@@ -46,7 +46,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
     }
 
     public DiscreteBacterialMemeticEvolutionaryAlgorithm(EVOLUTIONARILY_OPTIMIZABLE_TYPE evolutionarilyOptimalizable,
-                                                         FitnessFunction<COST_TYPE> fitnessFunction,
+                                                         FitnessFunction<COST_TYPE, CHROMOSOME_TYPE> fitnessFunction,
                                                          ChromosomeElementCostFunction<COST_TYPE> chromosomeElementCostFunction,
                                                          FitnessEvaluationStrategy fitnessEvaluationStrategy,
                                                          Object ... domainSpecificConfiguration){
@@ -55,7 +55,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
     }
 
     public DiscreteBacterialMemeticEvolutionaryAlgorithm(EVOLUTIONARILY_OPTIMIZABLE_TYPE evolutionarilyOptimalizable,
-                                                         FitnessFunction<COST_TYPE> fitnessFunction,
+                                                         FitnessFunction<COST_TYPE, CHROMOSOME_TYPE> fitnessFunction,
                                                          ChromosomeElementCostFunction<COST_TYPE> chromosomeElementCostFunction,
                                                          CriterionFunctionStrategy criterionFunctionStrategy,
                                                          FitnessEvaluationStrategy fitnessEvaluationStrategy,
@@ -218,8 +218,8 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
 
         List<Individual<CHROMOSOME_TYPE>> individuals = new ArrayList<>(population);
         individuals.sort((o1, o2) -> {
-            Double o1_fitness = fitnessFunction.calculateFitnessOfChromosomeOfIndividual(o1, chromosomeElementCostFunction);
-            Double o2_fitness = fitnessFunction.calculateFitnessOfChromosomeOfIndividual(o2, chromosomeElementCostFunction);
+            Double o1_fitness = fitnessFunction.calculateFitnessOfChromosomeOfIndividual(o1, chromosomeElementCostFunction, evolutionarilyOptimalizable);
+            Double o2_fitness = fitnessFunction.calculateFitnessOfChromosomeOfIndividual(o2, chromosomeElementCostFunction, evolutionarilyOptimalizable);
             return o1_fitness.compareTo(o2_fitness);
         });
         return individuals;
@@ -346,16 +346,18 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
             List<Individual<CHROMOSOME_TYPE>> candidates = new ArrayList<>();
 
             /// copy of original is added to the candidates
-            List<CHROMOSOME_TYPE> valuesOfOriginalSequenceInPositionsOfIndexCombination = new ArrayList<>(indexCombination.stream()
-                    .map(actualBest.getChromosomeSequence()::get)
-                    .collect(Collectors.toList()));
             Individual<CHROMOSOME_TYPE> copyOfOriginal = new Individual<>(actualBest.getChromosomeSequence());
                     // = modifyChromosomeOfIndividualInIndexPositionsWithOtherChromosomeElements(actualBest, indexCombination, valuesOfOriginalSequenceInPositionsOfIndexCombination);
             candidates.add(copyOfOriginal);
 
             /// copy of reversed is added to the candidates if not equals to the original
+            List<CHROMOSOME_TYPE> valuesOfOriginalSequenceInPositionsOfIndexCombination = new ArrayList<>(indexCombination.stream()
+                    .map(actualBest.getChromosomeSequence()::get)
+                    .collect(Collectors.toList()));
             List<CHROMOSOME_TYPE> valuesOfReversedOriginalSequenceInPositionsOfIndexCombinations = new ArrayList<>(valuesOfOriginalSequenceInPositionsOfIndexCombination);
             Collections.reverse(valuesOfReversedOriginalSequenceInPositionsOfIndexCombinations);
+            ArrayList<Integer> reversedIndexCombination = new ArrayList<>(indexCombination);
+            Collections.reverse(reversedIndexCombination);
             Individual<CHROMOSOME_TYPE> reversed
                     = modifyChromosomeOfIndividualInIndexPositionsWithOtherChromosomeElements(actualBest, indexCombination, valuesOfReversedOriginalSequenceInPositionsOfIndexCombinations);
             if (! candidates.contains(reversed)) {
@@ -378,14 +380,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
             }
 
             /// evaluate all candidates
-            List<Tuple2<Individual<CHROMOSOME_TYPE>, Double>> fitnessResults = candidates.stream()
-                    .map(candidate -> new Tuple2<>(candidate, fitnessFunction.calculateFitnessOfChromosomeOfIndividual(candidate, chromosomeElementCostFunction)))
-                    .collect(Collectors.toList());
-
-            Tuple2<Double, Individual<CHROMOSOME_TYPE>> bestIndividualForThisCycleOfSegmentPermutation
-                    = DbmeaHelperUtils.selectFromMultilistByPositionWithHashMap(0, Order.DESCENDING, fitnessResults);
-
-            actualBest = bestIndividualForThisCycleOfSegmentPermutation._2;
+            actualBest = getWinnerFromActualBestAndCandidates(actualBest, candidates);
         }
         return actualBest;
     }
@@ -399,25 +394,12 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
         if (indices_size != values_size)
             throw new RuntimeException("The sizes of indices and values does not match: indices=" + indices_size + " vs. values=" + values_size);
 
-        List<Integer> indexCopy = new ArrayList<>(indices);
-        Collections.sort(indexCopy);
-        Collections.reverse(indexCopy);
-
-        ArrayList<CHROMOSOME_TYPE> copyOfChromosomeSequence = new ArrayList<>(individual.getChromosomeSequence());
-
-        for (int integer : indexCopy) {
-            // it's very important to use int type instead of Integer type here, because of the remove method
-            copyOfChromosomeSequence.remove(integer);
+        ArrayList<CHROMOSOME_TYPE> newChromosome = new ArrayList<>(individual.getChromosomeSequence());
+        for (int i = 0; i < values_size; i++){
+            Integer index = indices.get(i);
+            newChromosome.set(index, values.get(i));
         }
-
-        Collections.sort(indices);
-        for (int i = 0; i < indices_size; i++){
-            Integer indexToInsert = indices.get(i);
-            CHROMOSOME_TYPE valueToInsert = values.get(i);
-            copyOfChromosomeSequence.add(indexToInsert, valueToInsert);
-        }
-
-        return new Individual<>(copyOfChromosomeSequence);
+        return new Individual<>(newChromosome);
     }
 
     public Individual<CHROMOSOME_TYPE> coherentSegmentMutationOnIndividual(Individual<CHROMOSOME_TYPE> individual, Integer i_segment, Integer n_clones) {
@@ -507,14 +489,43 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
             }
 
             /// evaluate all candidates
-            List<Tuple2<Individual<CHROMOSOME_TYPE>, Double>> fitnessResults = candidates.stream()
-                    .map(candidate -> new Tuple2<>(candidate, fitnessFunction.calculateFitnessOfChromosomeOfIndividual(candidate, chromosomeElementCostFunction)))
-                    .collect(Collectors.toList());
+            actualBest = getWinnerFromActualBestAndCandidates(actualBest, candidates);
 
-            Tuple2<Double, Individual<CHROMOSOME_TYPE>> bestIndividualForThisCycleOfSegmentPermutation
-                    = DbmeaHelperUtils.selectFromMultilistByPositionWithHashMap(0, Order.DESCENDING, fitnessResults);
+        }
+        return actualBest;
+    }
 
-            actualBest = bestIndividualForThisCycleOfSegmentPermutation._2;
+    Individual<CHROMOSOME_TYPE> getWinnerFromActualBestAndCandidates(Individual<CHROMOSOME_TYPE> actualBest, List<Individual<CHROMOSOME_TYPE>> candidates) {
+
+        /// evaluate all candidates
+        List<Tuple2<Individual<CHROMOSOME_TYPE>, Double>> fitnessResults = candidates.stream()
+                .map(candidate -> new Tuple2<>(candidate, fitnessFunction.calculateFitnessOfChromosomeOfIndividual(candidate, chromosomeElementCostFunction, evolutionarilyOptimalizable)))
+                .collect(Collectors.toList());
+
+        Tuple2<Double, Individual<CHROMOSOME_TYPE>> actualBestFromCandidates = null;
+
+        switch (fitnessEvaluationStrategy){
+
+            case MAXIMIZE_FITNESS:
+                actualBestFromCandidates = DbmeaHelperUtils.selectFromMultilistByPositionWithHashMap(0, Order.DESCENDING, fitnessResults);
+                break;
+
+            case MINIMIZE_FITNESS:
+                actualBestFromCandidates = DbmeaHelperUtils.selectFromMultilistByPositionWithHashMap(0, Order.ASCENDING, fitnessResults);
+                break;
+        }
+
+        if (actualBestFromCandidates != null){
+
+            double actualBestFitness
+                    = fitnessFunction.calculateFitnessOfChromosomeOfIndividual(actualBest, chromosomeElementCostFunction, evolutionarilyOptimalizable);
+            double permutationFitness
+                    = fitnessFunction.calculateFitnessOfChromosomeOfIndividual(actualBestFromCandidates._2, chromosomeElementCostFunction, evolutionarilyOptimalizable);
+
+            if (actualBestFitness < permutationFitness ){
+
+                actualBest = actualBestFromCandidates._2;
+            }
         }
         return actualBest;
     }
@@ -547,7 +558,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
 
         /// evaluate all candidates
         List<Tuple2<Individual<CHROMOSOME_TYPE>, Double>> fitnessResults = candidates.stream()
-                .map(candidate -> new Tuple2<>(candidate, fitnessFunction.calculateFitnessOfChromosomeOfIndividual(candidate, chromosomeElementCostFunction)))
+                .map(candidate -> new Tuple2<>(candidate, fitnessFunction.calculateFitnessOfChromosomeOfIndividual(candidate, chromosomeElementCostFunction, evolutionarilyOptimalizable)))
                 .collect(Collectors.toList());
 
         Tuple2<Double, Individual<CHROMOSOME_TYPE>> bestIndividualForThisCycleOfSegmentPermutation
@@ -591,7 +602,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
 
         /// evaluate all candidates
         List<Tuple2<Individual<CHROMOSOME_TYPE>, Double>> fitnessResults = candidates.stream()
-                .map(candidate -> new Tuple2<>(candidate, fitnessFunction.calculateFitnessOfChromosomeOfIndividual(candidate, chromosomeElementCostFunction)))
+                .map(candidate -> new Tuple2<>(candidate, fitnessFunction.calculateFitnessOfChromosomeOfIndividual(candidate, chromosomeElementCostFunction, evolutionarilyOptimalizable)))
                 .collect(Collectors.toList());
 
         Tuple2<Double, Individual<CHROMOSOME_TYPE>> bestIndividualForThisCycleOfSegmentPermutation
@@ -624,7 +635,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
 
         for (Individual<CHROMOSOME_TYPE> individualToEvaluate : individualsToEvaluate) {
 
-            double fitness = fitnessFunction.calculateFitnessOfChromosomeOfIndividual(individualToEvaluate, chromosomeElementCostFunction);
+            double fitness = fitnessFunction.calculateFitnessOfChromosomeOfIndividual(individualToEvaluate, chromosomeElementCostFunction, evolutionarilyOptimalizable);
 
             Tuple3<Integer, Individual<CHROMOSOME_TYPE>, Double> tuple = new Tuple3<>(iteration, individualToEvaluate, fitness);
 
@@ -651,7 +662,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
     @Override
     public double calculateFitnessValueOfIndividual(Individual<CHROMOSOME_TYPE> individual) {
 
-        return fitnessFunction.calculateFitnessOfChromosomeOfIndividual(individual, chromosomeElementCostFunction);
+        return fitnessFunction.calculateFitnessOfChromosomeOfIndividual(individual, chromosomeElementCostFunction, evolutionarilyOptimalizable);
     }
 
     @Override

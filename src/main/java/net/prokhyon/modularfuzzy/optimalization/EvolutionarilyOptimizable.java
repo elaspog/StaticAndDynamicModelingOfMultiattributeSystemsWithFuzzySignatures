@@ -12,7 +12,7 @@ public interface EvolutionarilyOptimizable <CHROMOSOME_TYPE extends ChromosomeEl
 
     List<Individual<CHROMOSOME_TYPE>> initializePopulation(Map<IndividualInitializationType, Integer> populationInitializationPlan,
                                                            ChromosomeElementCostFunction<COST_TYPE> chromosomeElementCostFunction,
-                                                           FitnessFunction<COST_TYPE> fitnessFunction,
+                                                           FitnessFunction<COST_TYPE, CHROMOSOME_TYPE> fitnessFunction,
                                                            FitnessEvaluationStrategy fitnessEvaluationStrategy,
                                                            Object ... domainSpecificConfiguration);
 
@@ -24,11 +24,11 @@ public interface EvolutionarilyOptimizable <CHROMOSOME_TYPE extends ChromosomeEl
                                                           ChromosomeElementCostFunction<COST_TYPE> chromosomeElementCostFunction);
 
     Double getFitness(Individual<CHROMOSOME_TYPE> individual,
-                      FitnessFunction<COST_TYPE> fitnessFunction,
+                      FitnessFunction<COST_TYPE, CHROMOSOME_TYPE> fitnessFunction,
                       ChromosomeElementCostFunction<COST_TYPE> chromosomeElementCostFunction);
 
     Tuple3<List<COST_TYPE>, List<Double>, Double> getCostSequenceEvaluatedAndCostSequenceAndFitness(Individual<CHROMOSOME_TYPE> individual,
-                                                                                                    FitnessFunction<COST_TYPE> fitnessFunction,
+                                                                                                    FitnessFunction<COST_TYPE,CHROMOSOME_TYPE> fitnessFunction,
                                                                                                     ChromosomeElementCostFunction<COST_TYPE> chromosomeElementCostFunction);
 
 }

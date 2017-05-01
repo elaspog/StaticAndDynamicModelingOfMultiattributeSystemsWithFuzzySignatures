@@ -97,7 +97,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
                         DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCost,
                         FitnessEvaluationStrategy.MAXIMIZE_FITNESS);
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
         populationInitializationPlan.put(IndividualInitializationType.NEAREST_NEIGHBOUR, 1);
         dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
 
@@ -127,7 +127,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCost,
                 FitnessEvaluationStrategy.MAXIMIZE_FITNESS);
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
         populationInitializationPlan.put(IndividualInitializationType.SECONDARY_NEAREST_NEIGHBOUR, 1);
         dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
 
@@ -157,7 +157,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCost,
                 FitnessEvaluationStrategy.MAXIMIZE_FITNESS);
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
         populationInitializationPlan.put(IndividualInitializationType.ALTERNATING_NEAREST_NEIGHBOUR_NN_START, 1);
         dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
 
@@ -187,7 +187,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCost,
                 FitnessEvaluationStrategy.MAXIMIZE_FITNESS);
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
         populationInitializationPlan.put(IndividualInitializationType.ALTERNATING_NEAREST_NEIGHBOUR_SNN_START, 1);
         dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
 
@@ -210,7 +210,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
     @Test
     public void test_InitializationStrategy_NEAREST_NEIGHBOUR() throws Exception {
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
 
         final Double PROBABILITY_OF_NULL_STATE = 0.00;
         final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 1.0;
@@ -254,7 +254,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
     @Test
     public void test_InitializationStrategy_SECONDARY_NEAREST_NEIGHBOUR() throws Exception {
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
 
         final Double PROBABILITY_OF_NULL_STATE = 0.00;
         final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 1.0;
@@ -298,7 +298,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
     @Test
     public void test_InitializationStrategy_ALTERNATING_NEAREST_NEIGHBOUR_NN_START() throws Exception {
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
 
         final Double PROBABILITY_OF_NULL_STATE = 0.5;
         final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 1.0;
@@ -342,7 +342,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
     @Test
     public void test_InitializationStrategy_ALTERNATING_NEAREST_NEIGHBOUR_SNN_START() throws Exception {
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
 
         final Double PROBABILITY_OF_NULL_STATE = 0.5;
         final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 1.0;
@@ -386,7 +386,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
     @Test
     public void test_InitializationStrategy_RANDOM() throws Exception {
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
 
         final Double PROBABILITY_OF_NULL_STATE = 0.5;
         final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
@@ -424,7 +424,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
     @Test
     public void test_geneSequenceChanger() throws Exception {
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
 
         final Double PROBABILITY_OF_NULL_STATE = 0.0;
         final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
@@ -466,7 +466,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
     @Test
     public void test_modifyChromosomeOfIndividualInIndexPositionsWithOtherChromosomeElements() throws Exception {
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
 
         final Double PROBABILITY_OF_NULL_STATE = 0.0;
         final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
@@ -524,9 +524,10 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
                 FitnessEvaluationStrategy.MINIMIZE_FITNESS,
                 PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
-        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
         populationInitializationPlan.put(IndividualInitializationType.NEAREST_NEIGHBOUR, 1);
         populationInitializationPlan.put(IndividualInitializationType.SECONDARY_NEAREST_NEIGHBOUR, 1);
+
         dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
 
         Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
@@ -561,5 +562,35 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
         Assert.assertNotEquals(newIndividual, individual2);
     }
 
+    @Test
+    public void test_randomAttributeGroupMutationOnIndividual() throws Exception {
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomatonForOptimization2,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::fitnessFunction,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
+        populationInitializationPlan.put(IndividualInitializationType.NEAREST_NEIGHBOUR, 1);
+        populationInitializationPlan.put(IndividualInitializationType.SECONDARY_NEAREST_NEIGHBOUR, 1);
+        dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
+
+        List<Integer> permutation = new ArrayList<>(Arrays.asList(8, 1, 3, 0, 11, 4, 9, 6, 2, 7, 10, 5));
+
+        Individual<CompoundFuzzyState> individual2 = dbmea.randomAttributeGroupMutationOnIndividual(individual1, 4, 20, permutation);
+
+        double v1 = dbmea.calculateFitnessValueOfIndividual(individual1);
+        double v2 = dbmea.calculateFitnessValueOfIndividual(individual2);
+
+        Assert.assertTrue(v2 >= v1);
+    }
 
 }

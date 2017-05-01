@@ -271,7 +271,7 @@ public class CompoundFuzzyAutomaton
     @Override
     public List<Individual<CompoundFuzzyState>> initializePopulation(Map<IndividualInitializationType, Integer> populationInitializationPlan,
                                                                      ChromosomeElementCostFunction<List<List<Double>>> chromosomeElementCostFunction,
-                                                                     FitnessFunction<List<List<Double>>> fitnessFunction,
+                                                                     FitnessFunction<List<List<Double>>, CompoundFuzzyState> fitnessFunction,
                                                                      FitnessEvaluationStrategy fitnessEvaluationStrategy,
                                                                      Object... domainSpecificConfiguration) {
 
@@ -327,7 +327,7 @@ public class CompoundFuzzyAutomaton
         for (int i = 0; i < individual.getChromosomeSequence().size() - 1; i++) {
 
             CompoundFuzzyState actual = individual.getChromosomeSequence().get(i);
-            Optional<CompoundFuzzyState> next = individual.getChromosomeSequence().stream()
+            Optional<CompoundFuzzyState> next = individual.getChromosomeSequence().subList(i+1, individual.getChromosomeSequence().size()).stream()
                     .filter(Objects::nonNull)
                     .findFirst();
 
@@ -416,7 +416,7 @@ public class CompoundFuzzyAutomaton
 
     @Override
     public Double getFitness(Individual<CompoundFuzzyState> individual,
-                             FitnessFunction<List<List<Double>>> fitnessFunction,
+                             FitnessFunction<List<List<Double>>, CompoundFuzzyState> fitnessFunction,
                              ChromosomeElementCostFunction<List<List<Double>>> chromosomeElementCostFunction) {
 
         /// this function could be much more complex
@@ -426,7 +426,7 @@ public class CompoundFuzzyAutomaton
 
     @Override
     public Tuple3<List<List<List<Double>>>, List<Double>, Double> getCostSequenceEvaluatedAndCostSequenceAndFitness(Individual<CompoundFuzzyState> individual,
-                                                                                                              FitnessFunction<List<List<Double>>> fitnessFunction,
+                                                                                                              FitnessFunction<List<List<Double>>, CompoundFuzzyState> fitnessFunction,
                                                                                                               ChromosomeElementCostFunction<List<List<Double>>> chromosomeElementCostFunction) {
 
         List<List<List<Double>>> costSequence = getCostSequence(individual);
