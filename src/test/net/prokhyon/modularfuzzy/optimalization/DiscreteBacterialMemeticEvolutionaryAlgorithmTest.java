@@ -1,6 +1,7 @@
 package net.prokhyon.modularfuzzy.optimalization;
 
 import net.prokhyon.modularfuzzy.TestBaseForCompoundAutomatonAndOptimization;
+import net.prokhyon.modularfuzzy.common.utils.Tuple2;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState;
@@ -593,7 +594,38 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
     }
 
     @Test
-    public void test_looseSegmentMutation() throws Exception {
+    public void test_looseSegmentMutation1() throws Exception {
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomatonForOptimization2,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::fitnessFunction,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
+        populationInitializationPlan.put(IndividualInitializationType.RANDOM, 1);
+        dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        List<List<Integer>> permutations = new ArrayList<>();
+        permutations.add(Arrays.asList(8, 1, 3, 0, 11, 4, 9, 6, 2, 7, 10, 5));
+        permutations.add(Arrays.asList(10, 5, 3, 8, 1, 0, 6, 2, 7, 11, 4, 9));
+
+        Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea.looseSegmentMutationOnIndividual(individual1, permutations);
+
+        double v1 = dbmea.calculateFitnessValueOfIndividual(individual1);
+        double v2 = dbmea.calculateFitnessValueOfIndividual(individual2);
+
+        Assert.assertTrue(v2 >= v1);
+    }
+
+    @Test
+    public void test_looseSegmentMutation2() throws Exception {
 
         final Double PROBABILITY_OF_NULL_STATE = 0.00;
         final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
@@ -617,6 +649,163 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
         double v2 = dbmea.calculateFitnessValueOfIndividual(individual2);
 
         Assert.assertTrue(v2 >= v1);
+    }
+
+    @Test
+    public void test_coherentSegmentMutationOnIndividual1() throws Exception {
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomatonForOptimization2,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::fitnessFunction,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
+        populationInitializationPlan.put(IndividualInitializationType.RANDOM, 1);
+        dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea.coherentSegmentMutationOnIndividual(individual1, 4, 16);
+
+        double v1 = dbmea.calculateFitnessValueOfIndividual(individual1);
+        double v2 = dbmea.calculateFitnessValueOfIndividual(individual2);
+
+        Assert.assertTrue(v2 >= v1);
+    }
+
+    @Test
+    public void test_coherentSegmentMutationOnIndividual2() throws Exception {
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomatonForOptimization2,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::fitnessFunction,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
+        populationInitializationPlan.put(IndividualInitializationType.RANDOM, 1);
+        dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        List<Tuple2<Integer, Integer>> borders = new ArrayList<>();
+        borders.add(new Tuple2<>(4,8));
+
+        Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea.coherentSegmentMutationOnIndividual(16, individual1, borders);
+
+        double v1 = dbmea.calculateFitnessValueOfIndividual(individual1);
+        double v2 = dbmea.calculateFitnessValueOfIndividual(individual2);
+
+        Assert.assertTrue(v2 >= v1);
+    }
+
+    @Test
+    public void test_randomAttributeGroupMutationOnIndividual1() throws Exception {
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomatonForOptimization2,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::fitnessFunction,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
+        populationInitializationPlan.put(IndividualInitializationType.RANDOM, 1);
+        dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea.randomAttributeGroupMutationOnIndividual(individual1, 4, 18);
+        Individual<CompoundFuzzyState> individual3 = dbmea.randomAttributeGroupMutationOnIndividual(individual1, 6, 500);
+
+        double v1 = dbmea.calculateFitnessValueOfIndividual(individual1);
+        double v2 = dbmea.calculateFitnessValueOfIndividual(individual2);
+        double v3 = dbmea.calculateFitnessValueOfIndividual(individual3);
+
+        Assert.assertTrue(v2 >= v1);
+        Assert.assertTrue(v3 >= v1);
+    }
+
+    @Test
+    public void test_randomAttributeGroupMutationOnIndividual2() throws Exception {
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomatonForOptimization2,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::fitnessFunction,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
+        populationInitializationPlan.put(IndividualInitializationType.RANDOM, 1);
+        dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        List<Integer> permutations1 = new ArrayList<>();
+        permutations1.addAll(Arrays.asList(11, 4, 9, 6, 1, 5, 2, 3, 10, 7, 0, 8));
+
+        Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea.randomAttributeGroupMutationOnIndividual(individual1, 4, 18, permutations1);
+        Individual<CompoundFuzzyState> individual3 = dbmea.randomAttributeGroupMutationOnIndividual(individual1, 6, 500, permutations1);
+
+        double v1 = dbmea.calculateFitnessValueOfIndividual(individual1);
+        double v2 = dbmea.calculateFitnessValueOfIndividual(individual2);
+        double v3 = dbmea.calculateFitnessValueOfIndividual(individual3);
+
+        Assert.assertTrue(v2 >= v1);
+        Assert.assertTrue(v3 >= v1);
+    }
+
+    @Test
+    public void test_randomAttributeGroupMutationOnIndividual3() throws Exception {
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomatonForOptimization2,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::fitnessFunction,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
+        populationInitializationPlan.put(IndividualInitializationType.RANDOM, 1);
+        dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        List<List<Integer>> permutations1 = new ArrayList<>();
+        permutations1.add(Arrays.asList(11, 4, 9, 6));
+        permutations1.add(Arrays.asList(10, 5, 3, 8));
+
+        List<List<Integer>> permutations2 = new ArrayList<>();
+        permutations2.add(Arrays.asList(10, 5, 7, 11, 6, 8));
+
+        Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea.randomAttributeGroupMutationOnIndividual(individual1, 18, permutations1);
+        Individual<CompoundFuzzyState> individual3 = dbmea.randomAttributeGroupMutationOnIndividual(individual1, 700, permutations2);
+
+        double v1 = dbmea.calculateFitnessValueOfIndividual(individual1);
+        double v2 = dbmea.calculateFitnessValueOfIndividual(individual2);
+        double v3 = dbmea.calculateFitnessValueOfIndividual(individual3);
+
+        Assert.assertTrue(v2 >= v1);
+        Assert.assertTrue(v3 >= v1);
     }
 
 }

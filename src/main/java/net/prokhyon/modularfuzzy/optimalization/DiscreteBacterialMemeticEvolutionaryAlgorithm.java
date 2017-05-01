@@ -154,7 +154,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
     public List<Individual<CHROMOSOME_TYPE>> geneTransferOnPopulation(int geneTransferCount, int segmentSize){
 
         List<Individual<CHROMOSOME_TYPE>> population = geneTransferOnPopulation(selectLastPopulation(), geneTransferCount, segmentSize);
-        dbmeaState = DBMEA_State.BACTERIAL_MUTATION_FINISHED;
+        dbmeaState = DBMEA_State.GENE_TRANSFER_FINISHED;
         return population;
     }
 
@@ -270,7 +270,6 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
         List<Integer> randomIndexPermutation = IntStream.range(0, originalChromosomeLength)
                 .boxed()
                 .collect(Collectors.toList());
-        DbmeaHelperUtils.generatePerm(randomIndexPermutation);
         Collections.shuffle(randomIndexPermutation);
 
         return randomAttributeGroupMutationOnIndividual(individual, i_column_cnt, n_clones, randomIndexPermutation, true);
@@ -557,14 +556,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
         }
 
         /// evaluate all candidates
-        List<Tuple2<Individual<CHROMOSOME_TYPE>, Double>> fitnessResults = candidates.stream()
-                .map(candidate -> new Tuple2<>(candidate, fitnessFunction.calculateFitnessOfChromosomeOfIndividual(candidate, chromosomeElementCostFunction, evolutionarilyOptimalizable)))
-                .collect(Collectors.toList());
-
-        Tuple2<Double, Individual<CHROMOSOME_TYPE>> bestIndividualForThisCycleOfSegmentPermutation
-                = DbmeaHelperUtils.selectFromMultilistByPositionWithHashMap(0, Order.DESCENDING, fitnessResults);
-
-        return bestIndividualForThisCycleOfSegmentPermutation._2;
+        return getWinnerFromActualBestAndCandidates(individual, candidates);
     }
 
     public Individual<CHROMOSOME_TYPE> looseSegmentMutationOnIndividual(Individual<CHROMOSOME_TYPE> individual, Integer n_clones) {
@@ -637,6 +629,8 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
             DbmeaHelperUtils.addElementToMapWithListContent(iterationResults, new Integer(iteration), tuple);
             DbmeaHelperUtils.addElementToMapWithListContent(individualResults, individualToEvaluate, tuple);
         }
+
+        dbmeaState = DBMEA_State.EVALUATED;
     }
 
     @Override
