@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DbmeaHelperUtilsTest {
 
@@ -184,6 +185,59 @@ public class DbmeaHelperUtilsTest {
 
         Integer possiblePermutationCountForNumber = DbmeaHelperUtils.getPossiblePermutationCountForNumber(5);
         Assert.assertEquals(120, (int)possiblePermutationCountForNumber);
+    }
+
+    @Test
+    public void test_addElementToMapWithListContent() throws Exception {
+
+        Map<Integer, List<Double>> map = new HashMap<>();
+
+        DbmeaHelperUtils.addElementToMapWithListContent(map, 5, 5.5);
+        Assert.assertTrue(map.containsKey(5));
+        Assert.assertEquals(1, map.keySet().size());
+        Assert.assertEquals(1, map.get(5).size());
+        Assert.assertEquals(new Double(5.5), map.get(5).get(0));
+
+        DbmeaHelperUtils.addElementToMapWithListContent(map, 5, 4.5);
+        Assert.assertTrue(map.containsKey(5));
+        Assert.assertEquals(1, map.keySet().size());
+        Assert.assertEquals(2, map.get(5).size());
+        Assert.assertEquals(new Double(5.5), map.get(5).get(0));
+        Assert.assertEquals(new Double(4.5), map.get(5).get(1));
+
+        DbmeaHelperUtils.addElementToMapWithListContent(map, 7, 5.7);
+        Assert.assertTrue(map.containsKey(5));
+        Assert.assertTrue(map.containsKey(7));
+        Assert.assertEquals(2, map.keySet().size());
+        Assert.assertEquals(2, map.get(5).size());
+        Assert.assertEquals(1, map.get(7).size());
+        Assert.assertEquals(new Double(5.7), map.get(7).get(0));
+
+        DbmeaHelperUtils.addElementToMapWithListContent(map, 7, 6.7);
+        Assert.assertTrue(map.containsKey(5));
+        Assert.assertTrue(map.containsKey(7));
+        Assert.assertEquals(2, map.keySet().size());
+        Assert.assertEquals(2, map.get(5).size());
+        Assert.assertEquals(2, map.get(7).size());
+        Assert.assertEquals(new Double(5.7), map.get(7).get(0));
+        Assert.assertEquals(new Double(6.7), map.get(7).get(1));
+    }
+
+    @Test
+    public void test_generatePerm() throws Exception {
+
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        List<List<Integer>> lists = DbmeaHelperUtils.generatePerm(list);
+        Assert.assertEquals(24, lists.size());
+        for (Integer i : list) {
+            Assert.assertEquals(i, list.get(i));
+        }
+
     }
 
 }

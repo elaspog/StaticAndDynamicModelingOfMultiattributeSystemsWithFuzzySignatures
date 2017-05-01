@@ -1,6 +1,6 @@
 package net.prokhyon.modularfuzzy.optimalization.fitness;
 
-public interface ChromosomeElementCostFunction<T> {
+public interface ChromosomeElementCostFunction<COST_TYPE> {
 
-    Double calculateCost(T cost);
+    Double calculateCost(COST_TYPE cost);
 }

@@ -3,6 +3,7 @@ package net.prokhyon.modularfuzzy.fuzzySignature.model.fx;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import net.prokhyon.modularfuzzy.common.utils.Tuple2;
+import net.prokhyon.modularfuzzy.common.utils.Tuple3;
 import net.prokhyon.modularfuzzy.common.utils.Tuple4;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
@@ -23,11 +24,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class CompoundFuzzyAutomaton
-        implements EvolutionarilyOptimizable<CompoundFuzzyState> {
+        implements EvolutionarilyOptimizable<CompoundFuzzyState, List<List<Double>>> {
 
     private List<FuzzyAutomaton> fuzzyAutomatonTuple;
     private List<CompoundFuzzyState> compoundFuzzyStates;
     private List<CompoundFuzzyTransition> compoundFuzzyTransitions;
+    private List<Object> domainSpecificConfiguration;
 
     public CompoundFuzzyAutomaton(){
         reset();
@@ -267,12 +269,16 @@ public class CompoundFuzzyAutomaton
     }
 
     @Override
-    public List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> initializePopulationGetWithFitness(Map<IndividualInitializationType, Integer> populationInitializationPlan,
-                                                                                                         ChromosomeElementCostFunction chromosomeElementCostFunction,
-                                                                                                         FitnessFunction fitnessFunction,
-                                                                                                         FitnessEvaluationStrategy fitnessEvaluationStrategy,
-                                                                                                         Object ... domainDependentConfiguration) {
+    public List<Individual<CompoundFuzzyState>> initializePopulation(Map<IndividualInitializationType, Integer> populationInitializationPlan,
+                                                                     ChromosomeElementCostFunction<List<List<Double>>> chromosomeElementCostFunction,
+                                                                     FitnessFunction<List<List<Double>>> fitnessFunction,
+                                                                     FitnessEvaluationStrategy fitnessEvaluationStrategy,
+                                                                     Object... domainSpecificConfiguration) {
 
+        this.domainSpecificConfiguration = Arrays.asList(domainSpecificConfiguration);
+
+        /// necessary only if populationInitializationPlan contains any not RANDOM type initialization
+        // TODO check if necessary
         final List<CompoundFuzzyState> initialFuzzyStates = filterCompoundFuzzyStateOfAutomatonByStateType(FuzzyStateTypeEnum.INITIAL);
         final List<CompoundFuzzyState> terminalFuzzyStates = filterCompoundFuzzyStateOfAutomatonByStateType(FuzzyStateTypeEnum.TERMINAL);
 
@@ -296,11 +302,15 @@ public class CompoundFuzzyAutomaton
             final int count = initializationEntry.getValue().intValue();
 
             Order finalOrder = order;
-            initialPopulationWithFitness = IntStream.range(0, count)
-                    .mapToObj(i -> generateChromosome(individualType, chromosomeElementCostFunction, initialFuzzyStates, terminalFuzzyStates, finalOrder, domainDependentConfiguration))
+            List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> collect = IntStream.range(0, count)
+                    .mapToObj(i -> generateChromosome(individualType, chromosomeElementCostFunction, initialFuzzyStates, terminalFuzzyStates, finalOrder, domainSpecificConfiguration))
                     .collect(Collectors.toList());
+
+            initialPopulationWithFitness.addAll(collect);
         }
-        return initialPopulationWithFitness;
+        return initialPopulationWithFitness.stream()
+                .map(x -> x._1)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -309,18 +319,135 @@ public class CompoundFuzzyAutomaton
         return compoundFuzzyStates.size();
     }
 
+    @Override
+    public List<List<List<Double>>> getCostSequence(Individual<CompoundFuzzyState> individual) {
+
+        List<List<List<Double>>> ret = new ArrayList<>();
+
+        for (int i = 0; i < individual.getChromosomeSequence().size() - 1; i++) {
+
+            CompoundFuzzyState actual = individual.getChromosomeSequence().get(i);
+            Optional<CompoundFuzzyState> next = individual.getChromosomeSequence().stream()
+                    .filter(Objects::nonNull)
+                    .findFirst();
+
+            if(actual != null && next.isPresent()){
+
+                final CompoundFuzzyState subsequentCompoundFuzzyState = next.get();
+                final List<CompoundFuzzyState> subsequentCompoundFuzzyStates = actual.getOutgoingEdges().stream()
+                        .map(x -> x.getToState())
+                        .collect(Collectors.toList());
+
+                if (subsequentCompoundFuzzyStates.contains(subsequentCompoundFuzzyState)){
+
+                    /// calculate the cost of the edge when the selected state is connected to the found subsequent state
+
+                    final Optional<CompoundFuzzyTransition> fuzzyTransition = actual.getOutgoingEdges().stream()
+                            .filter(x -> x.getToState().equals(subsequentCompoundFuzzyState))
+                            .findFirst();
+
+                    if (fuzzyTransition.isPresent()){
+
+                        final List<List<Double>> costVector = fuzzyTransition.get().getCostVector();
+                        ret.add(costVector);
+
+                    } else {
+                        throw new RuntimeException("Error in algorithm");
+                    }
+
+                } else {
+
+                    ret.add(null);
+                }
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public List<Double> getCostSequenceEvaluatedWithCostFunction(Individual<CompoundFuzzyState> individual,
+                                                                 ChromosomeElementCostFunction<List<List<Double>>> chromosomeElementCostFunction) {
+
+        List<Double> ret = new ArrayList<>();
+        Double disconnectionCost = (Double) this.domainSpecificConfiguration.get(1);
+
+        for (int i = 0; i < individual.getChromosomeSequence().size() - 1; i++) {
+
+            CompoundFuzzyState actual = individual.getChromosomeSequence().get(i);
+            Optional<CompoundFuzzyState> next = individual.getChromosomeSequence().subList(i+1, individual.getChromosomeSequence().size()).stream()
+                    .filter(Objects::nonNull)
+                    .findFirst();
+
+            if(actual != null && next.isPresent()){
+
+                final CompoundFuzzyState subsequentCompoundFuzzyState = next.get();
+                final List<CompoundFuzzyState> subsequentCompoundFuzzyStates = actual.getOutgoingEdges().stream()
+                        .map(x -> x.getToState())
+                        .collect(Collectors.toList());
+
+                if (subsequentCompoundFuzzyStates.contains(subsequentCompoundFuzzyState)){
+
+                    /// calculate the cost of the edge when the selected state is connected to the found subsequent state
+
+                    final Optional<CompoundFuzzyTransition> fuzzyTransition = actual.getOutgoingEdges().stream()
+                            .filter(x -> x.getToState().equals(subsequentCompoundFuzzyState))
+                            .findFirst();
+
+                    if (fuzzyTransition.isPresent()){
+
+                        final List<List<Double>> costVector = fuzzyTransition.get().getCostVector();
+                        ret.add(chromosomeElementCostFunction.calculateCost(costVector));
+
+                    } else {
+                        throw new RuntimeException("Error in algorithm");
+                    }
+
+                } else {
+
+                    /// generate a cost when the selected state is not connected to the found subsequent state
+                    Integer pathLength = getShortestPathLengthBetweenStatesByBFS(actual, subsequentCompoundFuzzyState);
+                    int multiplicator = pathLength == null ? compoundFuzzyStates.size() : pathLength;
+                    ret.add(multiplicator * disconnectionCost);
+                }
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public Double getFitness(Individual<CompoundFuzzyState> individual,
+                             FitnessFunction<List<List<Double>>> fitnessFunction,
+                             ChromosomeElementCostFunction<List<List<Double>>> chromosomeElementCostFunction) {
+
+        /// this function could be much more complex
+        List<Double> costSequenceEvaluatedWithCostFunction = getCostSequenceEvaluatedWithCostFunction(individual, chromosomeElementCostFunction);
+        return costSequenceEvaluatedWithCostFunction.stream().mapToDouble(x -> x).sum();
+    }
+
+    @Override
+    public Tuple3<List<List<List<Double>>>, List<Double>, Double> getCostSequenceEvaluatedAndCostSequenceAndFitness(Individual<CompoundFuzzyState> individual,
+                                                                                                              FitnessFunction<List<List<Double>>> fitnessFunction,
+                                                                                                              ChromosomeElementCostFunction<List<List<Double>>> chromosomeElementCostFunction) {
+
+        List<List<List<Double>>> costSequence = getCostSequence(individual);
+        List<Double> costSequenceEvaluatedWithCostFunction = getCostSequenceEvaluatedWithCostFunction(individual, chromosomeElementCostFunction);
+        Double fitness = getFitness(individual, fitnessFunction, chromosomeElementCostFunction);
+
+        return new Tuple3<>(costSequence, costSequenceEvaluatedWithCostFunction, fitness);
+    }
+
     private Tuple2<Individual<CompoundFuzzyState>, List<Double>> generateChromosome(IndividualInitializationType individualType,
                                                                                     ChromosomeElementCostFunction chromosomeElementCostFunction,
                                                                                     List<CompoundFuzzyState> initialFuzzyStates,
                                                                                     List<CompoundFuzzyState> terminalFuzzyStates,
                                                                                     Order order,
-                                                                                    Object[] domainDependentConfiguration) {
+                                                                                    Object[] domainSpecificConfiguration) {
 
-        CompoundFuzzyState randomlySelectedInitState = null;
-        List<Tuple2<CompoundFuzzyState, Double>> stateAndFitnessSequence = null;
+        CompoundFuzzyState randomlySelectedInitState;
+        List<Tuple2<CompoundFuzzyState, Double>> stateAndFitnessSequence;
         Individual<CompoundFuzzyState> newIndividual = null;
-        List<CompoundFuzzyState> stateSequence = null;
-        List<Double> costSequence = null;
+        List<CompoundFuzzyState> stateSequence;
+        List<Double> costSequence;
 
         switch (individualType){
 
@@ -329,10 +456,7 @@ public class CompoundFuzzyAutomaton
                 stateAndFitnessSequence = getNthNearestNeighbourRecursively(0, chromosomeElementCostFunction, randomlySelectedInitState, terminalFuzzyStates, order);
                 stateSequence = stateAndFitnessSequence.stream().map(x -> x._1).collect(Collectors.toList());
                 costSequence = stateAndFitnessSequence.stream().map(x -> x._2).collect(Collectors.toList());
-                if (stateSequence != null){
-                    stateSequence.add(0, randomlySelectedInitState);
-                    newIndividual = new Individual<>(stateSequence);
-                }
+                extendChromosomeWithNullsIfNecessary(randomlySelectedInitState, stateSequence, costSequence);
                 break;
 
             case SECONDARY_NEAREST_NEIGHBOUR:
@@ -340,10 +464,7 @@ public class CompoundFuzzyAutomaton
                 stateAndFitnessSequence = getNthNearestNeighbourRecursively(1, chromosomeElementCostFunction, randomlySelectedInitState, terminalFuzzyStates, order);
                 stateSequence = stateAndFitnessSequence.stream().map(x -> x._1).collect(Collectors.toList());
                 costSequence = stateAndFitnessSequence.stream().map(x -> x._2).collect(Collectors.toList());
-                if (stateSequence != null){
-                    stateSequence.add(0, randomlySelectedInitState);
-                    newIndividual = new Individual<>(stateSequence);
-                }
+                extendChromosomeWithNullsIfNecessary(randomlySelectedInitState, stateSequence, costSequence);
                 break;
 
             case ALTERNATING_NEAREST_NEIGHBOUR_NN_START:
@@ -351,10 +472,7 @@ public class CompoundFuzzyAutomaton
                 stateAndFitnessSequence = getAlternatingNearestNeighbourRecursively(0, chromosomeElementCostFunction, randomlySelectedInitState, terminalFuzzyStates, order);
                 stateSequence = stateAndFitnessSequence.stream().map(x -> x._1).collect(Collectors.toList());
                 costSequence = stateAndFitnessSequence.stream().map(x -> x._2).collect(Collectors.toList());
-                if (stateSequence != null){
-                    stateSequence.add(0, randomlySelectedInitState);
-                    newIndividual = new Individual<>(stateSequence);
-                }
+                extendChromosomeWithNullsIfNecessary(randomlySelectedInitState, stateSequence, costSequence);
                 break;
 
             case ALTERNATING_NEAREST_NEIGHBOUR_SNN_START:
@@ -362,28 +480,24 @@ public class CompoundFuzzyAutomaton
                 stateAndFitnessSequence = getAlternatingNearestNeighbourRecursively(1, chromosomeElementCostFunction, randomlySelectedInitState, terminalFuzzyStates, order);
                 stateSequence = stateAndFitnessSequence.stream().map(x -> x._1).collect(Collectors.toList());
                 costSequence = stateAndFitnessSequence.stream().map(x -> x._2).collect(Collectors.toList());
-                if (stateSequence != null){
-                    stateSequence.add(0, randomlySelectedInitState);
-                    newIndividual = new Individual<>(stateSequence);
-                }
+                extendChromosomeWithNullsIfNecessary(randomlySelectedInitState, stateSequence, costSequence);
                 break;
 
             case RANDOM:
-                if (domainDependentConfiguration.length != 1){
+                if (domainSpecificConfiguration.length != 2){
                     throw new IllegalArgumentException("Bad parametrization for generating random objects.");
                 }
-                final double probabilityOfEmptyChromosomeElements = 0.5;
+                final Double probabilityOfEmptyChromosomeElements = (Double) domainSpecificConfiguration[0];
+                final Double disconnectionCost = (Double) domainSpecificConfiguration[1];
+
                 final int size = compoundFuzzyStates.size();
                 if (size > 1 && probabilityOfEmptyChromosomeElements <= 1.0 && probabilityOfEmptyChromosomeElements >= 0.0) {
-                    stateAndFitnessSequence = getRandomPathRecursively(probabilityOfEmptyChromosomeElements, size, chromosomeElementCostFunction, (Double)domainDependentConfiguration[0]);
+                    stateAndFitnessSequence = getRandomPathRecursively(probabilityOfEmptyChromosomeElements, size, chromosomeElementCostFunction, disconnectionCost);
                 } else {
                     throw new IllegalArgumentException("The following parameters can't be passed to getRandomPathRecursively(): " + size + " " + probabilityOfEmptyChromosomeElements);
                 }
                 stateSequence = stateAndFitnessSequence.stream().map(x -> x._1).collect(Collectors.toList());
                 costSequence = stateAndFitnessSequence.stream().map(x -> x._2).collect(Collectors.toList());
-                if (stateSequence != null){
-                    newIndividual = new Individual<>(stateSequence);
-                }
                 break;
 
             case DOMAIN_SPECIFIC_CONSTRAINT_BASED:
@@ -391,21 +505,45 @@ public class CompoundFuzzyAutomaton
                 throw new IllegalArgumentException("IndividualType not supported: " + individualType.toString());
         }
 
+        if (stateSequence != null){
+            newIndividual = new Individual<>(stateSequence);
+        }
+
         if(newIndividual != null) {
             return new Tuple2<>(newIndividual, costSequence);
         }
-        throw new NotImplementedException();
+        return null;
     }
+
+    private void extendChromosomeWithNullsIfNecessary(CompoundFuzzyState initState, List<CompoundFuzzyState> stateSequence, List<Double> costSequence) {
+
+        if (stateSequence != null){
+            stateSequence.add(0, initState);
+        }
+
+        Random randomizer = new Random();
+        while (compoundFuzzyStates.size() - stateSequence.size() > 0){
+
+            int insertPosition = randomizer.nextInt(stateSequence.size() + 1);
+            stateSequence.add(insertPosition, null);
+
+            if (insertPosition <= 1)
+                costSequence.add(0, null);
+            else
+                costSequence.add(insertPosition-1, null);
+        }
+    }
+
 
     private List<Tuple2<CompoundFuzzyState, Double>> getRandomPathRecursively(final double probabilityOfEmptyChromosomeElements,
                                                                               final int iterationCounter,
                                                                               ChromosomeElementCostFunction chromosomeElementCostFunction,
-                                                                              Double domainDependentConfiguration) {
+                                                                              Double domainSpecificConfiguration) {
 
         List<Tuple2<CompoundFuzzyState, Double>> randomPathRecursively = null;
         if (iterationCounter != 1){
 
-            randomPathRecursively = getRandomPathRecursively(probabilityOfEmptyChromosomeElements, iterationCounter - 1, chromosomeElementCostFunction, domainDependentConfiguration);
+            randomPathRecursively = getRandomPathRecursively(probabilityOfEmptyChromosomeElements, iterationCounter - 1, chromosomeElementCostFunction, domainSpecificConfiguration);
 
         } else if (randomPathRecursively == null) {
 
@@ -470,14 +608,14 @@ public class CompoundFuzzyAutomaton
                 } else {
 
                     /// generate a cost when the selected state is not connected to the found subsequent state
-                    Integer pathLength1 = getShortestPathLengthBetweenStatesByDijkstra(selectedCompoundFuzzyState, subsequentCompoundFuzzyState);
-                    //Integer pathLength2 = getShortestPathLengthBetweenStatesByBFS(selectedCompoundFuzzyState, subsequentCompoundFuzzyState);
+                    Integer pathLength1 = getShortestPathLengthBetweenStatesByBFS(selectedCompoundFuzzyState, subsequentCompoundFuzzyState);
+                    //Integer pathLength2 = getShortestPathLengthBetweenStatesByDijkstra(selectedCompoundFuzzyState, subsequentCompoundFuzzyState);
                     //if (pathLength1 != pathLength2){
                     //    throw new RuntimeException("Error in algorithm");
                     //}
 
                     int multiplicator = pathLength1 == null ? compoundFuzzyStates.size() : pathLength1;
-                    calculatedCost = multiplicator * domainDependentConfiguration;
+                    calculatedCost = multiplicator * domainSpecificConfiguration;
                 }
             }
 
@@ -514,11 +652,11 @@ public class CompoundFuzzyAutomaton
                 if(! output.contains(neighbour) && ! queue.contains(neighbour)){
                     queue.add(neighbour);
                 }
-                Integer storedDistanceOfNeighour = resultMap.get(neighbour);
-                if (storedDistanceOfNeighour == null){
+                Integer storedDistanceOfNeighbour = resultMap.get(neighbour);
+                if (storedDistanceOfNeighbour == null){
                     resultMap.put(neighbour, storedDistanceOfElementToProcess + 1);
                 } else {
-                    int minDistance = Math.min(storedDistanceOfElementToProcess + 1, storedDistanceOfNeighour);
+                    int minDistance = Math.min(storedDistanceOfElementToProcess + 1, storedDistanceOfNeighbour);
                     resultMap.put(neighbour, minDistance);
                 }
             }

@@ -1,9 +1,9 @@
 package net.prokhyon.modularfuzzy.optimalization;
 
 import net.prokhyon.modularfuzzy.TestBaseForCompoundAutomatonAndOptimization;
-import net.prokhyon.modularfuzzy.common.utils.Tuple2;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
+import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.CompoundFuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.CompoundFuzzyState;
 import net.prokhyon.modularfuzzy.optimalization.fitness.FitnessEvaluationStrategy;
@@ -24,14 +24,18 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
     static CompoundFuzzyAutomaton compoundFuzzyAutomaton423;
     static CompoundFuzzyAutomaton compoundFuzzyAutomaton432;
 
-    private static FuzzyAutomaton fuzzyAutomatonForOptimization;
-    private static CompoundFuzzyAutomaton compoundFuzzyAutomatonForOptimization;
+    private static FuzzyAutomaton fuzzyAutomatonForOptimization1;
+    private static FuzzyAutomaton fuzzyAutomatonForOptimization2;
+    private static CompoundFuzzyAutomaton compoundFuzzyAutomatonForOptimization1;
+    private static CompoundFuzzyAutomaton compoundFuzzyAutomatonForOptimization2;
 
     @BeforeClass
     public static void runOnceBeforeClass() {
 
-        fuzzyAutomatonForOptimization = initializeTestFuzzyAutomatonForOptimization();
-        compoundFuzzyAutomatonForOptimization = new CompoundFuzzyAutomaton(fuzzyAutomatonForOptimization);
+        fuzzyAutomatonForOptimization1 = initializeTestFuzzyAutomatonForOptimization1();
+        fuzzyAutomatonForOptimization2 = initializeTestFuzzyAutomatonForOptimization2();
+        compoundFuzzyAutomatonForOptimization1 = new CompoundFuzzyAutomaton(fuzzyAutomatonForOptimization1);
+        compoundFuzzyAutomatonForOptimization2 = new CompoundFuzzyAutomaton(fuzzyAutomatonForOptimization2);
 
         testFuzzyAutomaton_2node = initializeTestFuzzyAutomaton_2_node();
         testFuzzyAutomaton_3node = initializeTestFuzzyAutomaton_3_node();
@@ -63,15 +67,24 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
         compoundFuzzyAutomaton432.extendExistingCompoundWith(testFuzzyAutomaton_2node);
     }
 
-    public static Double calculateCost(List<List<Double>> costData) {
+    @Test
+    public void testGenerateInitialPopulationSubProcessOnCompoundAutomaton0() throws Exception {
 
-        final List<Double> components_0 = costData.stream().filter(v -> v != null).map(v -> v.get(0)).collect(Collectors.toList());
-        final List<Double> components_1 = costData.stream().filter(v -> v != null).map(v -> v.get(1)).collect(Collectors.toList());
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 1.0;
 
-        final double max = Collections.max(components_0).doubleValue();
-        final double sum = components_1.stream().mapToDouble(Double::doubleValue).sum();
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomaton234,
+                null,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCost,
+                FitnessEvaluationStrategy.MAXIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
-        return max * sum;
+        dbmea.generateInitialPopulationSubProcess();
+        List<Individual<CompoundFuzzyState>> population = dbmea.getInitialPopulation();
+
+        Assert.assertEquals(dbmea.DEFAULT_POPULATION_SIZE, population.size());
     }
 
     @Test
@@ -88,13 +101,20 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
         populationInitializationPlan.put(IndividualInitializationType.NEAREST_NEIGHBOUR, 1);
         dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
 
-        final List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> initialPopulationPairedWithFitnessList = dbmea.getInitialPopulationPairedWithFitnessList();
+        final List<CompoundFuzzyState> chromosomeSequence = dbmea.getInitialPopulation().get(0).getChromosomeSequence();
 
-        //PrintHelpers.printIndividualAndFitnessPairs(initialPopulationPairedWithFitnessList);
+        CompoundFuzzyState firstNotNullCompoundFuzzyState = chromosomeSequence.stream()
+                .filter(Objects::nonNull)
+                .findFirst()
+                .get();
 
-        final List<CompoundFuzzyState> chromosomeSequence = initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence();
-        Assert.assertEquals(chromosomeSequence.get(0).getAggregatedStateType(), FuzzyStateTypeEnum.INITIAL);
-        Assert.assertEquals(chromosomeSequence.get(chromosomeSequence.size()-1).getAggregatedStateType(), FuzzyStateTypeEnum.TERMINAL);
+        CompoundFuzzyState lastNotNullCompoundFuzzyState = chromosomeSequence.stream()
+                .filter(Objects::nonNull)
+                .reduce((a, b) -> b)
+                .get();
+
+        Assert.assertEquals(firstNotNullCompoundFuzzyState.getAggregatedStateType(), FuzzyStateTypeEnum.INITIAL);
+        Assert.assertEquals(lastNotNullCompoundFuzzyState.getAggregatedStateType(), FuzzyStateTypeEnum.TERMINAL);
     }
 
     @Test
@@ -111,13 +131,20 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
         populationInitializationPlan.put(IndividualInitializationType.SECONDARY_NEAREST_NEIGHBOUR, 1);
         dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
 
-        final List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> initialPopulationPairedWithFitnessList = dbmea.getInitialPopulationPairedWithFitnessList();
+        final List<CompoundFuzzyState> chromosomeSequence = dbmea.getInitialPopulation().get(0).getChromosomeSequence();
 
-        //PrintHelpers.printIndividualAndFitnessPairs(initialPopulationPairedWithFitnessList);
+        CompoundFuzzyState firstNotNullCompoundFuzzyState = chromosomeSequence.stream()
+                .filter(Objects::nonNull)
+                .findFirst()
+                .get();
 
-        final List<CompoundFuzzyState> chromosomeSequence = initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence();
-        Assert.assertEquals(chromosomeSequence.get(0).getAggregatedStateType(), FuzzyStateTypeEnum.INITIAL);
-        Assert.assertEquals(chromosomeSequence.get(chromosomeSequence.size()-1).getAggregatedStateType(), FuzzyStateTypeEnum.TERMINAL);
+        CompoundFuzzyState lastNotNullCompoundFuzzyState = chromosomeSequence.stream()
+                .filter(Objects::nonNull)
+                .reduce((a, b) -> b)
+                .get();
+
+        Assert.assertEquals(firstNotNullCompoundFuzzyState.getAggregatedStateType(), FuzzyStateTypeEnum.INITIAL);
+        Assert.assertEquals(lastNotNullCompoundFuzzyState.getAggregatedStateType(), FuzzyStateTypeEnum.TERMINAL);
     }
 
     @Test
@@ -134,13 +161,20 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
         populationInitializationPlan.put(IndividualInitializationType.ALTERNATING_NEAREST_NEIGHBOUR_NN_START, 1);
         dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
 
-        final List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> initialPopulationPairedWithFitnessList = dbmea.getInitialPopulationPairedWithFitnessList();
+        final List<CompoundFuzzyState> chromosomeSequence = dbmea.getInitialPopulation().get(0).getChromosomeSequence();
 
-        //PrintHelpers.printIndividualAndFitnessPairs(initialPopulationPairedWithFitnessList);
+        CompoundFuzzyState firstNotNullCompoundFuzzyState = chromosomeSequence.stream()
+                .filter(Objects::nonNull)
+                .findFirst()
+                .get();
 
-        final List<CompoundFuzzyState> chromosomeSequence = initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence();
-        Assert.assertEquals(chromosomeSequence.get(0).getAggregatedStateType(), FuzzyStateTypeEnum.INITIAL);
-        Assert.assertEquals(chromosomeSequence.get(chromosomeSequence.size()-1).getAggregatedStateType(), FuzzyStateTypeEnum.TERMINAL);
+        CompoundFuzzyState lastNotNullCompoundFuzzyState = chromosomeSequence.stream()
+                .filter(Objects::nonNull)
+                .reduce((a, b) -> b)
+                .get();
+
+        Assert.assertEquals(firstNotNullCompoundFuzzyState.getAggregatedStateType(), FuzzyStateTypeEnum.INITIAL);
+        Assert.assertEquals(lastNotNullCompoundFuzzyState.getAggregatedStateType(), FuzzyStateTypeEnum.TERMINAL);
     }
 
     @Test
@@ -157,221 +191,375 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
         populationInitializationPlan.put(IndividualInitializationType.ALTERNATING_NEAREST_NEIGHBOUR_SNN_START, 1);
         dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
 
-        final List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> initialPopulationPairedWithFitnessList = dbmea.getInitialPopulationPairedWithFitnessList();
+        final List<CompoundFuzzyState> chromosomeSequence = dbmea.getInitialPopulation().get(0).getChromosomeSequence();
 
-        //PrintHelpers.printIndividualAndFitnessPairs(initialPopulationPairedWithFitnessList);
+        CompoundFuzzyState firstNotNullCompoundFuzzyState = chromosomeSequence.stream()
+                .filter(Objects::nonNull)
+                .findFirst()
+                .get();
 
-        final List<CompoundFuzzyState> chromosomeSequence = initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence();
-        Assert.assertEquals(chromosomeSequence.get(0).getAggregatedStateType(), FuzzyStateTypeEnum.INITIAL);
-        Assert.assertEquals(chromosomeSequence.get(chromosomeSequence.size()-1).getAggregatedStateType(), FuzzyStateTypeEnum.TERMINAL);
-    }
+        CompoundFuzzyState lastNotNullCompoundFuzzyState = chromosomeSequence.stream()
+                .filter(Objects::nonNull)
+                .reduce((a, b) -> b)
+                .get();
 
-
-    public static Double calculateCostSimple(List<List<Double>> costData) {
-
-        return costData.stream()
-                .flatMap(x -> x.stream())
-                .mapToDouble(Double::doubleValue)
-                .sum();
-    }
-
-    public static Double getCost(List<Double> costData) {
-
-        List<List<Double>> backLead = new ArrayList<>();
-        backLead.add(costData);
-        return calculateCostSimple(backLead);
+        Assert.assertEquals(firstNotNullCompoundFuzzyState.getAggregatedStateType(), FuzzyStateTypeEnum.INITIAL);
+        Assert.assertEquals(lastNotNullCompoundFuzzyState.getAggregatedStateType(), FuzzyStateTypeEnum.TERMINAL);
     }
 
     @Test
     public void test_InitializationStrategy_NEAREST_NEIGHBOUR() throws Exception {
 
         Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
-        List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> dbmea_max_initialPopulationPairedWithFitnessList;
-        List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> dbmea_min_initialPopulationPairedWithFitnessList;
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 1.0;
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_max
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
-                compoundFuzzyAutomatonForOptimization,
+                compoundFuzzyAutomatonForOptimization1,
                 null,
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
-                FitnessEvaluationStrategy.MAXIMIZE_FITNESS);
+                FitnessEvaluationStrategy.MAXIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_min
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
-                compoundFuzzyAutomatonForOptimization,
+                compoundFuzzyAutomatonForOptimization1,
                 null,
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
-                FitnessEvaluationStrategy.MINIMIZE_FITNESS);
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
         populationInitializationPlan.clear();
         populationInitializationPlan.put(IndividualInitializationType.NEAREST_NEIGHBOUR, 1);
+
         dbmea_max.generateInitialPopulationSubProcess(populationInitializationPlan);
         dbmea_min.generateInitialPopulationSubProcess(populationInitializationPlan);
 
-        dbmea_max_initialPopulationPairedWithFitnessList = dbmea_max.getInitialPopulationPairedWithFitnessList();
-        dbmea_min_initialPopulationPairedWithFitnessList = dbmea_min.getInitialPopulationPairedWithFitnessList();
+        Individual<CompoundFuzzyState> individual1 = dbmea_max.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea_min.getInitialPopulation().get(0);
 
-        //PrintHelpers.printIndividualAndFitnessPairs(dbmea_max_initialPopulationPairedWithFitnessList);
-        //PrintHelpers.printIndividualAndFitnessPairs(dbmea_min_initialPopulationPairedWithFitnessList);
+        List<Double> costSequenceEvaluatedWithCostFunction1 = dbmea_max.getEvolutionarilyOptimizable()
+                .getCostSequenceEvaluatedWithCostFunction(individual1, DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple);
+        List<Double> costSequenceEvaluatedWithCostFunction2 = dbmea_min.getEvolutionarilyOptimizable()
+                .getCostSequenceEvaluatedWithCostFunction(individual2, DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple);
 
-        Assert.assertEquals(4, dbmea_max_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size());
-        Assert.assertEquals(4, dbmea_min_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size());
-        Assert.assertEquals(9.0, getCost(dbmea_max_initialPopulationPairedWithFitnessList.get(0)._2), Double.MIN_VALUE);
-        Assert.assertEquals(3.0, getCost(dbmea_min_initialPopulationPairedWithFitnessList.get(0)._2), Double.MIN_VALUE);
+        Assert.assertEquals(compoundFuzzyAutomatonForOptimization1.getCompoundFuzzyStates().size(), individual1.getChromosomeSequence().size());
+        Assert.assertEquals(compoundFuzzyAutomatonForOptimization1.getCompoundFuzzyStates().size(), individual2.getChromosomeSequence().size());
+        Assert.assertEquals(9.0, getCost(costSequenceEvaluatedWithCostFunction1), Double.MIN_VALUE);
+        Assert.assertEquals(3.0, getCost(costSequenceEvaluatedWithCostFunction2), Double.MIN_VALUE);
     }
 
     @Test
     public void test_InitializationStrategy_SECONDARY_NEAREST_NEIGHBOUR() throws Exception {
 
         Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
-        List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> dbmea_max_initialPopulationPairedWithFitnessList;
-        List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> dbmea_min_initialPopulationPairedWithFitnessList;
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 1.0;
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_max
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
-                compoundFuzzyAutomatonForOptimization,
+                compoundFuzzyAutomatonForOptimization1,
                 null,
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
-                FitnessEvaluationStrategy.MAXIMIZE_FITNESS);
+                FitnessEvaluationStrategy.MAXIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_min
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
-                compoundFuzzyAutomatonForOptimization,
+                compoundFuzzyAutomatonForOptimization1,
                 null,
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
-                FitnessEvaluationStrategy.MINIMIZE_FITNESS);
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
         populationInitializationPlan.clear();
         populationInitializationPlan.put(IndividualInitializationType.SECONDARY_NEAREST_NEIGHBOUR, 1);
+
         dbmea_max.generateInitialPopulationSubProcess(populationInitializationPlan);
         dbmea_min.generateInitialPopulationSubProcess(populationInitializationPlan);
 
-        dbmea_max_initialPopulationPairedWithFitnessList = dbmea_max.getInitialPopulationPairedWithFitnessList();
-        dbmea_min_initialPopulationPairedWithFitnessList = dbmea_min.getInitialPopulationPairedWithFitnessList();
+        Individual<CompoundFuzzyState> individual1 = dbmea_max.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea_min.getInitialPopulation().get(0);
 
-        //PrintHelpers.printIndividualAndFitnessPairs(dbmea_max_initialPopulationPairedWithFitnessList);
-        //PrintHelpers.printIndividualAndFitnessPairs(dbmea_min_initialPopulationPairedWithFitnessList);
+        List<Double> costSequenceEvaluatedWithCostFunction1 = dbmea_max.getEvolutionarilyOptimizable()
+                .getCostSequenceEvaluatedWithCostFunction(individual1, DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple);
+        List<Double> costSequenceEvaluatedWithCostFunction2 = dbmea_min.getEvolutionarilyOptimizable()
+                .getCostSequenceEvaluatedWithCostFunction(individual2, DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple);
 
-        Assert.assertEquals(4, dbmea_max_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size());
-        Assert.assertEquals(4, dbmea_min_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size());
-        Assert.assertEquals(6.0, getCost(dbmea_max_initialPopulationPairedWithFitnessList.get(0)._2), Double.MIN_VALUE);
-        Assert.assertEquals(6.0, getCost(dbmea_min_initialPopulationPairedWithFitnessList.get(0)._2), Double.MIN_VALUE);
+        Assert.assertEquals(compoundFuzzyAutomatonForOptimization1.getCompoundFuzzyStates().size(), individual1.getChromosomeSequence().size());
+        Assert.assertEquals(compoundFuzzyAutomatonForOptimization1.getCompoundFuzzyStates().size(), individual2.getChromosomeSequence().size());
+        Assert.assertEquals(6.0, getCost(costSequenceEvaluatedWithCostFunction1), Double.MIN_VALUE);
+        Assert.assertEquals(6.0, getCost(costSequenceEvaluatedWithCostFunction2), Double.MIN_VALUE);
     }
 
     @Test
     public void test_InitializationStrategy_ALTERNATING_NEAREST_NEIGHBOUR_NN_START() throws Exception {
 
         Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
-        List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> dbmea_max_initialPopulationPairedWithFitnessList;
-        List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> dbmea_min_initialPopulationPairedWithFitnessList;
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.5;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 1.0;
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_max
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
-                compoundFuzzyAutomatonForOptimization,
+                compoundFuzzyAutomatonForOptimization1,
                 null,
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
-                FitnessEvaluationStrategy.MAXIMIZE_FITNESS);
+                FitnessEvaluationStrategy.MAXIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_min
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
-                compoundFuzzyAutomatonForOptimization,
+                compoundFuzzyAutomatonForOptimization1,
                 null,
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
-                FitnessEvaluationStrategy.MINIMIZE_FITNESS);
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
         populationInitializationPlan.clear();
         populationInitializationPlan.put(IndividualInitializationType.ALTERNATING_NEAREST_NEIGHBOUR_NN_START, 1);
+
         dbmea_max.generateInitialPopulationSubProcess(populationInitializationPlan);
         dbmea_min.generateInitialPopulationSubProcess(populationInitializationPlan);
 
-        dbmea_max_initialPopulationPairedWithFitnessList = dbmea_max.getInitialPopulationPairedWithFitnessList();
-        dbmea_min_initialPopulationPairedWithFitnessList = dbmea_min.getInitialPopulationPairedWithFitnessList();
+        Individual<CompoundFuzzyState> individual1 = dbmea_max.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea_min.getInitialPopulation().get(0);
 
-        //PrintHelpers.printIndividualAndFitnessPairs(dbmea_max_initialPopulationPairedWithFitnessList);
-        //PrintHelpers.printIndividualAndFitnessPairs(dbmea_min_initialPopulationPairedWithFitnessList);
+        List<Double> costSequenceEvaluatedWithCostFunction1 = dbmea_max.getEvolutionarilyOptimizable()
+                .getCostSequenceEvaluatedWithCostFunction(individual1, DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple);
+        List<Double> costSequenceEvaluatedWithCostFunction2 = dbmea_min.getEvolutionarilyOptimizable()
+                .getCostSequenceEvaluatedWithCostFunction(individual2, DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple);
 
-        Assert.assertEquals(4, dbmea_max_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size());
-        Assert.assertEquals(4, dbmea_min_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size());
-        Assert.assertEquals(7.0, getCost(dbmea_max_initialPopulationPairedWithFitnessList.get(0)._2), Double.MIN_VALUE);
-        Assert.assertEquals(5.0, getCost(dbmea_min_initialPopulationPairedWithFitnessList.get(0)._2), Double.MIN_VALUE);
+        Assert.assertEquals(compoundFuzzyAutomatonForOptimization1.getCompoundFuzzyStates().size(), individual1.getChromosomeSequence().size());
+        Assert.assertEquals(compoundFuzzyAutomatonForOptimization1.getCompoundFuzzyStates().size(), individual2.getChromosomeSequence().size());
+        Assert.assertEquals(7.0, getCost(costSequenceEvaluatedWithCostFunction1), Double.MIN_VALUE);
+        Assert.assertEquals(5.0, getCost(costSequenceEvaluatedWithCostFunction2), Double.MIN_VALUE);
     }
 
     @Test
     public void test_InitializationStrategy_ALTERNATING_NEAREST_NEIGHBOUR_SNN_START() throws Exception {
 
         Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
-        List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> dbmea_max_initialPopulationPairedWithFitnessList;
-        List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> dbmea_min_initialPopulationPairedWithFitnessList;
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.5;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 1.0;
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_max
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
-                compoundFuzzyAutomatonForOptimization,
+                compoundFuzzyAutomatonForOptimization1,
                 null,
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
-                FitnessEvaluationStrategy.MAXIMIZE_FITNESS);
+                FitnessEvaluationStrategy.MAXIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_min
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
-                compoundFuzzyAutomatonForOptimization,
+                compoundFuzzyAutomatonForOptimization1,
                 null,
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
-                FitnessEvaluationStrategy.MINIMIZE_FITNESS);
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
         populationInitializationPlan.clear();
         populationInitializationPlan.put(IndividualInitializationType.ALTERNATING_NEAREST_NEIGHBOUR_SNN_START, 1);
+
         dbmea_max.generateInitialPopulationSubProcess(populationInitializationPlan);
         dbmea_min.generateInitialPopulationSubProcess(populationInitializationPlan);
 
-        dbmea_max_initialPopulationPairedWithFitnessList = dbmea_max.getInitialPopulationPairedWithFitnessList();
-        dbmea_min_initialPopulationPairedWithFitnessList = dbmea_min.getInitialPopulationPairedWithFitnessList();
+        Individual<CompoundFuzzyState> individual1 = dbmea_max.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea_min.getInitialPopulation().get(0);
 
-        //PrintHelpers.printIndividualAndFitnessPairs(dbmea_max_initialPopulationPairedWithFitnessList);
-        //PrintHelpers.printIndividualAndFitnessPairs(dbmea_min_initialPopulationPairedWithFitnessList);
+        List<Double> costSequenceEvaluatedWithCostFunction1 = dbmea_max.getEvolutionarilyOptimizable()
+                .getCostSequenceEvaluatedWithCostFunction(individual1, DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple);
+        List<Double> costSequenceEvaluatedWithCostFunction2 = dbmea_min.getEvolutionarilyOptimizable()
+                .getCostSequenceEvaluatedWithCostFunction(individual2, DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple);
 
-        Assert.assertEquals(4, dbmea_max_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size());
-        Assert.assertEquals(4, dbmea_min_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size());
-        Assert.assertEquals(8.0, getCost(dbmea_max_initialPopulationPairedWithFitnessList.get(0)._2), Double.MIN_VALUE);
-        Assert.assertEquals(4.0, getCost(dbmea_min_initialPopulationPairedWithFitnessList.get(0)._2), Double.MIN_VALUE);
+        Assert.assertEquals(compoundFuzzyAutomatonForOptimization1.getCompoundFuzzyStates().size(), individual1.getChromosomeSequence().size());
+        Assert.assertEquals(compoundFuzzyAutomatonForOptimization1.getCompoundFuzzyStates().size(), individual2.getChromosomeSequence().size());
+        Assert.assertEquals(8.0, getCost(costSequenceEvaluatedWithCostFunction1), Double.MIN_VALUE);
+        Assert.assertEquals(4.0, getCost(costSequenceEvaluatedWithCostFunction2), Double.MIN_VALUE);
     }
 
     @Test
     public void test_InitializationStrategy_RANDOM() throws Exception {
 
         Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
-        List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> dbmea_max_initialPopulationPairedWithFitnessList;
-        List<Tuple2<Individual<CompoundFuzzyState>, List<Double>>> dbmea_min_initialPopulationPairedWithFitnessList;
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.5;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_max
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
-                compoundFuzzyAutomatonForOptimization,
+                compoundFuzzyAutomatonForOptimization1,
                 null,
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
-                FitnessEvaluationStrategy.MAXIMIZE_FITNESS);
+                FitnessEvaluationStrategy.MAXIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
         DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_min
                 = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
-                compoundFuzzyAutomatonForOptimization,
+                compoundFuzzyAutomatonForOptimization1,
                 null,
                 DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
-                FitnessEvaluationStrategy.MINIMIZE_FITNESS);
-
-        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
 
         populationInitializationPlan.clear();
         populationInitializationPlan.put(IndividualInitializationType.RANDOM, 1);
-        dbmea_max.generateInitialPopulationSubProcess(populationInitializationPlan, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
-        dbmea_min.generateInitialPopulationSubProcess(populationInitializationPlan, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+        dbmea_max.generateInitialPopulationSubProcess(populationInitializationPlan);
+        dbmea_min.generateInitialPopulationSubProcess(populationInitializationPlan);
 
-        dbmea_max_initialPopulationPairedWithFitnessList = dbmea_max.getInitialPopulationPairedWithFitnessList();
-        dbmea_min_initialPopulationPairedWithFitnessList = dbmea_min.getInitialPopulationPairedWithFitnessList();
+        Individual<CompoundFuzzyState> individual1 = dbmea_max.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea_min.getInitialPopulation().get(0);
 
-        //PrintHelpers.printIndividualAndFitnessSteps(dbmea_max_initialPopulationPairedWithFitnessList);
-        //PrintHelpers.printIndividualAndFitnessSteps(dbmea_min_initialPopulationPairedWithFitnessList);
-
-        Assert.assertTrue(dbmea_max_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size() >= 0);
-        Assert.assertTrue(dbmea_max_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size() <= 8);
-        Assert.assertTrue(dbmea_min_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size() >= 0);
-        Assert.assertTrue(dbmea_min_initialPopulationPairedWithFitnessList.get(0)._1.getChromosomeSequence().size() <= 8);
+        Assert.assertTrue(individual1.getChromosomeSequence().size() >= 0);
+        Assert.assertTrue(individual1.getChromosomeSequence().size() <= 8);
+        Assert.assertTrue(individual2.getChromosomeSequence().size() >= 0);
+        Assert.assertTrue(individual2.getChromosomeSequence().size() <= 8);
     }
+
+    @Test
+    public void test_geneSequenceChanger() throws Exception {
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.0;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_max
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomatonForOptimization1,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::fitnessFunction,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
+                FitnessEvaluationStrategy.MAXIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+
+        populationInitializationPlan.clear();
+        populationInitializationPlan.put(IndividualInitializationType.RANDOM, 1);
+        dbmea_max.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        Individual<CompoundFuzzyState> compoundFuzzyStateIndividual = dbmea_max.getInitialPopulation().get(0);
+        List<CompoundFuzzyState> reversedChromosomeSequence = new ArrayList<>(compoundFuzzyStateIndividual.getChromosomeSequence().subList(3,6));
+        Collections.reverse(reversedChromosomeSequence);
+
+        Assert.assertEquals(3, reversedChromosomeSequence.size());
+
+        Individual<CompoundFuzzyState> newIndividual
+                = dbmea_max.geneSequenceChanger(compoundFuzzyStateIndividual, 3, 6, reversedChromosomeSequence);
+
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(0), newIndividual.getChromosomeSequence().get(0));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(1), newIndividual.getChromosomeSequence().get(1));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(2), newIndividual.getChromosomeSequence().get(2));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(3), newIndividual.getChromosomeSequence().get(5));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(4), newIndividual.getChromosomeSequence().get(4));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(5), newIndividual.getChromosomeSequence().get(3));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(6), newIndividual.getChromosomeSequence().get(6));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(7), newIndividual.getChromosomeSequence().get(7));
+
+        Assert.assertEquals(8, newIndividual.getChromosomeSequence().size());
+        Assert.assertEquals(8, compoundFuzzyStateIndividual.getChromosomeSequence().size());
+    }
+
+    @Test
+    public void test_modifyChromosomeOfIndividualInIndexPositionsWithOtherChromosomeElements() throws Exception {
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.0;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea_max
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomatonForOptimization1,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::fitnessFunction,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
+                FitnessEvaluationStrategy.MAXIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+
+        populationInitializationPlan.clear();
+        populationInitializationPlan.put(IndividualInitializationType.RANDOM, 1);
+        dbmea_max.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        Individual<CompoundFuzzyState> compoundFuzzyStateIndividual = dbmea_max.getInitialPopulation().get(0);
+        List<CompoundFuzzyState> reversedChromosomeSequence = new ArrayList<>(compoundFuzzyStateIndividual.getChromosomeSequence().subList(3,6));
+        Collections.reverse(reversedChromosomeSequence);
+
+        List<Integer> indices = new ArrayList<>();
+        indices.add(3);
+        indices.add(4);
+        indices.add(5);
+
+        Assert.assertEquals(3, reversedChromosomeSequence.size());
+
+        Individual<CompoundFuzzyState> newIndividual
+                = dbmea_max.modifyChromosomeOfIndividualInIndexPositionsWithOtherChromosomeElements(compoundFuzzyStateIndividual, indices, reversedChromosomeSequence);
+
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(0), newIndividual.getChromosomeSequence().get(0));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(1), newIndividual.getChromosomeSequence().get(1));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(2), newIndividual.getChromosomeSequence().get(2));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(3), newIndividual.getChromosomeSequence().get(5));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(4), newIndividual.getChromosomeSequence().get(4));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(5), newIndividual.getChromosomeSequence().get(3));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(6), newIndividual.getChromosomeSequence().get(6));
+        Assert.assertEquals(compoundFuzzyStateIndividual.getChromosomeSequence().get(7), newIndividual.getChromosomeSequence().get(7));
+
+        Assert.assertEquals(8, newIndividual.getChromosomeSequence().size());
+        Assert.assertEquals(8, compoundFuzzyStateIndividual.getChromosomeSequence().size());
+    }
+
+    @Test
+    public void test_geneTransferOnIndividual() throws Exception {
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomatonForOptimization2,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::fitnessFunction,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new HashMap<>();
+        populationInitializationPlan.put(IndividualInitializationType.NEAREST_NEIGHBOUR, 1);
+        populationInitializationPlan.put(IndividualInitializationType.SECONDARY_NEAREST_NEIGHBOUR, 1);
+        dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea.getInitialPopulation().get(1);
+
+        List<CompoundFuzzyState> chromosomeSequence1 = individual1.getChromosomeSequence().stream().filter(Objects::nonNull).collect(Collectors.toList());
+        List<CompoundFuzzyState> chromosomeSequence2 = individual2.getChromosomeSequence().stream().filter(Objects::nonNull).collect(Collectors.toList());
+
+        Assert.assertTrue(chromosomeSequence1.get(0).getFuzzyStateTuple().size() == 1);
+        Assert.assertTrue(chromosomeSequence1.get(1).getFuzzyStateTuple().size() == 1);
+        Assert.assertTrue(chromosomeSequence1.get(2).getFuzzyStateTuple().size() == 1);
+        Assert.assertTrue(chromosomeSequence1.get(3).getFuzzyStateTuple().size() == 1);
+        Assert.assertTrue(chromosomeSequence2.get(0).getFuzzyStateTuple().size() == 1);
+        Assert.assertTrue(chromosomeSequence2.get(1).getFuzzyStateTuple().size() == 1);
+        Assert.assertTrue(chromosomeSequence2.get(2).getFuzzyStateTuple().size() == 1);
+        Assert.assertTrue(chromosomeSequence2.get(3).getFuzzyStateTuple().size() == 1);
+
+        Assert.assertTrue(chromosomeSequence1.get(0).getFuzzyStateTuple().contains(o2s00));
+        Assert.assertTrue(chromosomeSequence1.get(1).getFuzzyStateTuple().contains(o2s11));
+        Assert.assertTrue(chromosomeSequence1.get(2).getFuzzyStateTuple().contains(o2s21));
+        Assert.assertTrue(chromosomeSequence1.get(3).getFuzzyStateTuple().contains(o2s40));
+
+        Assert.assertTrue(chromosomeSequence2.get(0).getFuzzyStateTuple().contains(o2s00));
+        Assert.assertTrue(chromosomeSequence2.get(1).getFuzzyStateTuple().contains(o2s12));
+        Assert.assertTrue(chromosomeSequence2.get(2).getFuzzyStateTuple().contains(o2s22));
+        Assert.assertTrue(chromosomeSequence2.get(3).getFuzzyStateTuple().contains(o2s40));
+
+        Individual<CompoundFuzzyState> newIndividual = dbmea.geneTransferOnIndividual(individual1, individual2, 4, 2, 3);
+
+        /// there are too many random factor in chromosome to check more
+        Assert.assertNotEquals(newIndividual, individual1);
+        Assert.assertNotEquals(newIndividual, individual2);
+    }
+
 
 }

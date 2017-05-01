@@ -18,7 +18,8 @@ public class MinimalErrorGrowthInTimeWindowCriterionStrategy implements Criterio
     @Override
     public boolean stopCriterionMeets(EvolutionaryAlgorithm evolutionaryAlgorithm) {
 
-        final List<Double> fitnessResultsByIteration = evolutionaryAlgorithm.getFitnessResultsByIteration();
+        int iteration = evolutionaryAlgorithm.getCurrentIteration();
+        final List<Double> fitnessResultsByIteration = evolutionaryAlgorithm.getFitnessResultsByIteration(iteration);
         final int size = fitnessResultsByIteration.size();
         int fromIndex = Math.max(size - iterationWindowSize, 0);
 

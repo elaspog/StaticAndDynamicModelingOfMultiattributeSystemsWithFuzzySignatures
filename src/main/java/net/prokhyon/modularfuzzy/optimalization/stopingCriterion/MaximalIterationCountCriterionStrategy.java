@@ -14,7 +14,7 @@ public class MaximalIterationCountCriterionStrategy implements CriterionFunction
     @Override
     public boolean stopCriterionMeets(EvolutionaryAlgorithm evolutionaryAlgorithm) {
 
-        final int currentIteration = evolutionaryAlgorithm.geCurrentIteration();
+        final int currentIteration = evolutionaryAlgorithm.getCurrentIteration();
         if (currentIteration >= maximalIteration) {
             return true;
         }

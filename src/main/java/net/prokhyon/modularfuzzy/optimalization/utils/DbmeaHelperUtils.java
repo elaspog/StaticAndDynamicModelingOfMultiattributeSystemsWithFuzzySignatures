@@ -51,6 +51,26 @@ public class DbmeaHelperUtils {
         return selectFromMultilistByPosition(i, order, resultMap);
     }
 
+    public static <T1, COST_TYPE> Tuple2<T1, COST_TYPE> selectFromMultilistByPositionWithHashMap(int i, Order order, List<Tuple2<COST_TYPE, T1>> searchList) {
+
+        Map<COST_TYPE, List<T1>> mapToSelectFrom = new HashMap<>();
+        for (Tuple2<COST_TYPE, T1> pairOfCostAndElement : searchList) {
+
+            COST_TYPE cost = pairOfCostAndElement._1;
+            T1 element = pairOfCostAndElement._2;
+
+            if (mapToSelectFrom.keySet().contains(cost)){
+                List<T1> listInMap = mapToSelectFrom.get(cost);
+                listInMap.add(element);
+            } else {
+                List<T1> newValueForACostToPutIn = new ArrayList<>();
+                newValueForACostToPutIn.add(element);
+                mapToSelectFrom.put(cost, newValueForACostToPutIn);
+            }
+        }
+        return selectFromMultilistByPosition(i, order, mapToSelectFrom);
+    }
+
     public static <T1, COST_TYPE> Tuple2<T1, COST_TYPE> selectFromMultilistByPosition(int i, Order order, Map<COST_TYPE, List<T1>> resultMap) {
 
         final int size = resultMap.size();
@@ -116,6 +136,41 @@ public class DbmeaHelperUtils {
             }
         }
         return retVal;
+    }
+
+    public static <KEY_TYPE, VALUE_TYPE> void addElementToMapWithListContent(Map<KEY_TYPE, List<VALUE_TYPE>> map, KEY_TYPE key, VALUE_TYPE value){
+
+        List<VALUE_TYPE> values = map.get(key);
+        if (values == null || values.isEmpty()){
+
+            values = new ArrayList<>();
+            values.add(value);
+            map.put(key, values);
+
+        } else {
+
+            values.add(value);
+        }
+    }
+
+    public static <E> List<List<E>> generatePerm(List<E> original) {
+
+        if (original.size() == 0) {
+            List<List<E>> result = new ArrayList<>();
+            result.add(new ArrayList<>());
+            return result;
+        }
+        E firstElement = original.remove(0);
+        List<List<E>> returnValue = new ArrayList<>();
+        List<List<E>> permutations = generatePerm(original);
+        for (List<E> smallerPermutated : permutations) {
+            for (int index=0; index <= smallerPermutated.size(); index++) {
+                List<E> temp = new ArrayList<>(smallerPermutated);
+                temp.add(index, firstElement);
+                returnValue.add(temp);
+            }
+        }
+        return returnValue;
     }
 
 }
