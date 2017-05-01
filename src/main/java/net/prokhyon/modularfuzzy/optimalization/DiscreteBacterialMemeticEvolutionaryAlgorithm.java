@@ -578,7 +578,6 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
 
         List<Individual<CHROMOSOME_TYPE>> candidates = new ArrayList<>();
         Individual<CHROMOSOME_TYPE> cloneOfOriginal = new Individual<>(new ArrayList<>(originalChromosomeSequence));
-        candidates.add(cloneOfOriginal);
 
         /// +1 is for original individual and clone of the reversed segment
         int individualInstanceCountToCheck = n_clones + 1;  // one is reserved for original chromosome
@@ -587,11 +586,15 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
         while(candidates.size() != individualInstanceCountToCheck){
 
             /// generating random permutation of indices
+            List<Integer> permutationItems = IntStream.range(0, countOfPossibleChromosomeElements)
+                    .boxed()
+                    .collect(Collectors.toList());
             List<Integer> currentPermutation = new ArrayList<>();
             while(currentPermutation.size() != countOfPossibleChromosomeElements){
-                final int randomInt = randomizer.nextInt(countOfPossibleChromosomeElements);
-                if(! currentPermutation.contains(countOfPossibleChromosomeElements))
-                    currentPermutation.add(randomInt);
+                final int randomInt = randomizer.nextInt(permutationItems.size());
+                Integer item = permutationItems.get(randomInt);
+                currentPermutation.add(item);
+                permutationItems.remove(item);
             }
 
             Individual<CHROMOSOME_TYPE> permutedIndividual = permuteChromosomeOfIndividualByIndexOrder(individual, currentPermutation);
@@ -600,15 +603,7 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithm <EVOLUTIONARILY_OPTIM
             }
         }
 
-        /// evaluate all candidates
-        List<Tuple2<Individual<CHROMOSOME_TYPE>, Double>> fitnessResults = candidates.stream()
-                .map(candidate -> new Tuple2<>(candidate, fitnessFunction.calculateFitnessOfChromosomeOfIndividual(candidate, chromosomeElementCostFunction, evolutionarilyOptimalizable)))
-                .collect(Collectors.toList());
-
-        Tuple2<Double, Individual<CHROMOSOME_TYPE>> bestIndividualForThisCycleOfSegmentPermutation
-                = DbmeaHelperUtils.selectFromMultilistByPositionWithHashMap(0, Order.DESCENDING, fitnessResults);
-
-        return bestIndividualForThisCycleOfSegmentPermutation._2;
+        return getWinnerFromActualBestAndCandidates(cloneOfOriginal, candidates);
     }
 
     Individual<CHROMOSOME_TYPE> permuteChromosomeOfIndividualByIndexOrder(Individual<CHROMOSOME_TYPE> individual, List<Integer> currentPermutation) {

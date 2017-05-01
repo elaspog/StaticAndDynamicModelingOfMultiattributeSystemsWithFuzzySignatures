@@ -581,11 +581,37 @@ public class DiscreteBacterialMemeticEvolutionaryAlgorithmTest extends TestBaseF
         populationInitializationPlan.put(IndividualInitializationType.SECONDARY_NEAREST_NEIGHBOUR, 1);
         dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
 
-        Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
-
         List<Integer> permutation = new ArrayList<>(Arrays.asList(8, 1, 3, 0, 11, 4, 9, 6, 2, 7, 10, 5));
 
+        Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
         Individual<CompoundFuzzyState> individual2 = dbmea.randomAttributeGroupMutationOnIndividual(individual1, 4, 20, permutation);
+
+        double v1 = dbmea.calculateFitnessValueOfIndividual(individual1);
+        double v2 = dbmea.calculateFitnessValueOfIndividual(individual2);
+
+        Assert.assertTrue(v2 >= v1);
+    }
+
+    @Test
+    public void test_looseSegmentMutation() throws Exception {
+
+        final Double PROBABILITY_OF_NULL_STATE = 0.00;
+        final Double GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH = 10.0;
+
+        DiscreteBacterialMemeticEvolutionaryAlgorithm<CompoundFuzzyAutomaton, CompoundFuzzyState, List<List<Double>>> dbmea
+                = new DiscreteBacterialMemeticEvolutionaryAlgorithm<>(
+                compoundFuzzyAutomatonForOptimization2,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::fitnessFunction,
+                DiscreteBacterialMemeticEvolutionaryAlgorithmTest::calculateCostSimple,
+                FitnessEvaluationStrategy.MINIMIZE_FITNESS,
+                PROBABILITY_OF_NULL_STATE, GAP_COST_PER_SEGMENT_OF_SHORTEST_PATH);
+
+        Map<IndividualInitializationType, Integer> populationInitializationPlan = new LinkedHashMap<>();
+        populationInitializationPlan.put(IndividualInitializationType.RANDOM, 1);
+        dbmea.generateInitialPopulationSubProcess(populationInitializationPlan);
+
+        Individual<CompoundFuzzyState> individual1 = dbmea.getInitialPopulation().get(0);
+        Individual<CompoundFuzzyState> individual2 = dbmea.looseSegmentMutationOnIndividual(individual1, 5);
 
         double v1 = dbmea.calculateFitnessValueOfIndividual(individual1);
         double v2 = dbmea.calculateFitnessValueOfIndividual(individual2);
