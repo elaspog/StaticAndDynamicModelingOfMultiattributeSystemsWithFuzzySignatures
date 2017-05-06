@@ -1,8 +1,8 @@
 package net.prokhyon.modularfuzzy.common.conversion;
 
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
-import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxElementBase;
 
-public interface IConversionBase <DESCRIPTOR extends FuzzyDescriptorBase, FX extends FuzzyFxBase>{
+public interface IConversionBase <DESCRIPTOR extends DescriptorBase, FX extends WorkspaceFxElementBase>{
 
 }

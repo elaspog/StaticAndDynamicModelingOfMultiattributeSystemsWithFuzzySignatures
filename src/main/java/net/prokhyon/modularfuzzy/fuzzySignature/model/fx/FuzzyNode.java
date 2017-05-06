@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.common.errors.ModelError;
-import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxElementBase;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.AggregationType;
 
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FuzzyNode extends FuzzyFxBase
+public class FuzzyNode extends WorkspaceFxElementBase
         implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzyNode, net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzyNode>{
 
     private final StringProperty fuzzyNodeName;

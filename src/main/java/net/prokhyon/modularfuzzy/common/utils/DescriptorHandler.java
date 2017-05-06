@@ -1,4 +1,4 @@
-package net.prokhyon.modularfuzzy.common.modelDescriptor;
+package net.prokhyon.modularfuzzy.common.utils;
 
 import java.io.*;
 import java.util.List;
@@ -12,6 +12,8 @@ import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.json.JsonWriter;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorRootBase;
 import org.xml.sax.InputSource;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
@@ -45,14 +47,14 @@ public class DescriptorHandler {
 		}
 	}
 
-	public <T extends FuzzyDescriptorRootBase> String generateXmlStringFromModel(T model) {
+	public <T extends DescriptorRootBase> String generateXmlStringFromModel(T model) {
 		xstream = new XStream(new StaxDriver());
 		xstream.autodetectAnnotations(true);
 		String xml = xstream.toXML(model);
 		return formatXml(xml);
 	}
 
-	public <T extends FuzzyDescriptorRootBase> String generateJsonStringFromModel(T model) {
+	public <T extends DescriptorRootBase> String generateJsonStringFromModel(T model) {
 		xstream = new XStream(new JsonHierarchicalStreamDriver() {
 
 			public HierarchicalStreamWriter createWriter(Writer writer) {
@@ -95,15 +97,15 @@ public class DescriptorHandler {
 		}
 	}
 
-	public <T extends FuzzyDescriptorRootBase>
+	public <T extends DescriptorRootBase>
 	T readFromXmlFile(File file,
-					  Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
-					  List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
+					  Class<? extends DescriptorRootBase> descriptorRootModel,
+					  List<Class<? extends DescriptorBase>> descriptorModels)
 			throws NotParsableDescriptorException {
 
 		try {
 			xstream = new XStream(new StaxDriver());
-			for (Class<? extends FuzzyDescriptorBase> dm : descriptorModels){
+			for (Class<? extends DescriptorBase> dm : descriptorModels){
 				xstream.processAnnotations(dm);
 			}
 			xstream.autodetectAnnotations(true);
@@ -119,10 +121,10 @@ public class DescriptorHandler {
 		}
 	}
 
-	public <T extends FuzzyDescriptorRootBase>
+	public <T extends DescriptorRootBase>
 	T readFromJsonFile(File file,
-					   Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
-					   List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
+					   Class<? extends DescriptorRootBase> descriptorRootModel,
+					   List<Class<? extends DescriptorBase>> descriptorModels)
 			throws NotParsableDescriptorException {
 
 		try {
@@ -133,7 +135,7 @@ public class DescriptorHandler {
 					return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);
 				}
 			});
-			for (Class<? extends FuzzyDescriptorBase> dm : descriptorModels){
+			for (Class<? extends DescriptorBase> dm : descriptorModels){
 				xstream.processAnnotations(dm);
 			}
 			xstream.autodetectAnnotations(true);
@@ -149,7 +151,7 @@ public class DescriptorHandler {
 		}
 	}
 
-	public <T extends FuzzyDescriptorRootBase> T readFromTextFile(File file, Class clazz)
+	public <T extends DescriptorRootBase> T readFromTextFile(File file, Class clazz)
 			throws NotParsableDescriptorException {
 
 		throw new NotImplementedException();

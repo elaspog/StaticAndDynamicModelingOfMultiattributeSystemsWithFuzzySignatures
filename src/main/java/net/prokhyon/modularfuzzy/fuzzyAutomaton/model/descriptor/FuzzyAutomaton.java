@@ -5,10 +5,10 @@ import java.util.List;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorRootBase;
 
 @XStreamAlias("FuzzyAutomaton")
-public class FuzzyAutomaton extends FuzzyDescriptorRootBase {
+public class FuzzyAutomaton extends DescriptorRootBase {
 
 	@XStreamAlias("ReferencedFuzzySetSystemUUID")
 	@XStreamAsAttribute

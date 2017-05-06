@@ -3,13 +3,13 @@ package net.prokhyon.modularfuzzy.fuzzySet.model.fx;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
-import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxElementBase;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointAbove;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBelow;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointCustom;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase;
 
-public class FuzzySetPoint extends FuzzyFxBase
+public class FuzzySetPoint extends WorkspaceFxElementBase
 		implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzyPointBase, FuzzySetPoint> {
 
 	private final FloatProperty xPoint;

@@ -3,10 +3,10 @@ package net.prokhyon.modularfuzzy.fuzzyAutomaton.util;
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorHandler;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.utils.DescriptorHandler;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorRootBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
@@ -21,10 +21,10 @@ public class ModelDomainIOManager implements IPersistableModel {
 
 
     @Override
-    public <T extends FuzzyDescriptorRootBase>
+    public <T extends DescriptorRootBase>
     T importModel(File file,
-                  Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
-                  List<Class<? extends FuzzyDescriptorBase>> descriptorModels)
+                  Class<? extends DescriptorRootBase> descriptorRootModel,
+                  List<Class<? extends DescriptorBase>> descriptorModels)
             throws NotParsableDescriptorException {
 
         DescriptorHandler descriptorHandler = new DescriptorHandler();
@@ -38,7 +38,7 @@ public class ModelDomainIOManager implements IPersistableModel {
     }
 
     @Override
-    public <T extends WorkspaceElement> void exportModel(List<T> models) {
+    public <T extends WorkspaceFxRootElementBase> void exportModel(List<T> models) {
 
         if (models.size() < 1) {
             shellDialogServices.informWarningDialog("Export", "", "There was no file selected");
@@ -49,7 +49,7 @@ public class ModelDomainIOManager implements IPersistableModel {
         }
     }
 
-    private <T extends WorkspaceElement> void saveMultipleFiles(List<T> models) {
+    private <T extends WorkspaceFxRootElementBase> void saveMultipleFiles(List<T> models) {
 
         File selectedDirectory = shellDialogServices.saveFilesIntoDirectoryDialog();
         if (selectedDirectory == null)
@@ -76,7 +76,7 @@ public class ModelDomainIOManager implements IPersistableModel {
         }
     }
 
-    private <T extends WorkspaceElement> void saveOneFile(T model) {
+    private <T extends WorkspaceFxRootElementBase> void saveOneFile(T model) {
 
         try {
 

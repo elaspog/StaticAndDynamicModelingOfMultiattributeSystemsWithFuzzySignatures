@@ -9,8 +9,8 @@ import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.common.errors.NotConvertibleDescriptorException;
 import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 import net.prokhyon.modularfuzzy.common.modules.DefaultModelLoaderInfo;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
@@ -26,25 +26,25 @@ public interface CommonServices {
 
 	void registerDefaultModelLoader(DefaultModelLoaderInfo defaultModelLoaderInfo);
 
-	Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> getRegisteredStores();
+	Map<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> getRegisteredStores();
 
 	// TODO this should not be a common service, only ShellLayoutController should use this method
 	List<DefaultModelLoaderInfo> gerRegitsteredDefaultModelLoaders();
 
-	void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInfo modelInformation);
+	void saveModelByModule(ObservableList<? extends WorkspaceFxRootElementBase> modelList, WorkspaceInfo modelInformation);
 
-	<T extends WorkspaceElement> void addModelToRegisteredStore(T model);
+	<T extends WorkspaceFxRootElementBase> void addModelToRegisteredStore(T model);
 
-	<T extends WorkspaceElement> void updateModelInRegisteredStore(T original, T model);
+	<T extends WorkspaceFxRootElementBase> void updateModelInRegisteredStore(T original, T model);
 
 	void loadFiles(List<File> filesToLoad)
 			throws ModuleImplementationException, NotParsableDescriptorException, NotConvertibleDescriptorException;
 
-	List<FuzzyDescriptorBase> loadFilesIntoDescriptorsAndFilterByPersistableModel(List<File> filesToLoad, PersistableModelInfo persistableModelInfo)
+	List<DescriptorBase> loadFilesIntoDescriptorsAndFilterByPersistableModel(List<File> filesToLoad, PersistableModelInfo persistableModelInfo)
 			throws ModuleImplementationException, NotParsableDescriptorException;
 
-	void loadDescriptorsIntoWorkspaceElementsByPersistableModel(List<FuzzyDescriptorBase> descriptorsToLoad, PersistableModelInfo persistableModelInfo)
+	void loadDescriptorsIntoWorkspaceElementsByPersistableModel(List<DescriptorBase> descriptorsToLoad, PersistableModelInfo persistableModelInfo)
 			throws ModuleImplementationException, NotConvertibleDescriptorException;
 
-	<T extends WorkspaceElement> T resolveModelByUUID(String uuid);
+	<T extends WorkspaceFxRootElementBase> T resolveModelByUUID(String uuid);
 }

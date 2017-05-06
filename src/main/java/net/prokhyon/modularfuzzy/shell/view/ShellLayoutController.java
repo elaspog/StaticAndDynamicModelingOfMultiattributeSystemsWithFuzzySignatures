@@ -24,10 +24,10 @@ import javafx.scene.layout.VBox;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.errors.NotConvertibleDescriptorException;
 import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorBase;
 import net.prokhyon.modularfuzzy.common.modules.DefaultModelLoaderInfo;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
@@ -92,10 +92,10 @@ public class ShellLayoutController {
 
 	private void initializeTabTablesWorkspaceArea() {
 
-		Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores
+		Map<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> registeredStores
 				= commonServices.getRegisteredStores();
 
-		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores
+		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> entry : registeredStores
 				.entrySet()) {
 
 			SharedWorkspaceControlAndController swcac = new SharedWorkspaceControlAndController(contentArea,
@@ -146,10 +146,10 @@ public class ShellLayoutController {
 				public void handle(ActionEvent event) {
 
 					List<File> defaultModelFiles = listDefaultModelFiles();
-					final List<FuzzyDescriptorBase> fuzzyDescriptorBases;
+					final List<DescriptorBase> descriptorBases;
 					try {
-						fuzzyDescriptorBases = commonServices.loadFilesIntoDescriptorsAndFilterByPersistableModel(defaultModelFiles, persistableModelInfo);
-						commonServices.loadDescriptorsIntoWorkspaceElementsByPersistableModel(fuzzyDescriptorBases, persistableModelInfo);
+						descriptorBases = commonServices.loadFilesIntoDescriptorsAndFilterByPersistableModel(defaultModelFiles, persistableModelInfo);
+						commonServices.loadDescriptorsIntoWorkspaceElementsByPersistableModel(descriptorBases, persistableModelInfo);
 					} catch (NotParsableDescriptorException | NotConvertibleDescriptorException e) {
 						FxDialogHelper.informErrorWithStacktraceDialog(e, "Error", "Error while loading", "Error while loading files or workspace elements");
 					}
@@ -193,7 +193,7 @@ public class ShellLayoutController {
 
 		final Node content = workspaceTabPane.getSelectionModel().getSelectedItem().getContent();
 		final SharedWorkspaceControlAndController selectedController = (SharedWorkspaceControlAndController) content;
-		final ObservableList<WorkspaceElement> sharedModels = selectedController.getSelectedSharedModels();
+		final ObservableList<WorkspaceFxRootElementBase> sharedModels = selectedController.getSelectedSharedModels();
 		final WorkspaceInfo workspaceInfo = selectedController.getWorkspaceInfo();
 		try {
 			commonServices.saveModelByModule(sharedModels, workspaceInfo);

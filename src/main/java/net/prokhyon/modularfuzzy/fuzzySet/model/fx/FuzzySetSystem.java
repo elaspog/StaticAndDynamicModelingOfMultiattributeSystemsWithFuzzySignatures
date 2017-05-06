@@ -11,11 +11,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.*;
 
-public class FuzzySetSystem extends WorkspaceElement
+public class FuzzySetSystem extends WorkspaceFxRootElementBase
 		implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.FuzzySetSystem, FuzzySetSystem> {
 
 	private final StringProperty uuid;

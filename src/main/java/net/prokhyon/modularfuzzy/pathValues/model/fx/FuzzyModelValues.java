@@ -1,8 +1,8 @@
 package net.prokhyon.modularfuzzy.pathValues.model.fx;
 
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 
-public class FuzzyModelValues extends WorkspaceElement {
+public class FuzzyModelValues extends WorkspaceFxRootElementBase {
 
     @Override
     public String getUuid() {

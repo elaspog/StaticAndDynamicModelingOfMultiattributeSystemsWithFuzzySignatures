@@ -2,11 +2,10 @@ package net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorRootBase;
 
 @XStreamAlias("FuzzySignature")
-public class FuzzySignature extends FuzzyDescriptorRootBase {
+public class FuzzySignature extends DescriptorRootBase {
 
     @XStreamAlias("FuzzyNode")
     private FuzzyNode rootNode;

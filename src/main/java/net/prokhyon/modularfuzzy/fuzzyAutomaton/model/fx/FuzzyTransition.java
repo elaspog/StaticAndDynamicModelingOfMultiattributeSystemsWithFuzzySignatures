@@ -4,13 +4,13 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
-import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxElementBase;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class FuzzyTransition extends FuzzyFxBase
+public class FuzzyTransition extends WorkspaceFxElementBase
         implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyTransition, net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyTransition> {
 
     private final StringProperty fuzzyTransitionName;

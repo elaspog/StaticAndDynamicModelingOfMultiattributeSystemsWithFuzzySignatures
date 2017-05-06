@@ -11,14 +11,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
 import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
-import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxElementBase;
 import net.prokhyon.modularfuzzy.fuzzySet.model.descriptor.*;
 
-public class FuzzySet extends FuzzyFxBase
+public class FuzzySet extends WorkspaceFxElementBase
 		implements ConvertibleFxModel2Descriptor.Internal<FuzzySetBase, FuzzySet> {
 
 	private final StringProperty fuzzySetName;

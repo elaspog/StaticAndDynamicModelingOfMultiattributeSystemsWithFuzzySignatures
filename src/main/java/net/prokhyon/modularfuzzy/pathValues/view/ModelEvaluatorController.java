@@ -2,7 +2,7 @@ package net.prokhyon.modularfuzzy.pathValues.view;
 
 import javafx.fxml.FXML;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 
 public class ModelEvaluatorController implements LoadableDataController {
 
@@ -12,7 +12,7 @@ public class ModelEvaluatorController implements LoadableDataController {
     }
 
     @Override
-    public <T extends WorkspaceElement> void loadWithData(T modelToLoad) {
+    public <T extends WorkspaceFxRootElementBase> void loadWithData(T modelToLoad) {
 
     }
 

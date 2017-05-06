@@ -3,12 +3,12 @@ package net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorModelBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorModelBase;
 
 import java.util.List;
 
 @XStreamAlias("FuzzyNode")
-public class FuzzyNode extends FuzzyDescriptorModelBase {
+public class FuzzyNode extends DescriptorModelBase {
 
     @XStreamImplicit
     private List<FuzzyNode> childNodes;

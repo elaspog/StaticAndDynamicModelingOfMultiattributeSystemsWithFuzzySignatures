@@ -3,12 +3,12 @@ package net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorModelBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorModelBase;
 
 import java.util.List;
 
 @XStreamAlias("FuzyTransition")
-public class FuzzyTransition extends FuzzyDescriptorModelBase {
+public class FuzzyTransition extends DescriptorModelBase {
 
 	@XStreamAlias("FromState")
 	@XStreamAsAttribute

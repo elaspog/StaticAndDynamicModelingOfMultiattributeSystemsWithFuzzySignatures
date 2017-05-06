@@ -1,8 +1,8 @@
 package net.prokhyon.modularfuzzy.api;
 
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 
 public interface LoadableDataController {
 
-	<T extends WorkspaceElement> void loadWithData(T modelToLoad);
+	<T extends WorkspaceFxRootElementBase> void loadWithData(T modelToLoad);
 }

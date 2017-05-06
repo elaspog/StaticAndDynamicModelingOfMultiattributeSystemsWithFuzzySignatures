@@ -8,7 +8,7 @@ import javafx.util.Callback;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzySignature.FuzzySignatureModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature;
@@ -101,7 +101,7 @@ public class PathValuesEditorController implements LoadableDataController {
     }
 
     @Override
-    public <T extends WorkspaceElement> void loadWithData(T modelToLoad) {
+    public <T extends WorkspaceFxRootElementBase> void loadWithData(T modelToLoad) {
 
     }
 
@@ -123,9 +123,9 @@ public class PathValuesEditorController implements LoadableDataController {
     @FXML
     private void loadActualFuzzySignatures(){
 
-        final Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = this.commonServices.getRegisteredStores();
+        final Map<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> registeredStores = this.commonServices.getRegisteredStores();
         final WorkspaceInfo workspaceInfo = fuzzySignatureModuleDescriptor.getWorkspaceInfo();
-        final ObservableList<? extends WorkspaceElement> workspaceElements = registeredStores.get(workspaceInfo);
+        final ObservableList<? extends WorkspaceFxRootElementBase> workspaceElements = registeredStores.get(workspaceInfo);
 
         final ObservableList<FuzzySignature> fuzzySignatures = (ObservableList<FuzzySignature>) workspaceElements;
         this.signatureTypeComboBox.setItems(FXCollections.observableArrayList(fuzzySignatures));

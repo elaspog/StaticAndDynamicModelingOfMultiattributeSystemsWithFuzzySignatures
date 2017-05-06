@@ -3,9 +3,9 @@ package net.prokhyon.modularfuzzy.common.modules;
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleDescriptor2FxModel;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorRootBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +17,18 @@ public class PersistableModelInfo {
     Class<? extends ConvertibleDescriptor2FxModel.Internal> descriptor2FxModelConverterInternal;
     Class<? extends ConvertibleFxModel2Descriptor.External> fxModel2DescriptorConverterExternal;
     Class<? extends ConvertibleFxModel2Descriptor.Internal> fxModel2DescriptorConverterInternal;
-    Class<? extends WorkspaceElement> fxModel;
-    Class<? extends FuzzyDescriptorRootBase> descriptorRootModel;
-    List<Class<? extends FuzzyDescriptorBase>> descriptorModels;
+    Class<? extends WorkspaceFxRootElementBase> fxModel;
+    Class<? extends DescriptorRootBase> descriptorRootModel;
+    List<Class<? extends DescriptorBase>> descriptorModels;
 
     public PersistableModelInfo(IPersistableModel persistableModel,
                                 Class<? extends ConvertibleDescriptor2FxModel.External> descriptor2FxModelConverterExternal,
                                 Class<? extends ConvertibleDescriptor2FxModel.Internal> descriptor2FxModelConverterInternal,
                                 Class<? extends ConvertibleFxModel2Descriptor.External> fxModel2DescriptorConverterExternal,
                                 Class<? extends ConvertibleFxModel2Descriptor.Internal> fxModel2DescriptorConverterInternal,
-                                Class<? extends WorkspaceElement> fxModel,
-                                Class<? extends FuzzyDescriptorRootBase> descriptorRootModel,
-                                Class<? extends FuzzyDescriptorBase> ... descriptorModels) {
+                                Class<? extends WorkspaceFxRootElementBase> fxModel,
+                                Class<? extends DescriptorRootBase> descriptorRootModel,
+                                Class<? extends DescriptorBase> ... descriptorModels) {
         this.persistableModel = persistableModel;
         this.descriptor2FxModelConverterExternal = descriptor2FxModelConverterExternal;
         this.descriptor2FxModelConverterInternal = descriptor2FxModelConverterInternal;
@@ -37,7 +37,7 @@ public class PersistableModelInfo {
         this.fxModel = fxModel;
         this.descriptorRootModel = descriptorRootModel;
         this.descriptorModels = new ArrayList<>();
-        for (Class<? extends FuzzyDescriptorBase> dm : descriptorModels){
+        for (Class<? extends DescriptorBase> dm : descriptorModels){
             this.descriptorModels.add(dm);
         }
         if (! this.descriptorModels.contains(descriptorRootModel)){
@@ -85,27 +85,27 @@ public class PersistableModelInfo {
         this.fxModel2DescriptorConverterInternal = fxModel2DescriptorConverterInternal;
     }
 
-    public Class<? extends WorkspaceElement> getFxModel() {
+    public Class<? extends WorkspaceFxRootElementBase> getFxModel() {
         return fxModel;
     }
 
-    public void setFxModel(Class<? extends WorkspaceElement> fxModel) {
+    public void setFxModel(Class<? extends WorkspaceFxRootElementBase> fxModel) {
         this.fxModel = fxModel;
     }
 
-    public Class<? extends FuzzyDescriptorRootBase> getDescriptorRootModel() {
+    public Class<? extends DescriptorRootBase> getDescriptorRootModel() {
         return descriptorRootModel;
     }
 
-    public void setDescriptorRootModel(Class<? extends FuzzyDescriptorRootBase> descriptorRootModel) {
+    public void setDescriptorRootModel(Class<? extends DescriptorRootBase> descriptorRootModel) {
         this.descriptorRootModel = descriptorRootModel;
     }
 
-    public List<Class<? extends FuzzyDescriptorBase>> getDescriptorModels() {
+    public List<Class<? extends DescriptorBase>> getDescriptorModels() {
         return descriptorModels;
     }
 
-    public void setDescriptorModels(List<Class<? extends FuzzyDescriptorBase>> descriptorModels) {
+    public void setDescriptorModels(List<Class<? extends DescriptorBase>> descriptorModels) {
         this.descriptorModels = descriptorModels;
     }
 }

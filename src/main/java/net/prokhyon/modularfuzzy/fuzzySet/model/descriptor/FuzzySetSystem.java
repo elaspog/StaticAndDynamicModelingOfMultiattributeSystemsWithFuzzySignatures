@@ -6,10 +6,10 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorRootBase;
 
 @XStreamAlias("FuzzySetSystem")
-public class FuzzySetSystem extends FuzzyDescriptorRootBase {
+public class FuzzySetSystem extends DescriptorRootBase {
 
 	@XStreamAlias("FuzzySetType")
 	@XStreamAsAttribute

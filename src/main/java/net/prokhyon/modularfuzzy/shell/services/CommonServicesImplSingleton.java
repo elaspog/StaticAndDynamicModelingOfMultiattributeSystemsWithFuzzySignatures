@@ -2,8 +2,6 @@ package net.prokhyon.modularfuzzy.shell.services;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import net.prokhyon.modularfuzzy.api.IPersistableModel;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
@@ -13,10 +11,10 @@ import net.prokhyon.modularfuzzy.common.errors.ModuleImplementationException;
 import net.prokhyon.modularfuzzy.common.errors.MultipleExceptionWrapper;
 import net.prokhyon.modularfuzzy.common.errors.NotConvertibleDescriptorException;
 import net.prokhyon.modularfuzzy.common.errors.NotParsableDescriptorException;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
-import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorRootBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxElementBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 import net.prokhyon.modularfuzzy.common.modules.DefaultModelLoaderInfo;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.PersistableModelInfo;
@@ -29,7 +27,6 @@ import net.prokhyon.modularfuzzy.shell.ShellApp;
 import net.prokhyon.modularfuzzy.shell.util.FxDialogHelper;
 import net.prokhyon.modularfuzzy.shell.view.SharedWorkspaceControlAndController;
 import net.prokhyon.modularfuzzy.shell.view.ShellLayoutController;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.util.*;
@@ -37,7 +34,7 @@ import java.util.*;
 public class CommonServicesImplSingleton implements CommonServices, ShellServices, ShellDialogServices {
 
 	private Map<Class<? extends ModuleDescriptor>, ModuleDescriptor> pseudoModules = new HashMap<>();
-	private Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = new HashMap<>();
+	private Map<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> registeredStores = new HashMap<>();
 	private List<FxModulesViewInfo> registeredViews = new ArrayList<>();
 	private List<DefaultModelLoaderInfo> registeredDefaultModelLoaders = new ArrayList<>();
 	private Stage stage;
@@ -110,7 +107,7 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 		registeredDefaultModelLoaders.add(defaultModelLoaderInfo);
 	}
 
-	public Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> getRegisteredStores() {
+	public Map<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> getRegisteredStores() {
 		return Collections.unmodifiableMap(registeredStores);
 	}
 
@@ -121,7 +118,7 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	}
 
 	@Override
-	public void saveModelByModule(ObservableList<? extends WorkspaceElement> modelList, WorkspaceInfo modelInformation) {
+	public void saveModelByModule(ObservableList<? extends WorkspaceFxRootElementBase> modelList, WorkspaceInfo modelInformation) {
 
 		// TODO Export model according to the module what registered this type (should be extended later)
 		final PersistableModelInfo persistableModelInfo = modelInformation.getPersistableModelInfo();
@@ -134,10 +131,10 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	}
 
 	@Override
-	public <T extends WorkspaceElement> void addModelToRegisteredStore(T model) {
+	public <T extends WorkspaceFxRootElementBase> void addModelToRegisteredStore(T model) {
 
-		Class<? extends WorkspaceElement> modelClass = model.getClass();
-		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores
+		Class<? extends WorkspaceFxRootElementBase> modelClass = model.getClass();
+		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> entry : registeredStores
 				.entrySet()) {
 
 			WorkspaceInfo key = entry.getKey();
@@ -151,10 +148,10 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	}
 
 	@Override
-	public <T extends WorkspaceElement> void updateModelInRegisteredStore(T original, T model) {
+	public <T extends WorkspaceFxRootElementBase> void updateModelInRegisteredStore(T original, T model) {
 
-		Class<? extends WorkspaceElement> modelClass = model.getClass();
-		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores
+		Class<? extends WorkspaceFxRootElementBase> modelClass = model.getClass();
+		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> entry : registeredStores
 				.entrySet()) {
 
 			WorkspaceInfo key = entry.getKey();
@@ -175,17 +172,17 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 			final IPersistableModel persistableModel = persistableModelInfo.getPersistableModel();
 			final Class<? extends ConvertibleDescriptor2FxModel.External> descriptor2FxModelConverterExternal = persistableModelInfo.getDescriptor2FxModelConverterExternal();
 			final Class<? extends ConvertibleDescriptor2FxModel.Internal> descriptor2FxModelConverterInternal = persistableModelInfo.getDescriptor2FxModelConverterInternal();
-			final Class<? extends FuzzyDescriptorRootBase> descriptorRootModel = persistableModelInfo.getDescriptorRootModel();
-			final Class<? extends WorkspaceElement> fxModel = persistableModelInfo.getFxModel();
-			final List<Class<? extends FuzzyDescriptorBase>> descriptorModels = persistableModelInfo.getDescriptorModels();
+			final Class<? extends DescriptorRootBase> descriptorRootModel = persistableModelInfo.getDescriptorRootModel();
+			final Class<? extends WorkspaceFxRootElementBase> fxModel = persistableModelInfo.getFxModel();
+			final List<Class<? extends DescriptorBase>> descriptorModels = persistableModelInfo.getDescriptorModels();
 
-			if (FuzzyDescriptorRootBase.class.isAssignableFrom(descriptorRootModel)) {
+			if (DescriptorRootBase.class.isAssignableFrom(descriptorRootModel)) {
 
-				FuzzyDescriptorRootBase fuzzyDescriptorRootBase = null;
+				DescriptorRootBase descriptorRootBase = null;
 				if (persistableModel != null) {
-					fuzzyDescriptorRootBase = persistableModel.importModel(file, descriptorRootModel, descriptorModels);
+					descriptorRootBase = persistableModel.importModel(file, descriptorRootModel, descriptorModels);
 
-					if (fuzzyDescriptorRootBase == null)
+					if (descriptorRootBase == null)
 						throw new NotParsableDescriptorException("Error has occurred while importing file with: " + persistableModel.getClass().toString());
 
 					ConvertibleDescriptor2FxModel.External convertibleDescriptor2FxModelExternal = null;
@@ -201,16 +198,16 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 					if (convertibleDescriptor2FxModelExternal == null && convertibleDescriptor2FxModelInternal == null)
 						throw new ModuleImplementationException("Error has occurred while searching for converter in module: " + persistableModel.getClass().toString());
 
-					FuzzyFxBase fuzzyFxBase = null;
+					WorkspaceFxElementBase workspaceFxElementBase = null;
 					if (convertibleDescriptor2FxModelExternal != null){
-						fuzzyFxBase = convertibleDescriptor2FxModelExternal.convert2FxModel(fuzzyDescriptorRootBase);
+						workspaceFxElementBase = convertibleDescriptor2FxModelExternal.convert2FxModel(descriptorRootBase);
 					} else if (convertibleDescriptor2FxModelInternal != null){
 						// TODO implement Internal conversion
 						// throw new NotImplementedException();
 					}
 
-					if (fuzzyFxBase != null){
-						addModelToRegisteredStore(fxModel.cast(fuzzyFxBase));
+					if (workspaceFxElementBase != null){
+						addModelToRegisteredStore(fxModel.cast(workspaceFxElementBase));
 					} else {
 						throw new NotConvertibleDescriptorException("Error has occurred while converting descriptor to model in module: " + persistableModel.getClass().toString());
 					}
@@ -235,7 +232,7 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 		StringBuilder exceptioMessages = new StringBuilder();
 		List<Exception> exceptions = new ArrayList<>();
 
-		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores.entrySet()) {
+		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> entry : registeredStores.entrySet()) {
 			final PersistableModelInfo persistableModelInfo = entry.getKey().getPersistableModelInfo();
 			try {
 				loadFile(persistableModelInfo, file);
@@ -277,12 +274,12 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	}
 
 	@Override
-	public List<FuzzyDescriptorBase> loadFilesIntoDescriptorsAndFilterByPersistableModel(List<File> filesToLoad, PersistableModelInfo persistableModelInfoFilter)
+	public List<DescriptorBase> loadFilesIntoDescriptorsAndFilterByPersistableModel(List<File> filesToLoad, PersistableModelInfo persistableModelInfoFilter)
 			throws ModuleImplementationException, NotParsableDescriptorException {
 
-		List<FuzzyDescriptorBase> fuzzyDescriptors = new ArrayList<>();
+		List<DescriptorBase> fuzzyDescriptors = new ArrayList<>();
 		for (File file : filesToLoad) {
-			for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> entry : registeredStores.entrySet()) {
+			for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> entry : registeredStores.entrySet()) {
 				try {
 					final PersistableModelInfo persistableModelInfo = entry.getKey().getPersistableModelInfo();
 
@@ -290,14 +287,14 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 						continue;
 
 					final IPersistableModel persistableModel = persistableModelInfo.getPersistableModel();
-					final Class<? extends FuzzyDescriptorRootBase> descriptorRootModel = persistableModelInfo.getDescriptorRootModel();
-					final List<Class<? extends FuzzyDescriptorBase>> descriptorModels = persistableModelInfo.getDescriptorModels();
+					final Class<? extends DescriptorRootBase> descriptorRootModel = persistableModelInfo.getDescriptorRootModel();
+					final List<Class<? extends DescriptorBase>> descriptorModels = persistableModelInfo.getDescriptorModels();
 
-					if (FuzzyDescriptorRootBase.class.isAssignableFrom(descriptorRootModel)) {
-						FuzzyDescriptorRootBase fuzzyDescriptorRootBase = null;
+					if (DescriptorRootBase.class.isAssignableFrom(descriptorRootModel)) {
+						DescriptorRootBase descriptorRootBase = null;
 						if (persistableModel != null) {
-							fuzzyDescriptorRootBase = persistableModel.importModel(file, descriptorRootModel, descriptorModels);
-							fuzzyDescriptors.add(fuzzyDescriptorRootBase);
+							descriptorRootBase = persistableModel.importModel(file, descriptorRootModel, descriptorModels);
+							fuzzyDescriptors.add(descriptorRootBase);
 						}
 					}
 				} catch (NotParsableDescriptorException e){}
@@ -307,7 +304,7 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	}
 
 	@Override
-	public void loadDescriptorsIntoWorkspaceElementsByPersistableModel(List<FuzzyDescriptorBase> descriptorsToLoad, PersistableModelInfo persistableModelInfo)
+	public void loadDescriptorsIntoWorkspaceElementsByPersistableModel(List<DescriptorBase> descriptorsToLoad, PersistableModelInfo persistableModelInfo)
 			throws ModuleImplementationException, NotConvertibleDescriptorException{
 
 		if (persistableModelInfo == null)
@@ -315,12 +312,12 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 
 		final Class<? extends ConvertibleDescriptor2FxModel.External> descriptor2FxModelConverterExternal = persistableModelInfo.getDescriptor2FxModelConverterExternal();
 		final Class<? extends ConvertibleDescriptor2FxModel.Internal> descriptor2FxModelConverterInternal = persistableModelInfo.getDescriptor2FxModelConverterInternal();
-		final Class<? extends WorkspaceElement> fxModel = persistableModelInfo.getFxModel();
+		final Class<? extends WorkspaceFxRootElementBase> fxModel = persistableModelInfo.getFxModel();
 
 		ConvertibleDescriptor2FxModel.External convertibleDescriptor2FxModelExternal = null;
 		ConvertibleDescriptor2FxModel.Internal convertibleDescriptor2FxModelInternal = null;
 
-		for (FuzzyDescriptorBase fuzzyDescriptorBase : descriptorsToLoad) {
+		for (DescriptorBase descriptorBase : descriptorsToLoad) {
 
 			try {
 				convertibleDescriptor2FxModelExternal = descriptor2FxModelConverterExternal.newInstance();
@@ -329,16 +326,16 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 				convertibleDescriptor2FxModelInternal = descriptor2FxModelConverterInternal.newInstance();
 			} catch (NullPointerException | IllegalAccessException | InstantiationException e){}
 
-			FuzzyFxBase fuzzyFxBase;
+			WorkspaceFxElementBase workspaceFxElementBase;
 			if (convertibleDescriptor2FxModelExternal != null){
-				fuzzyFxBase = convertibleDescriptor2FxModelExternal.convert2FxModel(fuzzyDescriptorBase);
+				workspaceFxElementBase = convertibleDescriptor2FxModelExternal.convert2FxModel(descriptorBase);
 			} else if (convertibleDescriptor2FxModelInternal != null){
-				fuzzyFxBase = ((ConvertibleDescriptor2FxModel.Internal) fuzzyDescriptorBase).convert2FxModel();
+				workspaceFxElementBase = ((ConvertibleDescriptor2FxModel.Internal) descriptorBase).convert2FxModel();
 			} else
 				throw new NotConvertibleDescriptorException("Error has occurred while searching for converter in module: " + persistableModelInfo.getClass().toString());
 
-			if (fuzzyFxBase != null){
-				addModelToRegisteredStore(fxModel.cast(fuzzyFxBase));
+			if (workspaceFxElementBase != null){
+				addModelToRegisteredStore(fxModel.cast(workspaceFxElementBase));
 			} else {
 				throw new ModuleImplementationException();
 			}
@@ -346,14 +343,14 @@ public class CommonServicesImplSingleton implements CommonServices, ShellService
 	}
 
 	@Override
-	public <T extends WorkspaceElement> T resolveModelByUUID(String uuid) {
+	public <T extends WorkspaceFxRootElementBase> T resolveModelByUUID(String uuid) {
 
-		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> workspaceInfoObservableListEntry : registeredStores.entrySet()) {
-			final ObservableList<? extends WorkspaceElement> value = workspaceInfoObservableListEntry.getValue();
-			for (WorkspaceElement workspaceElement : value) {
-				final String workspaceElementUUID = workspaceElement.getUuid();
+		for (Map.Entry<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> workspaceInfoObservableListEntry : registeredStores.entrySet()) {
+			final ObservableList<? extends WorkspaceFxRootElementBase> value = workspaceInfoObservableListEntry.getValue();
+			for (WorkspaceFxRootElementBase workspaceFxRootElementBase : value) {
+				final String workspaceElementUUID = workspaceFxRootElementBase.getUuid();
 				if (workspaceElementUUID.equals(uuid))
-					return (T) workspaceElement;
+					return (T) workspaceFxRootElementBase;
 			}
 		}
 		return null;

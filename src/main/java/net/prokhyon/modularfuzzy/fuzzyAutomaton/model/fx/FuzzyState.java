@@ -5,11 +5,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
-import net.prokhyon.modularfuzzy.common.modelFx.FuzzyFxBase;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxElementBase;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyStateTypeEnum;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet;
 
-public class FuzzyState extends FuzzyFxBase
+public class FuzzyState extends WorkspaceFxElementBase
         implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzyAutomaton.model.descriptor.FuzzyState, net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyState>{
 
     private final StringProperty fuzzyStateName;

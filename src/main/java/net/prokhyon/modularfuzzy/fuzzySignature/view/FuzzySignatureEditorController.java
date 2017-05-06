@@ -16,7 +16,7 @@ import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.errors.ModelError;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.FuzzyAutomatonModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzyAutomaton.model.fx.FuzzyAutomaton;
@@ -335,9 +335,9 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 	@FXML
 	private void saveSignature(){
 
-		final Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = this.commonServices.getRegisteredStores();
+		final Map<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> registeredStores = this.commonServices.getRegisteredStores();
 		final WorkspaceInfo workspaceInfo = fuzzySignatureModuleDescriptor.getWorkspaceInfo();
-		final ObservableList<? extends WorkspaceElement> workspaceElements = registeredStores.get(workspaceInfo);
+		final ObservableList<? extends WorkspaceFxRootElementBase> workspaceElements = registeredStores.get(workspaceInfo);
 		final ObservableList<FuzzySignature> fuzzySignatures = (ObservableList<FuzzySignature>) workspaceElements;
 
 		ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();
@@ -382,9 +382,9 @@ public class FuzzySignatureEditorController implements LoadableDataController {
 	@FXML
 	private void loadActualFuzzyAutomatons(){
 
-		final Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = this.commonServices.getRegisteredStores();
+		final Map<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> registeredStores = this.commonServices.getRegisteredStores();
 		final WorkspaceInfo workspaceInfo = fuzzyAutomatonModuleDescriptor.getWorkspaceInfo();
-		final ObservableList<? extends WorkspaceElement> workspaceElements = registeredStores.get(workspaceInfo);
+		final ObservableList<? extends WorkspaceFxRootElementBase> workspaceElements = registeredStores.get(workspaceInfo);
 
 		final ObservableList<FuzzyAutomaton> fuzzyAutomatons = (ObservableList<FuzzyAutomaton>) workspaceElements;
 		this.automatonTypeComboBox.setItems(FXCollections.observableArrayList(fuzzyAutomatons));
@@ -460,7 +460,7 @@ public class FuzzySignatureEditorController implements LoadableDataController {
      */
 
 	@Override
-	public <T extends WorkspaceElement> void loadWithData(T modelToLoad) {
+	public <T extends WorkspaceFxRootElementBase> void loadWithData(T modelToLoad) {
 
 		unbindSignatureViewElementsFromControllerProperties();
 		clearSignatureViewElements();

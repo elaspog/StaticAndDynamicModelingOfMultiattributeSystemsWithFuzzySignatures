@@ -1,8 +1,8 @@
 package net.prokhyon.modularfuzzy.fuzzySet.model.descriptor;
 
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorBase;
 
-public abstract class FuzzyPointBase extends FuzzyDescriptorBase {
+public abstract class FuzzyPointBase extends DescriptorBase {
 
 	abstract int getCoordinateDimension();
 }

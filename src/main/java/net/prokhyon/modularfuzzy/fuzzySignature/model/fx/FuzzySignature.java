@@ -3,12 +3,12 @@ package net.prokhyon.modularfuzzy.fuzzySignature.model.fx;
 import javafx.beans.property.*;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
 import net.prokhyon.modularfuzzy.common.conversion.ConvertibleFxModel2Descriptor;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuzzySignature extends WorkspaceElement
+public class FuzzySignature extends WorkspaceFxRootElementBase
         implements ConvertibleFxModel2Descriptor.Internal<net.prokhyon.modularfuzzy.fuzzySignature.model.descriptor.FuzzySignature, net.prokhyon.modularfuzzy.fuzzySignature.model.fx.FuzzySignature>{
 
     /*

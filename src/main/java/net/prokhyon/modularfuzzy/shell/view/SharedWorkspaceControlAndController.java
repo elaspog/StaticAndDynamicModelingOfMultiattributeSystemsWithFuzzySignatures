@@ -15,13 +15,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.shell.util.ContentLoaderHandler;
 import net.prokhyon.modularfuzzy.shell.util.PaneAndControllerPair;
 
-public class SharedWorkspaceControlAndController<T extends WorkspaceElement> extends AnchorPane {
+public class SharedWorkspaceControlAndController<T extends WorkspaceFxRootElementBase> extends AnchorPane {
 
 	@FXML
 	private ListView<T> sharedWorkspace;

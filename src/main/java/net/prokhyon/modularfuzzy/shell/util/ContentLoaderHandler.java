@@ -7,7 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.common.modules.FxModulesViewInfo;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 import net.prokhyon.modularfuzzy.shell.services.ServiceFactory;
 import net.prokhyon.modularfuzzy.shell.services.ShellDialogServices;
 
@@ -34,7 +34,7 @@ public class ContentLoaderHandler {
 		return null;
 	}
 
-	public static void loadContentPane(AnchorPane whereToLoad, WorkspaceElement selectedItem, PaneAndControllerPair p) {
+	public static void loadContentPane(AnchorPane whereToLoad, WorkspaceFxRootElementBase selectedItem, PaneAndControllerPair p) {
 
 		whereToLoad.getChildren().setAll(p.pane);
 		if (selectedItem != null) {

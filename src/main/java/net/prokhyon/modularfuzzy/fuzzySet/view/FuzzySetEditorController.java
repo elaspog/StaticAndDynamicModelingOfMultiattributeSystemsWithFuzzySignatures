@@ -16,7 +16,7 @@ import net.prokhyon.modularfuzzy.api.LoadableDataController;
 import net.prokhyon.modularfuzzy.api.ModuleDescriptor;
 import net.prokhyon.modularfuzzy.common.CommonServices;
 import net.prokhyon.modularfuzzy.common.CommonUtils;
-import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceElement;
+import net.prokhyon.modularfuzzy.common.modelFx.WorkspaceFxRootElementBase;
 import net.prokhyon.modularfuzzy.common.modules.WorkspaceInfo;
 import net.prokhyon.modularfuzzy.fuzzySet.FuzzySetModuleDescriptor;
 import net.prokhyon.modularfuzzy.fuzzySet.model.fx.FuzzySet;
@@ -258,7 +258,7 @@ public class FuzzySetEditorController implements LoadableDataController {
 	}
 
 	@Override
-	public <T extends WorkspaceElement> void loadWithData(T modelToLoad) {
+	public <T extends WorkspaceFxRootElementBase> void loadWithData(T modelToLoad) {
 
 		clearFuzzySetSystem();
 		if (modelToLoad == null)
@@ -291,9 +291,9 @@ public class FuzzySetEditorController implements LoadableDataController {
 	@FXML
 	private void saveSystem() {
 
-		final Map<WorkspaceInfo, ObservableList<? extends WorkspaceElement>> registeredStores = this.commonServices.getRegisteredStores();
+		final Map<WorkspaceInfo, ObservableList<? extends WorkspaceFxRootElementBase>> registeredStores = this.commonServices.getRegisteredStores();
 		final WorkspaceInfo workspaceInfo = fuzzySetModuleDescriptor.getWorkspaceInfo();
-		final ObservableList<? extends WorkspaceElement> workspaceElements = registeredStores.get(workspaceInfo);
+		final ObservableList<? extends WorkspaceFxRootElementBase> workspaceElements = registeredStores.get(workspaceInfo);
 		final ObservableList<FuzzySetSystem> fuzzySetSystems = (ObservableList<FuzzySetSystem>) workspaceElements;
 
 		ShellDialogServices shellDialogServices = new ServiceFactory().getShellDialogServices();

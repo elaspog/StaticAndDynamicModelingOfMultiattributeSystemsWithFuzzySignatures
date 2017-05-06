@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import net.prokhyon.modularfuzzy.common.modelDescriptor.FuzzyDescriptorRootBase;
+import net.prokhyon.modularfuzzy.common.modelDescriptor.DescriptorRootBase;
 
 @XStreamAlias("fuzzymodelvalues")
-public class FuzzyModelValues extends FuzzyDescriptorRootBase {
+public class FuzzyModelValues extends DescriptorRootBase {
 
 	@XStreamImplicit
 	private List<PathInfo> pathList;
